@@ -29,6 +29,9 @@
 @import '../css/modules/matchmaking.css';
 @import '../css/modules/modals-auth.css';
 @import '../css/modules/diario.css';
+@import '../css/modules/matchmaking-UI.css';
+
+
 
 /* app/globals.css – niente @import qui */
 :root { --c-primario: #4CAF50; }
