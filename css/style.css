@@ -1034,3 +1034,108 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible{
   background: var(--c-superficie);
   border: 1px solid var(--c-bordi);
 }
+
+
+
+/* Header impilato e centrato */
+.main-header.main-header--stacked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 14px var(--spazio-md, 16px);
+  border-bottom: 1px solid var(--c-bordi, #eee);
+  background: var(--c-superficie, #fff);
+}
+
+/* Brand */
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.header-brand .brand-title {
+  font-family: var(--font-heading, 'Montserrat', system-ui, sans-serif);
+  font-weight: 800;
+  font-size: clamp(1.25rem, 2.2vw, 1.8rem);
+  letter-spacing: .2px;
+}
+
+/* Toggle mobile: visibile solo <768px */
+.mobile-nav-toggle { display: inline-flex; align-items: center; gap: 8px; }
+@media (min-width: 768px) {
+  .mobile-nav-toggle { display: none; }
+}
+
+/* Nav centrata, avvolgibile, con gestione visibilità su mobile */
+.main-nav.main-nav--centered {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 16px;
+  max-width: 100%;
+}
+.main-nav.main-nav--centered a,
+.main-nav.main-nav--centered button {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 6px 10px;
+  font: inherit;
+  color: var(--c-testo, #222);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color .15s ease, background .15s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.main-nav.main-nav--centered a:hover,
+.main-nav.main-nav--centered button:hover {
+  color: var(--c-primario, #2e7d32);
+  background: color-mix(in oklab, var(--c-primario, #2e7d32) 8%, transparent);
+}
+.main-nav .is-active {
+  color: var(--c-primario, #2e7d32);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Visibilità nav su mobile col toggle */
+@media (max-width: 767.98px) {
+  .main-nav[data-visible="false"] { display: none; }
+  .main-nav[data-visible="true"]  { display: flex; }
+}
+
+/* Azioni centrate */
+.header-actions.header-actions--centered {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Chip utente compatta */
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border: 1px solid var(--c-bordi, #e5e5e5);
+  border-radius: 999px;
+  background: #fff;
+}
+.chip-email {
+  font-size: .85rem;
+  color: var(--c-testo-leggero, #666);
+  max-width: 38ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* piccoli ritocchi desktop */
+@media (min-width: 900px) {
+  .main-header.main-header--stacked { gap: 14px; }
+  .main-nav.main-nav--centered { gap: 12px 20px; }
+}
