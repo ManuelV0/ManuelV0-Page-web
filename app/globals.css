@@ -8,46 +8,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:wght@400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400;500&display=swap');
 
-/* Moduli del sito (ordine importante: dal generico allo specifico) */
-@import '../css/modules/tokens.css';
-@import '../css/modules/base-accessibility.css';
-@import '../css/modules/header.css';
-@import '../css/modules/hero.css';
-@import '../css/modules/layout.css';
-@import '../css/modules/cards-and-expanded.css';
-@import '../css/modules/poems.css';
-@import '../css/modules/sidebar.css';
-@import '../css/modules/widget.css';
-@import '../css/modules/footer.css';
-@import '../css/modules/modals.css';
-@import '../css/modules/forms-and-buttons.css';
-@import '../css/modules/star-rating.css';
-@import '../css/modules/animations.css';
-@import '../css/modules/utilities.css';
-@import '../css/modules/responsive.css';
-@import '../css/modules/diario-match.css';
-@import '../css/modules/matchmaking.css';
-@import '../css/modules/modals-auth.css';
-@import '../css/modules/diario.css';
-@import '../css/modules/matchmaking-UI.css';
-@import '../css/modules/diario-UI.css';
-@import '../css/modules/matchmaking-UITWO.css';
-@import '../css/modules/diario-UITWO.css';
-@import '../css/modules/diario-gated.css';
-@import '../css/modules/header-stacked.css';
-@import '../css/modules/diario-gated-UI.css';
-@import '../css/modules/journal-diario.css';
-@import '../css/modules/diario-author.css';
-@import '../css/modules/poetry-home.css';
-@import '../css/modules/diario-author.css';
 
 
-
-@import '../css/modules/01-tokens.css';
-@import '../css/modules/05-header-nav.css';
-@import '../css/modules/12-diario.css';
-
-
+@import '../css/modules/01-header.css';
 
 
 /* app/globals.css – niente @import qui */
