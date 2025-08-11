@@ -1,9 +1,9 @@
 
 // app/layout.tsx
 
-import '../styles/style.css'
-import '../styles/diario.css'
-import '../styles/poetry-widget.css'
+import '../css/style.css'
+import '../css/diario.css'
+import '../css/poetry-widget.css'
 
 
 export const metadata = { title: 'TheItalianPoetry' }
