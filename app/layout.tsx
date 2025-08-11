@@ -1,17 +1,21 @@
-// app/layout.tsx
+import './globals.css'
 import type { Metadata } from 'next'
-import '../css/style.css'
-import '../css/diario.css'
+import SiteHeader from '@/components/SiteHeader'
+import SiteFooter from '@/components/SiteFooter'
 
 export const metadata: Metadata = {
   title: 'TheItalianPoetry',
-  description: '…',
+  description: 'Community e diario autori'
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="it">
-      <body>{children}</body>
+      <body>
+        <SiteHeader />
+        {children}
+        <SiteFooter />
+      </body>
     </html>
   )
 }
