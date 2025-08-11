@@ -1,0 +1,50 @@
+/* griglia autori fluida */
+.authors-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+/* card */
+.author-card{
+  background: var(--c-superficie);
+  border: 1px solid var(--c-bordi);
+  border-radius: 14px;
+  box-shadow: var(--ombra-card);
+  padding: 14px; display:flex; flex-direction:column; gap: 10px;
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.author-card:hover{ transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,.06); }
+
+/* header card */
+.author-card__header{ display:flex; gap:12px; align-items:center; }
+.author-card__avatar{
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #eee center/cover no-repeat;
+  flex: 0 0 56px;
+}
+.author-card__name{ font-weight:700; }
+.author-card__badges .badge{ background:#f5f5f5; border-radius:999px; padding:4px 10px; font-size:.85rem; }
+
+/* meta & preview */
+.author-card__meta{ display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.meta-pill{ font-size:.85rem; color:#666; background:#f7f7f7; border-radius:999px; padding:4px 10px; }
+.journal-preview__text{ color:#444; font-size:.95rem; line-height:1.5; }
+
+/* dettagli espandibili */
+.journal-details{ max-height:0; overflow:hidden; transition:max-height .35s ease; }
+.journal-details.is-open{ max-height: 900px; }
+.journal-details__inner{ border-top:1px dashed var(--c-bordi); padding-top:10px; display:grid; gap:10px; }
+.journal-tag{ display:inline-block; padding:3px 8px; border:1px solid var(--c-bordi); border-radius:999px; font-size:.8rem; margin:2px; }
+
+/* toolbar */
+.diario-toolbar{ display:grid; grid-template-columns: 1fr; gap:8px; margin-bottom:10px; }
+@media (min-width: var(--bp-sm)){ .diario-toolbar{ grid-template-columns: 1fr 200px; }}
+
+/* scheletri */
+.skel{ background:linear-gradient(90deg,#eee,#f6f6f6,#eee); background-size:200% 100%; animation:s-l 1.2s infinite; border-radius:8px; }
+@keyframes s-l{ 0%{background-position:100% 0} 100%{background-position:0 0} }
+
+/* modale (già usata per voti, riutilizzabile) */
+.modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; padding:16px; }
+.modal-content{ background:#fff; width:min(720px, 96vw); border-radius:16px; padding:18px; box-shadow:var(--ombra-intensa); }
