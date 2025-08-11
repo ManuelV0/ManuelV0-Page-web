@@ -1,226 +1,110 @@
 
-/* =========================================================
-   03 — HEADER & NAVIGAZIONE (Responsive, “stacked”)
-   Dipendenze: 01-tokens.css, 02-base-accessibility.css
-   Struttura prevista dal componente:
-   <header class="main-header main-header--stacked">
-     <div class="header-brand"><i ...></i><span class="brand-title">...</span></div>
-     <button class="mobile-nav-toggle" ...>☰</button>
-     <nav id="primary-navigation"
-          class="main-nav main-nav--centered"
-          data-visible="false|true"> ...link/button... </nav>
-     <div class="header-actions header-actions--centered"> ... </div>
-   </header>
-   ========================================================= */
+/* ========== HEADER RESPONSIVE ========== */
 
-/* ---------- Wrapper header: sticky, sfondo, blur ---------- */
-.main-header {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: var(--c-superficie);
-  backdrop-filter: saturate(110%) blur(6px);
-  -webkit-backdrop-filter: saturate(110%) blur(6px);
-  border-bottom: 1px solid color-mix(in oklab, var(--c-bordi) 85%, transparent);
-}
-
-/* Variante “stacked”: brand, nav, azioni in colonna */
-.main-header--stacked {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  padding: 12px max(16px, env(safe-area-inset-left));
-}
-
-/* ---------- Brand (logo + titolo) ---------- */
-.header-brand {
-  display: inline-flex;
+/* Layout base: header impilato e centrato (mobile-first) */
+.main-header.main-header--stacked {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-.header-brand i { font-size: 1.2em; color: var(--c-primario); }
-.header-brand .brand-title {
-  font-family: var(--font-heading);
-  font-weight: 800;
-  letter-spacing: .2px;
-  color: var(--c-testo);
-  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  gap: 12px;
+  padding: 14px var(--spazio-md, 16px);
+  border-bottom: 1px solid var(--c-bordi, #eee);
+  background: var(--c-superficie, #fff);
 }
 
-/* ---------- Toggle mobile ---------- */
+/* Brand */
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.header-brand .brand-title {
+  font-family: var(--font-heading, 'Montserrat', system-ui, sans-serif);
+  font-weight: 800;
+  font-size: clamp(1.25rem, 2.2vw, 1.8rem);
+  letter-spacing: .2px;
+}
+
+/* Toggle (visibile su mobile) */
 .mobile-nav-toggle {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
-  margin: 0 auto; /* centrato sotto il brand */
-  padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--c-bordi);
-  background: var(--c-superficie);
-  color: var(--c-testo);
-  transition: background .18s ease, border-color .18s ease, transform .18s ease;
-}
-.mobile-nav-toggle:hover {
-  border-color: color-mix(in oklab, var(--c-primario) 25%, transparent);
-  background: color-mix(in oklab, var(--c-primario) 6%, transparent);
-  transform: translateY(-1px);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-size: 1.25rem;
 }
 
-/* ---------- Navigazione: centrata, wrappa, stato attivo ---------- */
+/* Nav centrata */
 .main-nav.main-nav--centered {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px 14px;
-  padding: 4px 0;
+  gap: 10px 16px;
+  max-width: 100%;
 }
 
-/* Mobile: mostra/nascondi con data-visible (gestito da React) */
-@media (max-width: 767.98px) {
-  .main-nav[data-visible="false"] { display: none; }
-  .main-nav[data-visible="true"]  { display: flex; }
-}
-
-.main-nav a,
-.main-nav button {
+/* Link/bottoni nav */
+.main-nav.main-nav--centered a,
+.main-nav.main-nav--centered button {
   appearance: none;
   background: none;
   border: 0;
   padding: 6px 10px;
-  border-radius: 10px;
   font: inherit;
-  color: var(--c-testo);
+  color: var(--c-testo, #222);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color .15s ease, background .15s ease;
   text-decoration: none;
   white-space: nowrap;
-  transition: color .15s ease, background .15s ease, transform .15s ease;
-}
-.main-nav a:hover,
-.main-nav button:hover {
-  color: var(--c-primario);
-  background: color-mix(in oklab, var(--c-primario) 10%, transparent);
 }
 .main-nav .is-active {
-  color: var(--c-primario);
+  color: var(--c-primario, #2e7d32);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+.main-nav.main-nav--centered a:hover,
+.main-nav.main-nav--centered button:hover {
+  color: var(--c-primario, #2e7d32);
+  background: color-mix(in oklab, var(--c-primario, #2e7d32) 8%, transparent);
+}
 
-/* ---------- Azioni header (login / partecipa) ---------- */
+/* Actions centrati (login/partecipazione) */
 .header-actions.header-actions--centered {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px 10px;
-}
-
-/* Google button & varianti */
-.button-primary {
-  background-color: var(--c-primario);
-  color: #fff;
-  border: none;
-  padding: .7rem 1rem;
-  border-radius: 999px;
-  font-weight: 700;
-  transition: background .18s ease, transform .18s ease, box-shadow .18s ease;
-}
-.button-primary:hover {
-  background-color: var(--c-primario-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0,0,0,.08);
-}
-
-.button-secondary {
-  background: var(--c-superficie);
-  border: 2px solid var(--c-bordi);
-  color: var(--c-testo);
-  padding: .6rem .9rem;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: border-color .18s ease, color .18s ease;
-}
-.button-secondary:hover {
-  border-color: var(--c-primario);
-  color: var(--c-primario);
-}
-
-.button-social.google {
-  background: #4285F4;
-  color: #fff;
-  padding: .65rem 1rem;
-  border-radius: 999px;
-  border: none;
-  font-weight: 700;
-  transition: filter .18s ease, transform .18s ease;
-}
-.button-social.google:hover { filter: brightness(.95); transform: translateY(-1px); }
-.button-social.google i { margin-right: .4rem; }
-
-/* Chip utente (email + logout) */
-.user-chip {
-  display: inline-flex;
-  align-items: center;
   gap: 8px;
-  padding: 4px 10px;
-  border: 1px solid var(--c-bordi);
-  border-radius: 999px;
-  background: var(--c-superficie);
-}
-.chip-email {
-  font-size: .85rem;
-  color: var(--c-testo-leggero);
-  max-width: 38ch;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  width: 100%;
 }
 
-/* ---------- Breakpoint: ≥768px (tablet & su) ---------- */
+/* Stato “visibile/nascosto” su mobile (controllato dall’hamburger) */
+.main-nav[data-visible="false"],
+.header-actions[data-visible="false"] { display: none; }
+.main-nav[data-visible="true"],
+.header-actions[data-visible="true"]  { display: flex; }
+
+/* Desktop/tablet: layout in riga, hamburger nascosto, nav/actions sempre visibili */
 @media (min-width: 768px) {
-  /* Nascondi il toggle, nav sempre visibile */
+  .main-header.main-header--stacked {
+    flex-direction: column; /* brand sopra, sotto nav+actions affiancati */
+    gap: 10px;
+  }
   .mobile-nav-toggle { display: none; }
-  .main-nav { display: flex !important; }
 
-  /* Spazi & ritmo più stretti */
-  .main-header--stacked { gap: 12px; padding-block: 14px; }
-  .main-nav.main-nav--centered { gap: 12px 18px; }
-
-  /* Bottoni nav compatti */
-  .main-nav a, .main-nav button { padding: 6px 12px; }
-
-  /* Azioni sempre su una riga, centrate */
-  .header-actions.header-actions--centered { gap: 10px; }
+  /* su desktop vogliamo sempre visibili */
+  .main-nav,
+  .header-actions {
+    display: flex !important;
+  }
 }
 
-/* ---------- Breakpoint: ≥1024px (desktop) ---------- */
+/* ≥1024px: header “a barra” se preferisci (opzionale) */
 @media (min-width: 1024px) {
-  /* Manteniamo lo “stacked” per coerenza visiva; aumentiamo solo la resa */
-  .main-header--stacked { gap: 14px; }
-
-  .main-nav a, .main-nav button {
-    padding: 8px 12px;
-    border-radius: 12px;
+  .main-header.main-header--stacked {
+    flex-direction: column;
   }
-}
-
-/* ---------- Stati interattivi extra ---------- */
-.main-nav a:active,
-.main-nav button:active { transform: translateY(1px); }
-
-.main-header :where(a, button):focus-visible {
-  outline: 3px solid var(--c-secondario-hover);
-  outline-offset: 2px;
-  border-radius: 8px;
-}
-
-/* ---------- Tema scuro opzionale (se vorrai attivarlo) ---------- */
-@media (prefers-color-scheme: dark) {
-  .main-header { background: color-mix(in oklab, #111 85%, #000); border-bottom-color: #222; }
-  .header-brand .brand-title { color: #f2f2f2; }
-  .main-nav a, .main-nav button { color: #f0f0f0; }
-  .main-nav a:hover, .main-nav button:hover {
-    background: color-mix(in oklab, var(--c-primario) 18%, transparent);
-  }
-  .user-chip { background: #0f0f0f; border-color: #222; }
-  .chip-email { color: #bbb; }
 }
