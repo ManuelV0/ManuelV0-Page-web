@@ -1,9 +1,6 @@
 // app/layout.tsx
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
-@import '../css/style.css';
-@import '../css/diario.css';
-@import '../css/poetry-widget.css';
-import './globals.css'
+
+import './app/globals.css'
 import Link from 'next/link'
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
