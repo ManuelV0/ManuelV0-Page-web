@@ -9,7 +9,6 @@ type Journal = {
   profilo_poetico?: { temi_ricorrenti?: string[]; evoluzione?: string }
   ultime_opere_rilevanti?: { id?: string; titolo?: string }[]
 }
-
 type Profile = {
   id: string
   username: string | null
@@ -19,7 +18,6 @@ type Profile = {
   public_page_url: string | null
   last_updated: string | null
 }
-
 type ProfileWithCount = Profile & { poems_count: number }
 
 export default function DiarioPage() {
@@ -33,30 +31,25 @@ export default function DiarioPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        setLoading(true)
-        setErr(null)
+        setLoading(true); setErr(null)
 
-        // 1) Profili (tabella: profiles)
         const { data: profiles, error: pErr } = await supabase
           .from('profiles')
           .select('id, username, avatar_url, poetic_journal, qr_code_url, public_page_url, last_updated')
           .order('last_updated', { ascending: false })
         if (pErr) throw pErr
 
-        // 2) Conteggio poesie per autore (tabella: poesie, chiave: profile_id)
         const { data: poemsRows, error: cErr } = await supabase
           .from('poesie')
-          .select('profile_id') // basta l'id autore per contare
+          .select('profile_id')
         if (cErr) throw cErr
 
         const countMap = new Map<string, number>()
         poemsRows?.forEach(r => {
           const k = r.profile_id as string | null
-          if (!k) return
-          countMap.set(k, (countMap.get(k) || 0) + 1)
+          if (k) countMap.set(k, (countMap.get(k) || 0) + 1)
         })
 
-        // 3) Merge
         const merged: ProfileWithCount[] = (profiles || []).map(p => ({
           ...p,
           poems_count: countMap.get(p.id) || 0,
@@ -73,17 +66,14 @@ export default function DiarioPage() {
     load()
   }, [])
 
-  // ricerca + ordinamento
   useEffect(() => {
     let v = allAuthors.filter(a =>
       (a.username || '').toLowerCase().includes(q.toLowerCase()) ||
       (a.poetic_journal?.descrizione_autore || '').toLowerCase().includes(q.toLowerCase())
     )
     if (order === 'recenti') {
-      v.sort(
-        (a, b) =>
-          new Date(b.last_updated || 0).getTime() -
-          new Date(a.last_updated || 0).getTime()
+      v.sort((a, b) =>
+        new Date(b.last_updated || 0).getTime() - new Date(a.last_updated || 0).getTime()
       )
     } else {
       v.sort((a, b) => (b.poems_count || 0) - (a.poems_count || 0))
@@ -137,9 +127,7 @@ export default function DiarioPage() {
           <div className="diario-empty">Nessun autore trovato.</div>
         ) : (
           <div className="authors-grid" aria-live="polite">
-            {view.map(a => (
-              <AuthorCard key={a.id} author={a} />
-            ))}
+            {view.map(a => <AuthorCard key={a.id} author={a} />)}
           </div>
         )}
       </section>
@@ -149,7 +137,6 @@ export default function DiarioPage() {
 
 function AuthorCard({ author }: { author: ProfileWithCount }) {
   const [open, setOpen] = useState(false)
-
   const j = author.poetic_journal || {}
   const descrizione = j.descrizione_autore || '(nessuna descrizione)'
   const temi = j.profilo_poetico?.temi_ricorrenti || []
@@ -159,10 +146,7 @@ function AuthorCard({ author }: { author: ProfileWithCount }) {
   return (
     <div className="author-card">
       <div className="author-card__header">
-        <div
-          className="author-card__avatar"
-          style={{ backgroundImage: `url('${author.avatar_url || ''}')` }}
-        />
+        <div className="author-card__avatar" style={{ backgroundImage: `url('${author.avatar_url || ''}')` }} />
         <div>
           <div className="author-card__name">
             <Link href={`/autori/${author.id}`}>{author.username || 'Senza nome'}</Link>
@@ -181,9 +165,7 @@ function AuthorCard({ author }: { author: ProfileWithCount }) {
           </span>
         </div>
         {author.public_page_url && (
-          <a className="btn" href={author.public_page_url} target="_blank" rel="noreferrer">
-            Pagina
-          </a>
+          <a className="btn" href={author.public_page_url} target="_blank" rel="noreferrer">Pagina</a>
         )}
       </div>
 
@@ -207,9 +189,7 @@ function AuthorCard({ author }: { author: ProfileWithCount }) {
           <div className="journal-block">
             <h4>Temi ricorrenti</h4>
             <div className="journal-tags">
-              {temi.map((t, i) => (
-                <span className="journal-tag" key={i}>{t}</span>
-              ))}
+              {temi.map((t, i) => <span className="journal-tag" key={i}>{t}</span>)}
             </div>
           </div>
           {evol && (
