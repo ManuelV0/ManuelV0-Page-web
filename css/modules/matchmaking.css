@@ -1,0 +1,254 @@
+/* =========================================================
+   06 — MATCH-MAKING UI (Responsive + A11y)
+   Dipendenze: 01-tokens.css
+   Namespace: .mm-* per evitare collisioni
+   ========================================================= */
+
+/* ---------- Contenitore sezione ---------- */
+.mm {
+  background: var(--c-superficie);
+  border: 1px solid var(--c-bordi);
+  border-radius: var(--bordo-arrotondato);
+  box-shadow: var(--ombra-card);
+  padding: var(--spazio-md);
+  display: grid;
+  gap: var(--spazio-md);
+}
+
+/* ---------- Header: titolo + hint ---------- */
+.mm__header {
+  display: grid;
+  gap: .5rem;
+  text-align: center;
+}
+.mm__title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: var(--c-primario);
+  font-size: 1.35rem;
+}
+.mm__hint {
+  color: var(--c-testo-leggero);
+  font-size: .95rem;
+}
+
+/* ---------- Barra filtri ---------- */
+.mm__filters {
+  display: grid;
+  gap: var(--spazio-sm);
+}
+.mm__filters-row {
+  display: grid;
+  gap: var(--spazio-sm);
+}
+.mm__field {
+  display: grid;
+  gap: .35rem;
+}
+.mm__label {
+  font-weight: 700;
+  font-size: .9rem;
+  color: var(--c-testo);
+}
+.mm__input, .mm__select, .mm__tags {
+  width: 100%;
+  padding: .65rem .8rem;
+  border: 1px solid var(--c-bordi);
+  border-radius: 12px;
+  background: var(--c-superficie);
+  color: var(--c-testo);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.mm__input:focus, .mm__select:focus {
+  border-color: var(--c-primario);
+  box-shadow: 0 0 0 3px rgba(76,175,80,.15);
+  outline: none;
+}
+
+/* Tag pills (temi) */
+.mm__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  padding: .6rem;
+}
+.mm-tag {
+  font-size: .78rem;
+  padding: .35rem .6rem;
+  border: 1px solid var(--c-bordi);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--c-testo-leggero);
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.mm-tag[aria-pressed="true"] {
+  color: var(--c-primario);
+  border-color: var(--c-primario);
+  background: color-mix(in oklab, var(--c-primario) 8%, transparent);
+}
+
+/* ---------- Risultati (griglia carte) ---------- */
+.mm__results {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spazio-md);
+}
+
+/* Card autore */
+.mm-card {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: var(--spazio-sm);
+  align-items: center;
+
+  border: 1px solid var(--c-bordi);
+  background: var(--c-superficie);
+  border-radius: 14px;
+  padding: var(--spazio-sm);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.mm-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ombra-intensa);
+  border-color: color-mix(in oklab, currentColor 18%, transparent);
+}
+
+/* Avatar */
+.mm-card__avatar {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: #eee center/cover no-repeat;
+  border: 1px solid var(--c-bordi);
+}
+
+/* Testo */
+.mm-card__text { display: grid; gap: .25rem; }
+.mm-card__name {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: var(--c-testo);
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+.mm-card__meta {
+  display: flex; flex-wrap: wrap; gap: .35rem .5rem;
+  color: var(--c-testo-leggero);
+  font-size: .86rem;
+}
+.mm-pill {
+  border: 1px solid var(--c-bordi);
+  border-radius: 999px;
+  padding: .2rem .55rem;
+  background: #fafafa;
+  color: var(--c-testo);
+  font-size: .78rem;
+}
+
+/* Azioni / compatibilità */
+.mm-card__right {
+  display: grid;
+  gap: .4rem;
+  justify-items: end;
+}
+
+/* Barra compatibilità */
+.mm-compat {
+  display: grid;
+  gap: .25rem;
+  min-width: 140px;
+}
+.mm-compat__label {
+  font-size: .78rem;
+  color: var(--c-testo-leggero);
+  text-align: right;
+}
+.mm-compat__bar {
+  height: 8px;
+  background: #eee;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.mm-compat__fill {
+  height: 100%;
+  width: var(--match, 0%);
+  background: linear-gradient(90deg, #66bb6a, #43a047, #2e7d32);
+  border-radius: inherit;
+  transition: width .25s ease;
+}
+
+/* CTA */
+.mm-card__cta {
+  display: inline-flex;
+  gap: .5rem;
+}
+.mm-btn {
+  padding: .5rem .75rem;
+  border-radius: 10px;
+  border: 1px solid var(--c-bordi);
+  background: var(--c-superficie);
+  color: var(--c-testo);
+  font-weight: 700;
+  font-size: .92rem;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.mm-btn:hover { border-color: var(--c-primario); color: var(--c-primario); }
+.mm-btn--primary {
+  background: var(--c-primario);
+  color: #fff;
+  border-color: transparent;
+}
+.mm-btn--primary:hover { background: var(--c-primario-hover); }
+
+/* ---------- Stati vuoto/errore ---------- */
+.mm-empty, .mm-error {
+  display: grid; place-items: center;
+  min-height: 140px;
+  border: 2px dashed var(--c-bordi);
+  border-radius: 12px;
+  color: var(--c-testo-leggero);
+  text-align: center;
+}
+
+/* ---------- Scheletri ---------- */
+.mm-skel {
+  background: linear-gradient(90deg, #eee 25%, #f6f6f6 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: mm-skel 1.4s ease infinite;
+  border-radius: 8px;
+}
+@keyframes mm-skel {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+/* ≥768px: filtri a 2/3 colonne, griglia card a 2 */
+@media (min-width: 768px) {
+  .mm__filters-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .mm__results {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ≥1024px: filtri a 3 colonne, griglia card a 3 */
+@media (min-width: 1024px) {
+  .mm__filters-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .mm__results {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Riduzione movimento */
+@media (prefers-reduced-motion: reduce) {
+  .mm-card, .mm-compat__fill { transition: none; }
+}
