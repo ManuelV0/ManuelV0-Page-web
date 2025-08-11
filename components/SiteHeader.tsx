@@ -12,28 +12,14 @@ export default function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [email, setEmail] = useState<string | null>(null)
 
-  // Auth status
   useEffect(() => {
     let active = true
-    supabase.auth.getUser().then(({ data }) => {
-      if (active) setEmail(data.user?.email ?? null)
-    })
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) =>
-      setEmail(s?.user?.email ?? null)
-    )
+    supabase.auth.getUser().then(({ data }) => { if (active) setEmail(data.user?.email ?? null) })
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setEmail(s?.user?.email ?? null))
     return () => { active = false; sub?.subscription.unsubscribe() }
   }, [])
 
-  // Chiudi menu quando cambi route
   useEffect(() => { setMobileOpen(false) }, [pathname])
-
-  // Body scroll lock + chiusura con ESC
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : ''
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileOpen(false) }
-    window.addEventListener('keydown', onKey)
-    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', onKey) }
-  }, [mobileOpen])
 
   const is = (p: string) => pathname === p
   const starts = (p: string) => pathname?.startsWith(p)
@@ -53,13 +39,13 @@ export default function SiteHeader() {
 
   return (
     <header className="main-header main-header--stacked">
-      {/* Riga 1: brand centrale */}
+      {/* Riga 1: brand */}
       <div className="header-brand" role="banner">
         <i className="fa-solid fa-feather-pointed" aria-hidden />
         <span className="brand-title">TheItalianPoetry</span>
       </div>
 
-      {/* Toggle solo mobile */}
+      {/* Toggle mobile */}
       <button
         className="mobile-nav-toggle"
         aria-controls="primary-navigation primary-actions"
@@ -67,44 +53,26 @@ export default function SiteHeader() {
         onClick={() => setMobileOpen(v => !v)}
         aria-label="Apri/chiudi menu"
       >
-        <span className="burger" aria-hidden>
-          <span></span><span></span><span></span>
-        </span>
+        <i className="fas fa-bars" aria-hidden />
         <span className="sr-only">Menu</span>
       </button>
 
-      {/* Riga 2: nav centrata */}
+      {/* Riga 2: nav */}
       <nav
         id="primary-navigation"
         className="main-nav main-nav--centered"
         data-visible={mobileOpen}
         aria-label="Navigazione principale"
       >
-        <Link href="/" className={is('/') ? 'is-active' : ''} aria-current={is('/') ? 'page' : undefined}>
-          Home
-        </Link>
-        <Link href="/#leaderboard" className={is('/') ? 'is-active' : ''}>
-          Classifica
-        </Link>
+        <Link href="/" className={is('/') ? 'is-active' : ''} aria-current={is('/') ? 'page' : undefined}>Home</Link>
+        <Link href="/#leaderboard" className={is('/') ? 'is-active' : ''}>Classifica</Link>
         <button type="button" onClick={() => openModal('how-to')}>Come Partecipare</button>
         <button type="button" onClick={() => openModal('about')}>Chi Siamo</button>
-        <Link
-          href="/autore"
-          className={starts('/autore') ? 'is-active' : ''}
-          aria-current={starts('/autore') ? 'page' : undefined}
-        >
-          Autore
-        </Link>
-        <Link
-          href="/diario"
-          className={starts('/diario') ? 'is-active' : ''}
-          aria-current={starts('/diario') ? 'page' : undefined}
-        >
-          Diario
-        </Link>
+        <Link href="/autore" className={starts('/autore') ? 'is-active' : ''} aria-current={starts('/autore') ? 'page' : undefined}>Autore</Link>
+        <Link href="/diario" className={starts('/diario') ? 'is-active' : ''} aria-current={starts('/diario') ? 'page' : undefined}>Diario</Link>
       </nav>
 
-      {/* Riga 3: azioni centrate */}
+      {/* Riga 3: actions */}
       <div
         id="primary-actions"
         className="header-actions header-actions--centered"
