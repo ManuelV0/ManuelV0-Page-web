@@ -1,0 +1,71 @@
+/* 05-header-nav.css — header con hamburger responsive */
+
+/* Wrapper già presente:
+   .main-header.main-header--stacked, .header-brand, .brand-title
+   (riuso i token) */
+
+.mobile-nav-toggle{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:8px; padding:8px 10px; border:0; background:transparent; cursor:pointer;
+  border-radius:10px; transition: background .2s ease;
+}
+.mobile-nav-toggle:hover{ background: rgba(0,0,0,.05); }
+
+/* Icona hamburger pura CSS */
+.mobile-nav-toggle .burger{
+  width:24px; height:18px; position:relative; display:inline-block;
+}
+.mobile-nav-toggle .burger span{
+  position:absolute; left:0; right:0; height:2px; background: var(--c-testo);
+  border-radius:2px; transition: transform .25s ease, opacity .2s ease, top .25s ease;
+}
+.mobile-nav-toggle .burger span:nth-child(1){ top:0; }
+.mobile-nav-toggle .burger span:nth-child(2){ top:8px; }
+.mobile-nav-toggle .burger span:nth-child(3){ top:16px; }
+
+/* Stato “aperto”: trasformo in X */
+.main-nav[data-visible="true"] ~ .header-actions .mobile-nav-toggle .burger span,
+.mobile-nav-toggle[aria-expanded="true"] .burger span{
+  background: var(--c-primario);
+}
+.mobile-nav-toggle[aria-expanded="true"] .burger span:nth-child(1){
+  top:8px; transform: rotate(45deg);
+}
+.mobile-nav-toggle[aria-expanded="true"] .burger span:nth-child(2){
+  opacity:0;
+}
+.mobile-nav-toggle[aria-expanded="true"] .burger span:nth-child(3){
+  top:8px; transform: rotate(-45deg);
+}
+
+/* Nav centrata (mobile: a fisarmonica sotto al brand) */
+.main-nav.main-nav--centered{
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  width:100%; padding:10px 0;
+}
+.main-nav.main-nav--centered a{
+  appearance:none; background:none; border:0; text-decoration:none;
+  color: var(--c-testo); padding:8px 12px; border-radius:8px; font-weight:600;
+  transition: color .15s ease, background .15s ease;
+}
+.main-nav.main-nav--centered a:hover{
+  color: var(--c-primario);
+  background: color-mix(in oklab, var(--c-primario) 8%, transparent);
+}
+.main-nav .is-active{
+  color: var(--c-primario);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Comportamento visibilità mobile */
+@media (max-width: 767.98px){
+  .main-nav[data-visible="false"]{ display:none; }
+  .main-nav[data-visible="true"]{ display:flex; }
+}
+
+/* Da tablet in su: nav sempre visibile, hamburger nascosto */
+@media (min-width: 768px){
+  .mobile-nav-toggle{ display:none; }
+  .main-nav{ display:flex !important; flex-direction:row; gap:12px; }
+}
