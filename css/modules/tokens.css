@@ -1,1 +1,173 @@
+/* =========================================================
+   01 — DESIGN TOKENS (TheItalianPoetry)
+   - Colori (chiaro/scuro + stato)
+   - Tipografia fluida (scala modulare)
+   - Spaziatura, raggi, ombre, transizioni
+   - Layer/Z-index, dimensioni container
+   - Preferenze utente (motion/contrast)
+   ========================================================= */
 
+/* ---------- Tema chiaro (default) ---------- */
+:root {
+  /* Palette base */
+  --c-sfondo:           #F9F9F9;
+  --c-superficie:       #FFFFFF;
+  --c-testo:            #1f2328;
+  --c-testo-leggero:    #59636e;
+  --c-bordi:            #e5e7eb;
+
+  /* Brand */
+  --c-primario:         #2e7d32; /* verde elegante */
+  --c-primario-600:     #256c29;
+  --c-primario-700:     #1f5b23;
+  --c-primario-hover:   #2a742e;
+  --c-secondario:       #1e88e5;
+  --c-secondario-hover: #1976d2;
+
+  /* Accenti e premi */
+  --c-oro:              #FFD700;
+  --c-argento:          #C0C0C0;
+  --c-bronzo:           #CD7F32;
+  --c-oro-testo:        #FFD700;
+  --c-argento-testo:    #C0C0C0;
+  --c-bronzo-testo:     #CD7F32;
+
+  /* Stato */
+  --c-successo:         #22c55e;
+  --c-attenzione:       #f59e0b;
+  --c-errore:           #ef4444;
+  --c-info:             #0ea5e9;
+
+  /* Social / widget */
+  --c-stelle:           #FFC107;
+
+  /* Tipografia (famiglie) */
+  --font-heading:       'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --font-body:          'Open Sans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --font-mono:          ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* Tipografia (scala fluida) */
+  /* Base 16px → scala morbida; usa var(--step-*) dove serve */
+  --step--2: clamp(0.70rem, 0.69rem + 0.05vw, 0.74rem);
+  --step--1: clamp(0.84rem, 0.81rem + 0.20vw, 0.95rem);
+  --step-0:  clamp(1.00rem, 0.95rem + 0.35vw, 1.125rem); /* body */
+  --step-1:  clamp(1.15rem, 1.05rem + 0.70vw, 1.35rem);
+  --step-2:  clamp(1.35rem, 1.22rem + 0.95vw, 1.62rem);
+  --step-3:  clamp(1.62rem, 1.45rem + 1.20vw, 1.95rem);
+  --step-4:  clamp(1.95rem, 1.70rem + 1.60vw, 2.40rem);
+  --step-5:  clamp(2.40rem, 2.10rem + 2.20vw, 3.00rem);
+
+  /* Spazi (8-pt scale estesa) */
+  --spazio-2xs: 0.25rem;
+  --spazio-xs:  0.50rem;
+  --spazio-sm:  0.75rem;
+  --spazio-md:  1.00rem;
+  --spazio-lg:  1.50rem;
+  --spazio-xl:  2.00rem;
+  --spazio-2xl: 3.00rem;
+
+  /* Raggi */
+  --r-2:  6px;
+  --r-3:  10px;
+  --r-4:  16px;   /* default card */
+  --r-pill: 999px;
+
+  /* Ombre (elevazioni) */
+  --ombra-1: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --ombra-2: 0 4px 12px rgba(0,0,0,.08);
+  --ombra-3: 0 10px 30px rgba(0,0,0,.12);
+
+  /* Transizioni & curve */
+  --transizione: 180ms ease;
+  --ease-out-1: cubic-bezier(.2,.7,.3,1);
+  --ease-in-1:  cubic-bezier(.7,0,.84,0);
+
+  /* Layer */
+  --z-header: 1000;
+  --z-overlay: 2000;
+  --z-toast: 3000;
+
+  /* Layout */
+  --header-height: 70px;
+  --container-max: 1200px;
+
+  /* Gradient brand (per hero/bottoni speciali) */
+  --grad-brand: linear-gradient(45deg, #1B5E20, #2E7D32, #4CAF50);
+}
+
+/* ---------- Tema scuro (opt-in con data-theme="dark") ---------- */
+:root[data-theme="dark"] {
+  --c-sfondo:        #0f1419;
+  --c-superficie:    #0f1722;
+  --c-testo:         #e6edf3;
+  --c-testo-leggero: #9aa6b2;
+  --c-bordi:         #253041;
+
+  --c-primario:       #3fbf53;
+  --c-primario-600:   #32a444;
+  --c-primario-700:   #2a883a;
+  --c-primario-hover: #39b24c;
+  --c-secondario:     #7cc2ff;
+  --c-secondario-hover:#62aff0;
+
+  --ombra-1: 0 1px 3px rgba(0,0,0,.6), 0 1px 2px rgba(0,0,0,.5);
+  --ombra-2: 0 6px 16px rgba(0,0,0,.55);
+  --ombra-3: 0 12px 36px rgba(0,0,0,.6);
+}
+
+/* Preferenza sistema: se vuoi abilitare auto-dark */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --c-sfondo:        #0f1419;
+    --c-superficie:    #0f1722;
+    --c-testo:         #e6edf3;
+    --c-testo-leggero: #9aa6b2;
+    --c-bordi:         #253041;
+  }
+}
+
+/* Motion: riduci animazioni se l’utente lo preferisce */
+@media (prefers-reduced-motion: reduce) {
+  :root { --transizione: 0ms linear; }
+}
+
+/* Tipografia/Root */
+html { font-size: 16px; }
+body {
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  color: var(--c-testo);
+  background: var(--c-sfondo);
+}
+
+/* Headings base (usa la scala fluida) */
+h1, h2, h3, h4 { font-family: var(--font-heading); line-height: 1.2; }
+h1 { font-size: var(--step-5); }
+h2 { font-size: var(--step-4); }
+h3 { font-size: var(--step-3); }
+h4 { font-size: var(--step-2); }
+
+/* Component-tokens (opzionali ma utili) */
+:root {
+  /* Header */
+  --header-bg: var(--c-superficie);
+  --header-shadow: var(--ombra-2);
+
+  /* Card */
+  --card-bg: var(--c-superficie);
+  --card-radius: var(--r-4);
+  --card-shadow: var(--ombra-2);
+  --card-border: 1px solid color-mix(in oklab, currentColor 12%, transparent);
+
+  /* Buttons */
+  --btn-radius: var(--r-pill);
+  --btn-padding: .65rem 1.0rem;
+  --btn-primary-bg: var(--c-primario);
+  --btn-primary-bg-hover: var(--c-primario-hover);
+  --btn-primary-fg: #fff;
+
+  /* Link */
+  --link: color-mix(in oklab, var(--c-secondario) 85%, black);
+  --link-hover: var(--c-secondario);
+}
