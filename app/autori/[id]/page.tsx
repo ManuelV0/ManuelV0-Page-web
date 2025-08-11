@@ -1,6 +1,9 @@
 // app/autori/[id]/page.tsx
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { supabaseServer } from '@/lib/supabaseServer'
+
+export const dynamic = 'force-dynamic'
 
 type Journal = {
   descrizione_autore?: string
@@ -17,13 +20,15 @@ async function getData(id: string) {
     .select('id,username,avatar_url,poetic_journal,qr_code_url,public_page_url,last_updated')
     .eq('id', id)
     .single()
-  if (pErr || !profile) throw new Error('Autore non trovato')
+
+  if (pErr || !profile) return null
 
   // conteggio opere (tabella ponte author_poem)
   const { data: rows, error: cErr } = await supabase
     .from('author_poem')
     .select('author_id')
     .eq('author_id', id)
+
   if (cErr) throw cErr
 
   return {
@@ -32,25 +37,30 @@ async function getData(id: string) {
   }
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  try {
-    const { profile } = await getData(params.id)
-    const title = profile?.username ? `${profile.username} — Diario Autore` : 'Diario Autore'
-    const desc =
-      (profile?.poetic_journal as Journal | null)?.descrizione_autore ||
-      'Profilo autore e diario poetico.'
-    return {
-      title,
-      description: desc,
-      openGraph: { title, description: desc },
-    }
-  } catch {
-    return { title: 'Autore', description: 'Profilo autore' }
+export async function generateMetadata(
+  { params }: { params: { id: string } }
+): Promise<Metadata> {
+  const data = await getData(decodeURIComponent(params.id))
+  if (!data) return { title: 'Autore', description: 'Profilo autore' }
+
+  const { profile } = data
+  const j = (profile.poetic_journal as Journal | null) || {}
+  const title = profile.username ? `${profile.username} — Diario Autore` : 'Diario Autore'
+  const description = j.descrizione_autore || 'Profilo autore e diario poetico.'
+
+  return {
+    title,
+    description,
+    openGraph: { title, description },
   }
 }
 
 export default async function AutorePage({ params }: { params: { id: string } }) {
-  const { profile, poemsCount } = await getData(params.id)
+  const id = decodeURIComponent(params.id)
+  const data = await getData(id)
+  if (!data) notFound()
+
+  const { profile, poemsCount } = data!
   const j = (profile.poetic_journal as Journal | null) || {}
   const temi = j.profilo_poetico?.temi_ricorrenti || []
   const evol = j.profilo_poetico?.evoluzione
@@ -81,7 +91,7 @@ export default async function AutorePage({ params }: { params: { id: string } })
           <div className="author-card__meta">
             <div className="meta-row">
               <span className="meta-pill">
-                Agg.: {profile.last_updated ? new Date(profile.last_updated).toLocaleDateString() : '-'}
+                Agg.: {profile.last_updated ? new Date(profile.last_updated).toLocaleDateString('it-IT') : '-'}
               </span>
             </div>
             {profile.public_page_url && (
@@ -99,7 +109,7 @@ export default async function AutorePage({ params }: { params: { id: string } })
 
           <div className="author-card__footer">
             <div className="author-card__actions">
-              {/* spazio per azioni future (es. “Aggiorna diario”) */}
+              {/* spazio azioni future (es. “Aggiorna diario”) */}
             </div>
             {profile.qr_code_url && (
               <div
