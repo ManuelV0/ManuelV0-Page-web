@@ -1,1 +1,183 @@
 
+/* =========================================================
+   05 — MODALI & OVERLAY (Responsive + A11y)
+   Dipendenze: 01-tokens.css
+   Compatibile con gli eventi "open-modal" che usi nel header.
+   Stati: [data-open="true"] oppure .is-open
+   ========================================================= */
+
+/* ---------- Layer & backdrop ---------- */
+.modal-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  padding: var(--spazio-sm);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .25s ease, visibility .25s ease;
+  /* Blur leggero per profondità */
+  backdrop-filter: blur(4px);
+  background: color-mix(in oklab, #000 50%, transparent);
+}
+
+.modal-layer[data-open="true"], .modal-layer.is-open {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Evita scroll sotto la modale (aggiungi .no-scroll al <body> quando apri) */
+.no-scroll { overflow: hidden; }
+
+/* ---------- Contenitore modale ---------- */
+.modal {
+  width: min(720px, 100%);
+  max-height: 90dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--spazio-sm);
+  background: var(--c-superficie);
+  color: var(--c-testo);
+  border: 1px solid var(--c-bordi);
+  border-radius: var(--bordo-arrotondato);
+  box-shadow: var(--ombra-card);
+  transform: translateY(16px);
+  transition: transform .25s ease;
+}
+
+.modal-layer[data-open="true"] .modal,
+.modal-layer.is-open .modal {
+  transform: translateY(0);
+}
+
+/* ---------- Header / body / footer ---------- */
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spazio-sm);
+  padding: var(--spazio-sm) var(--spazio-md) 0 var(--spazio-md);
+}
+
+.modal__title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--c-primario);
+}
+
+.modal__close {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  color: var(--c-testo-leggero);
+  cursor: pointer;
+  display: grid; place-items: center;
+  transition: background .15s ease, color .15s ease;
+}
+.modal__close:hover { background: rgba(0,0,0,.06); color: var(--c-primario); }
+.modal__close:focus-visible {
+  outline: 3px solid var(--c-secondario-hover);
+  outline-offset: 2px;
+}
+
+.modal__body {
+  padding: 0 var(--spazio-md);
+  overflow: auto;
+}
+.modal__body > * + * { margin-top: .75rem; }
+
+.modal__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  justify-content: flex-end;
+  padding: 0 var(--spazio-md) var(--spazio-sm) var(--spazio-md);
+  border-top: 1px solid var(--c-bordi);
+  margin-top: var(--spazio-sm);
+}
+
+/* ---------- Varianti contenuto ---------- */
+.modal--howto .modal__title   { color: var(--c-primario); }
+.modal--about .modal__title   { color: var(--c-secondario); }
+.modal--submission .modal__title { color: var(--c-primario); }
+
+/* Blocchi testo dentro le modali */
+.modal .prose h3 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  margin-top: .5rem;
+  color: var(--c-testo);
+}
+.modal .prose p { color: var(--c-testo); line-height: 1.65; }
+.modal .prose ul { padding-left: 1rem; }
+.modal .prose li { margin: .35rem 0; color: var(--c-testo-leggero); }
+
+/* ---------- Pulsanti standard ---------- */
+.modal .button-primary {
+  background: var(--c-primario);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: .65rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s ease, transform .15s ease;
+}
+.modal .button-primary:hover { background: var(--c-primario-hover); }
+.modal .button-secondary {
+  background: transparent;
+  color: var(--c-testo);
+  border: 1px solid var(--c-bordi);
+  border-radius: 10px;
+  padding: .65rem 1rem;
+}
+.modal .button-secondary:hover { border-color: var(--c-primario); color: var(--c-primario); }
+
+/* ---------- Responsiveness ---------- */
+/* Mobile: comportamento “sheet” a tutta larghezza/altezza comoda */
+@media (max-width: 767.98px) {
+  .modal {
+    width: 100%;
+    height: 92dvh;
+    max-height: 92dvh;
+    border-radius: 16px 16px 0 0;
+    align-self: end;                 /* appoggiata in basso */
+  }
+  .modal__header { padding-top: var(--spazio-md); }
+}
+
+/* Tablet+ : modale centrata */
+@media (min-width: 768px) {
+  .modal {
+    width: min(720px, 90vw);
+    max-height: 86dvh;
+    border-radius: var(--bordo-arrotondato);
+  }
+}
+
+/* ---------- Riduzione movimento ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .modal-layer { transition: none; }
+  .modal { transition: none; }
+}
+
+/* ---------- Tema scuro opzionale ---------- */
+@media (prefers-color-scheme: dark) {
+  .modal-layer { background: color-mix(in oklab, #000 60%, transparent); }
+  .modal {
+    background: #121212;
+    color: #f3f3f3;
+    border-color: color-mix(in oklab, #fff 12%, transparent);
+  }
+  .modal__footer { border-top-color: color-mix(in oklab, #fff 12%, transparent); }
+  .modal__close:hover { background: rgba(255,255,255,.08); }
+  .modal .button-secondary { color: #ddd; border-color: color-mix(in oklab, #fff 18%, transparent); }
+  .modal .button-secondary:hover { color: var(--c-primario); border-color: var(--c-primario); }
+}
+
+/* ---------- Helper: stato nascosto legacy (compat) ---------- */
+.modal-backdrop.hidden { display: none !important; }
