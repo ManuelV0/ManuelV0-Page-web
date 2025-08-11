@@ -11,6 +11,11 @@
 
 
 @import '../css/modules/01-header.css';
+/* app/globals.css */
+@import '../css/modules/12-diario.css';
+@import '../css/modules/13-poems.css';
+
+
 
 
 /* app/globals.css – niente @import qui */
