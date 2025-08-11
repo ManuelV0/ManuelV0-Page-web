@@ -25,7 +25,7 @@
 @import '../css/modules/animations.css';
 @import '../css/modules/utilities.css';
 @import '../css/modules/responsive.css';
-
+@import '../css/modules/diario-match.css';
 
 /* app/globals.css – niente @import qui */
 :root { --c-primario: #4CAF50; }
