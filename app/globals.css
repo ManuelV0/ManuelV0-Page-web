@@ -43,10 +43,9 @@
 
 
 
-@import '../css/modules/tokens-UI.css';
-@import '../css/modules/header-nav-UI.css';
-@import '../css/modules/diario-UI.css';
-
+@import '../css/modules/01-tokens.css';
+@import '../css/modules/05-header-nav.css';
+@import '../css/modules/12-diario.css';
 
 
 
