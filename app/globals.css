@@ -19,7 +19,8 @@
 @import '../css/modules/03-base.css';
 @import '../css/modules/03-layout.css';
 @import '../css/modules/04-header.css';
-@import '../css/modules/04-hero-cards.css
+@import '../css/modules/04-hero-cards.css;
+@import '../css/modules/05-layout-sidebar.css';
 @import '../css/modules/05-buttons.css';
 @import '../css/modules/06-forms.css';
 @import '../css/modules/07-cards.css';
