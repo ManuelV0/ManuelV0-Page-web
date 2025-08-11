@@ -12,6 +12,7 @@ export default function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [email, setEmail] = useState<string | null>(null)
 
+  // Auth status
   useEffect(() => {
     let active = true
     supabase.auth.getUser().then(({ data }) => { if (active) setEmail(data.user?.email ?? null) })
@@ -19,7 +20,15 @@ export default function SiteHeader() {
     return () => { active = false; sub?.subscription.unsubscribe() }
   }, [])
 
+  // Chiudi il menu quando cambi route
   useEffect(() => { setMobileOpen(false) }, [pathname])
+
+  // Chiudi con ESC
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   const is = (p: string) => pathname === p
   const starts = (p: string) => pathname?.startsWith(p)
@@ -51,7 +60,7 @@ export default function SiteHeader() {
         aria-controls="primary-navigation primary-actions"
         aria-expanded={mobileOpen}
         onClick={() => setMobileOpen(v => !v)}
-        aria-label="Apri/chiudi menu"
+        aria-label={mobileOpen ? 'Chiudi menu' : 'Apri menu'}
       >
         <i className="fas fa-bars" aria-hidden />
         <span className="sr-only">Menu</span>
