@@ -1,0 +1,18 @@
+/* 02) BASE — Reset leggero, body, accessibilità */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0; font-family:var(--font-body); color:var(--c-testo);
+  background:var(--c-sfondo); line-height:1.7;
+  padding-top:var(--header-h); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+
+:focus-visible{outline:3px solid var(--c-secondario-hover); outline-offset:2px; border-radius:6px}
+:focus:not(:focus-visible){outline:none}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;padding:0;margin:-1px}
+a{color:inherit;text-decoration:none}
+
+/* Titoli base */
+h1,h2,h3,h4{font-family:var(--font-heading); line-height:1.25}
+h1{font-size:clamp(1.6rem,2.8vw,2.2rem)}
+h2{font-size:clamp(1.3rem,2.2vw,1.8rem)}
