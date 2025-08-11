@@ -1,9 +1,5 @@
-// app/autori/[id]/page.tsx
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import { supabaseServer } from '@/lib/supabaseServer'
-
-export const dynamic = 'force-dynamic'
 
 type Journal = {
   descrizione_autore?: string
@@ -14,53 +10,45 @@ type Journal = {
 async function getData(id: string) {
   const supabase = supabaseServer()
 
-  // profilo autore
   const { data: profile, error: pErr } = await supabase
     .from('profiles')
-    .select('id,username,avatar_url,poetic_journal,qr_code_url,public_page_url,last_updated')
+    .select('id, username, avatar_url, poetic_journal, qr_code_url, public_page_url, last_updated')
     .eq('id', id)
     .single()
+  if (pErr || !profile) throw new Error('Autore non trovato')
 
-  if (pErr || !profile) return null
+  const { count, error: cntErr } = await supabase
+    .from('poesie')
+    .select('id', { count: 'exact', head: true })
+    .eq('profile_id', id)
+  if (cntErr) throw cntErr
 
-  // conteggio opere (tabella ponte author_poem)
-  const { data: rows, error: cErr } = await supabase
-    .from('author_poem')
-    .select('author_id')
-    .eq('author_id', id)
+  // opzionale: poesie recenti per la scheda
+  const { data: recentPoems } = await supabase
+    .from('poesie')
+    .select('id, title, titolo, created_at')
+    .eq('profile_id', id)
+    .order('created_at', { ascending: false })
+    .limit(5)
 
-  if (cErr) throw cErr
-
-  return {
-    profile,
-    poemsCount: rows?.length ?? 0,
-  }
+  return { profile, poemsCount: count || 0, recentPoems: recentPoems || [] }
 }
 
-export async function generateMetadata(
-  { params }: { params: { id: string } }
-): Promise<Metadata> {
-  const data = await getData(decodeURIComponent(params.id))
-  if (!data) return { title: 'Autore', description: 'Profilo autore' }
-
-  const { profile } = data
-  const j = (profile.poetic_journal as Journal | null) || {}
-  const title = profile.username ? `${profile.username} — Diario Autore` : 'Diario Autore'
-  const description = j.descrizione_autore || 'Profilo autore e diario poetico.'
-
-  return {
-    title,
-    description,
-    openGraph: { title, description },
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  try {
+    const { profile } = await getData(params.id)
+    const title = profile?.username ? `${profile.username} — Diario Autore` : 'Diario Autore'
+    const desc =
+      ((profile?.poetic_journal as Journal | null)?.descrizione_autore) ||
+      'Profilo autore e diario poetico.'
+    return { title, description: desc, openGraph: { title, description: desc } }
+  } catch {
+    return { title: 'Autore', description: 'Profilo autore' }
   }
 }
 
 export default async function AutorePage({ params }: { params: { id: string } }) {
-  const id = decodeURIComponent(params.id)
-  const data = await getData(id)
-  if (!data) notFound()
-
-  const { profile, poemsCount } = data!
+  const { profile, poemsCount, recentPoems } = await getData(params.id)
   const j = (profile.poetic_journal as Journal | null) || {}
   const temi = j.profilo_poetico?.temi_ricorrenti || []
   const evol = j.profilo_poetico?.evoluzione
@@ -69,16 +57,11 @@ export default async function AutorePage({ params }: { params: { id: string } })
   return (
     <main className="container">
       <section className="diario-section" aria-labelledby="autore-title">
-        <h1 id="autore-title" className="section-title">
-          {profile.username || 'Senza nome'}
-        </h1>
+        <h1 id="autore-title" className="section-title">{profile.username || 'Senza nome'}</h1>
 
         <div className="author-card" style={{ marginTop: '1rem' }}>
           <div className="author-card__header">
-            <div
-              className="author-card__avatar"
-              style={{ backgroundImage: `url('${profile.avatar_url || ''}')` }}
-            />
+            <div className="author-card__avatar" style={{ backgroundImage: `url('${profile.avatar_url || ''}')` }} />
             <div>
               <div className="author-card__name">{profile.username || 'Senza nome'}</div>
               <div className="author-card__id">{profile.id}</div>
@@ -91,31 +74,22 @@ export default async function AutorePage({ params }: { params: { id: string } })
           <div className="author-card__meta">
             <div className="meta-row">
               <span className="meta-pill">
-                Agg.: {profile.last_updated ? new Date(profile.last_updated).toLocaleDateString('it-IT') : '-'}
+                Agg.: {profile.last_updated ? new Date(profile.last_updated).toLocaleDateString() : '-'}
               </span>
             </div>
             {profile.public_page_url && (
-              <a className="btn" href={profile.public_page_url} target="_blank" rel="noreferrer">
-                Pagina pubblica
-              </a>
+              <a className="btn" href={profile.public_page_url} target="_blank" rel="noreferrer">Pagina pubblica</a>
             )}
           </div>
 
           <div className="journal-preview">
-            <div className="journal-preview__text">
-              {j.descrizione_autore || '(nessuna descrizione)'}
-            </div>
+            <div className="journal-preview__text">{j.descrizione_autore || '(nessuna descrizione)'}</div>
           </div>
 
           <div className="author-card__footer">
-            <div className="author-card__actions">
-              {/* spazio azioni future (es. “Aggiorna diario”) */}
-            </div>
+            <div className="author-card__actions" />
             {profile.qr_code_url && (
-              <div
-                className="author-card__qr"
-                style={{ backgroundImage: `url('${profile.qr_code_url}')` }}
-              />
+              <div className="author-card__qr" style={{ backgroundImage: `url('${profile.qr_code_url}')` }} />
             )}
           </div>
 
@@ -124,13 +98,7 @@ export default async function AutorePage({ params }: { params: { id: string } })
               <div className="journal-block">
                 <h4>Temi ricorrenti</h4>
                 <div className="journal-tags">
-                  {temi.length
-                    ? temi.map((t, i) => (
-                        <span className="journal-tag" key={i}>
-                          {t}
-                        </span>
-                      ))
-                    : <span className="journal-tag">—</span>}
+                  {temi.length ? temi.map((t, i) => <span className="journal-tag" key={i}>{t}</span>) : <span className="journal-tag">—</span>}
                 </div>
               </div>
 
@@ -145,6 +113,19 @@ export default async function AutorePage({ params }: { params: { id: string } })
                 <div className="journal-block">
                   <h4>Ultime opere</h4>
                   <ul>{opere.map((o, i) => <li key={i}>{o.titolo}</li>)}</ul>
+                </div>
+              )}
+
+              {recentPoems.length > 0 && (
+                <div className="journal-block">
+                  <h4>Poesie recenti</h4>
+                  <ul>
+                    {recentPoems.map((p) => (
+                      <li key={p.id}>
+                        {(p.title as string) || (p.titolo as string) || 'Senza titolo'} — {new Date(p.created_at as string).toLocaleDateString()}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </div>
