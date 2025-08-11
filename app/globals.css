@@ -9,22 +9,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400;500&display=swap');
 
 /* Moduli del sito (ordine importante: dal generico allo specifico) */
-@import '../css/modules/01-tokens.css';
-@import '../css/modules/02-base-accessibility.css';
-@import '../css/modules/03-header.css';
-@import '../css/modules/04-hero.css';
-@import '../css/modules/05-layout.css';
-@import '../css/modules/06-cards-and-expanded.css';
-@import '../css/modules/07-poems.css';
-@import '../css/modules/08-sidebar.css';
-@import '../css/modules/09-widget.css';
-@import '../css/modules/10-footer.css';
-@import '../css/modules/11-modals.css';
-@import '../css/modules/12-forms-and-buttons.css';
-@import '../css/modules/13-star-rating.css';
-@import '../css/modules/14-animations.css';
-@import '../css/modules/15-utilities.css';
-@import '../css/modules/16-responsive.css';
+@import '../css/modules/tokens.css';
+@import '../css/modules/base-accessibility.css';
+@import '../css/modules/header.css';
+@import '../css/modules/hero.css';
+@import '../css/modules/layout.css';
+@import '../css/modules/cards-and-expanded.css';
+@import '../css/modules/poems.css';
+@import '../css/modules/sidebar.css';
+@import '../css/modules/widget.css';
+@import '../css/modules/footer.css';
+@import '../css/modules/modals.css';
+@import '../css/modules/forms-and-buttons.css';
+@import '../css/modules/star-rating.css';
+@import '../css/modules/animations.css';
+@import '../css/modules/utilities.css';
+@import '../css/modules/responsive.css';
 
 
 /* app/globals.css – niente @import qui */
