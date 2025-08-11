@@ -6,30 +6,52 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 
+type ModalName = 'how-to' | 'about' | 'submission'
+
 export default function SiteHeader() {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [email, setEmail] = useState<string | null>(null)
 
+  // Auth status
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null))
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setEmail(s?.user?.email ?? null))
-    return () => sub?.subscription.unsubscribe()
+    let active = true
+    supabase.auth.getUser().then(({ data }) => {
+      if (active) setEmail(data.user?.email ?? null)
+    })
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) =>
+      setEmail(s?.user?.email ?? null)
+    )
+    return () => {
+      active = false
+      sub?.subscription.unsubscribe()
+    }
   }, [])
 
-  const is = (p: string) => pathname === p
-  const isStarts = (p: string) => pathname?.startsWith(p)
+  // Chiudi il drawer quando cambi route
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [pathname])
 
-  const openModal = (name: 'how-to' | 'about' | 'submission') =>
-    window.dispatchEvent(new CustomEvent('open-modal', { detail: name }))
+  const is = (p: string) => pathname === p
+  const starts = (p: string) => pathname?.startsWith(p)
+
+  const openModal = (name: ModalName) =>
+    window.dispatchEvent(new CustomEvent<ModalName>('open-modal', { detail: name }))
 
   const signInWithGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: typeof window !== 'undefined' ? location.origin : undefined }
-    })
+    try {
+      await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: typeof window !== 'undefined' ? location.origin : undefined }
+      })
+    } catch {
+      /* noop: puoi mostrare un toast qui */
+    }
   }
-  const signOut = async () => { await supabase.auth.signOut() }
+  const signOut = async () => {
+    try { await supabase.auth.signOut() } catch {}
+  }
 
   return (
     <header className="main-header">
@@ -42,7 +64,7 @@ export default function SiteHeader() {
         aria-controls="primary-navigation"
         aria-expanded={mobileOpen}
         onClick={() => setMobileOpen(v => !v)}
-        aria-label="Menu"
+        aria-label="Apri/chiudi menu"
       >
         <i className="fas fa-bars" aria-hidden />
         <span className="sr-only">Menu</span>
@@ -50,12 +72,39 @@ export default function SiteHeader() {
 
       <div id="primary-navigation" className="nav-wrapper" data-visible={mobileOpen}>
         <nav className="main-nav">
-          <Link href="/" className={is('/') ? 'is-active' : ''}>Home</Link>
-          <a href="/#leaderboard" className={is('/#leaderboard') ? 'is-active' : ''}>Classifica</a>
-          <button type="button" onClick={() => openModal('how-to')}>Come Partecipare</button>
-          <button type="button" onClick={() => openModal('about')}>Chi Siamo</button>
-          <Link href="/autore" className={isStarts('/autore') ? 'is-active' : ''}>Autore</Link>
-          <Link href="/diario" className={isStarts('/diario') ? 'is-active' : ''}>Diario</Link>
+          <Link href="/" className={is('/') ? 'is-active' : ''} aria-current={is('/') ? 'page' : undefined}>
+            Home
+          </Link>
+
+          {/* L’ancora usa Link: attivo quando sei in homepage */}
+          <Link href="/#leaderboard" className={is('/') ? 'is-active' : ''}>
+            Classifica
+          </Link>
+
+          <button type="button" onClick={() => openModal('how-to')}>
+            Come Partecipare
+          </button>
+          <button type="button" onClick={() => openModal('about')}>
+            Chi Siamo
+          </button>
+
+          {/* Pagina Autore (tua) */}
+          <Link
+            href="/autore"
+            className={starts('/autore') ? 'is-active' : ''}
+            aria-current={starts('/autore') ? 'page' : undefined}
+          >
+            Autore
+          </Link>
+
+          {/* Diario (lista autori + diari) */}
+          <Link
+            href="/diario"
+            className={starts('/diario') ? 'is-active' : ''}
+            aria-current={starts('/diario') ? 'page' : undefined}
+          >
+            Diario
+          </Link>
         </nav>
 
         <div className="header-actions">
@@ -69,6 +118,7 @@ export default function SiteHeader() {
               <button className="button-secondary" onClick={signOut}>Logout</button>
             </div>
           )}
+
           <button
             className="button-primary"
             disabled={!email}
