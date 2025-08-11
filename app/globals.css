@@ -27,7 +27,7 @@
 @import '../css/modules/responsive.css';
 @import '../css/modules/diario-match.css';
 @import '../css/modules/matchmaking.css';
-
+@import '../css/modules/modals-auth.css';
 
 
 /* app/globals.css – niente @import qui */
