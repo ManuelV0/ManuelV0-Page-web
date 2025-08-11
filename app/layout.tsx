@@ -1,9 +1,4 @@
-
 // app/layout.tsx
-
-import '../css/style.css'
-import '../css/diario.css'
-import '../css/poetry-widget.css'
 import './globals.css'
 import Link from 'next/link'
 
@@ -16,12 +11,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <i className="fa-solid fa-feather-pointed" aria-hidden="true" />
             <span>TheItalianPoetry</span>
           </div>
+
           <nav className="main-nav">
             <Link href="/">Home</Link>
-            <Link href="/diario">Diario</Link>{/* 👈 nuovo */}
-            <Link href="/autori">Autori</Link>
+            <a href="/#leaderboard">Classifica</a>
+            <Link href="/diario">Diario</Link>
+            <Link href="/autore">Autore</Link>
+            <Link href="/come-partecipare">Come Partecipare</Link>
+            <Link href="/chi-siamo">Chi Siamo</Link>
+            <Link href="/login">Accedi</Link>
           </nav>
         </header>
+
         {children}
       </body>
     </html>
