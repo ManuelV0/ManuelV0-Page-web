@@ -11,22 +11,17 @@ export default function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [email, setEmail] = useState<string | null>(null)
 
-  // bootstrap auth
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null))
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      setEmail(session?.user?.email ?? null)
-    })
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setEmail(s?.user?.email ?? null))
     return () => sub?.subscription.unsubscribe()
   }, [])
 
   const is = (p: string) => pathname === p
   const isStarts = (p: string) => pathname?.startsWith(p)
 
-  const openModal = (name: 'how-to' | 'about' | 'author' | 'submission') => {
-    // layout o pagina possono ascoltare questo evento per aprire le modali
+  const openModal = (name: 'how-to' | 'about' | 'submission') =>
     window.dispatchEvent(new CustomEvent('open-modal', { detail: name }))
-  }
 
   const signInWithGoogle = async () => {
     await supabase.auth.signInWithOAuth({
@@ -34,14 +29,12 @@ export default function SiteHeader() {
       options: { redirectTo: typeof window !== 'undefined' ? location.origin : undefined }
     })
   }
-
   const signOut = async () => { await supabase.auth.signOut() }
 
   return (
     <header className="main-header">
       <div className="logo">
-        <i className="fa-solid fa-feather-pointed" aria-hidden />
-        <span>TheItalianPoetry</span>
+        <i className="fa-solid fa-feather-pointed" aria-hidden /> <span>TheItalianPoetry</span>
       </div>
 
       <button
@@ -61,7 +54,6 @@ export default function SiteHeader() {
           <a href="/#leaderboard" className={is('/#leaderboard') ? 'is-active' : ''}>Classifica</a>
           <button type="button" onClick={() => openModal('how-to')}>Come Partecipare</button>
           <button type="button" onClick={() => openModal('about')}>Chi Siamo</button>
-          {/* “Autore” = pagina del proprietario; “Diario” = elenco autori/diari */}
           <Link href="/autore" className={isStarts('/autore') ? 'is-active' : ''}>Autore</Link>
           <Link href="/diario" className={isStarts('/diario') ? 'is-active' : ''}>Diario</Link>
         </nav>
@@ -77,13 +69,12 @@ export default function SiteHeader() {
               <button className="button-secondary" onClick={signOut}>Logout</button>
             </div>
           )}
-
           <button
             className="button-primary"
             disabled={!email}
+            onClick={() => openModal('submission')}
             aria-disabled={!email}
             title={!email ? 'Accedi per partecipare' : 'Invia la tua poesia'}
-            onClick={() => openModal('submission')}
           >
             Partecipa!
           </button>
