@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { supabase } from '@/lib/supabaseClient'
 
 type Journal = {
@@ -35,28 +36,30 @@ export default function DiarioPage() {
         setLoading(true)
         setErr(null)
 
-        // 1) Profili
+        // 1) Profili (tabella: profiles)
         const { data: profiles, error: pErr } = await supabase
           .from('profiles')
-          .select('id,username,avatar_url,poetic_journal,qr_code_url,public_page_url,last_updated')
+          .select('id, username, avatar_url, poetic_journal, qr_code_url, public_page_url, last_updated')
           .order('last_updated', { ascending: false })
         if (pErr) throw pErr
 
-        // 2) Conteggio poesie per autore
-        const { data: authorPoems, error: cErr } = await supabase
-          .from('author_poem')
-          .select('author_id')
+        // 2) Conteggio poesie per autore (tabella: poesie, chiave: profile_id)
+        const { data: poemsRows, error: cErr } = await supabase
+          .from('poesie')
+          .select('profile_id') // basta l'id autore per contare
         if (cErr) throw cErr
 
         const countMap = new Map<string, number>()
-        authorPoems?.forEach(r => {
-          countMap.set(r.author_id, (countMap.get(r.author_id) || 0) + 1)
+        poemsRows?.forEach(r => {
+          const k = r.profile_id as string | null
+          if (!k) return
+          countMap.set(k, (countMap.get(k) || 0) + 1)
         })
 
         // 3) Merge
         const merged: ProfileWithCount[] = (profiles || []).map(p => ({
           ...p,
-          poems_count: countMap.get(p.id) || 0
+          poems_count: countMap.get(p.id) || 0,
         }))
 
         setAllAuthors(merged)
@@ -161,7 +164,9 @@ function AuthorCard({ author }: { author: ProfileWithCount }) {
           style={{ backgroundImage: `url('${author.avatar_url || ''}')` }}
         />
         <div>
-          <div className="author-card__name">{author.username || 'Senza nome'}</div>
+          <div className="author-card__name">
+            <Link href={`/autori/${author.id}`}>{author.username || 'Senza nome'}</Link>
+          </div>
           <div className="author-card__id">{author.id}</div>
         </div>
         <div className="author-card__badges">
