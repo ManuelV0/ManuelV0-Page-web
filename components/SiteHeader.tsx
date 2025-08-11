@@ -24,8 +24,16 @@ export default function SiteHeader() {
     return () => { active = false; sub?.subscription.unsubscribe() }
   }, [])
 
-  // Chiudi il menu quando cambi route
+  // Chiudi menu quando cambi route
   useEffect(() => { setMobileOpen(false) }, [pathname])
+
+  // Body scroll lock + chiusura con ESC
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : ''
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', onKey) }
+  }, [mobileOpen])
 
   const is = (p: string) => pathname === p
   const starts = (p: string) => pathname?.startsWith(p)
@@ -59,7 +67,9 @@ export default function SiteHeader() {
         onClick={() => setMobileOpen(v => !v)}
         aria-label="Apri/chiudi menu"
       >
-        <i className="fas fa-bars" aria-hidden />
+        <span className="burger" aria-hidden>
+          <span></span><span></span><span></span>
+        </span>
         <span className="sr-only">Menu</span>
       </button>
 
