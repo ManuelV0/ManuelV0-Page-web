@@ -1,3 +1,13 @@
+
+
+
+/* app/globals.css */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+@import '../css/style.css';
+@import '../css/diario.css';
+@import '../css/poetry-widget.css';
+
+
 /* app/globals.css – niente @import qui */
 :root { --c-primario: #4CAF50; }
 /* quick test per verificare il caricamento */
@@ -8,4 +18,11 @@ body { background:#F9F9F9; color:#222; }
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+
+/* opzionale: piccoli override globali */
+.main-nav a.is-active{
+  text-underline-offset:4px;
+  text-decoration:underline;
+  font-weight:700;
 }
