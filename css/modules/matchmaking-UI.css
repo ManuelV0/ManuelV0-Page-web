@@ -1,0 +1,206 @@
+/* =========================================================
+   09 — MATCHMAKING UI (Responsive + A11y + States)
+   Dipendenze: 01-tokens.css (variabili), 02-base.css (reset)
+   Scopo: layout, toolbar filtri, griglia risultati, card match,
+          skeleton/loading, empty/error, hint punteggi.
+   ========================================================= */
+
+/* ========== 1) SHELL & INTRO =========================================== */
+.mm-shell{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spazio-sm);
+  display: grid;
+  gap: var(--spazio-md);
+}
+.mm-header{
+  background: var(--c-superficie);
+  border: 1px solid var(--c-bordi);
+  border-radius: var(--bordo-arrotondato);
+  box-shadow: var(--ombra-card);
+  padding: clamp(16px, 3vw, 28px);
+  display: grid;
+  gap: .4rem;
+}
+.mm-title{
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: var(--c-secondario);
+  font-size: clamp(1.1rem, 2.6vw, 1.6rem);
+}
+.mm-subtitle{ color: var(--c-testo-leggero); }
+
+/* ========== 2) TOOLBAR FILTRI (sticky su desktop) ====================== */
+.mm-toolbar{
+  background: var(--c-superficie);
+  border: 1px solid var(--c-bordi);
+  border-radius: var(--bordo-arrotondato);
+  box-shadow: var(--ombra-card);
+  padding: var(--spazio-sm);
+  display: grid;
+  gap: var(--spazio-sm);
+}
+.mm-toolbar .row{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spazio-sm);
+}
+.mm-input, .mm-select{
+  width: 100%;
+  padding: .8rem .9rem;
+  border: 1px solid var(--c-bordi);
+  border-radius: 12px;
+  background: var(--c-superficie);
+  color: var(--c-testo);
+  transition: var(--transizione);
+}
+.mm-input:focus, .mm-select:focus{
+  border-color: var(--c-primario);
+  box-shadow: 0 0 0 3px rgba(76,175,80,.15);
+}
+.mm-chips{
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.mm-chip{
+  font-size: .8rem; padding: 6px 10px; border-radius: 999px;
+  border: 1px solid var(--c-bordi); background: #fff; color: var(--c-testo-leggero);
+}
+.mm-actions{
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-start;
+}
+.mm-btn{
+  padding: .65rem 1rem; border-radius: 10px; font-weight: 700; border: 1px solid var(--c-bordi);
+  background: var(--c-superficie); color: var(--c-testo); cursor: pointer; transition: var(--transizione);
+}
+.mm-btn:hover{ border-color: var(--c-primario); color: var(--c-primario); }
+.mm-btn--primary{ background: var(--c-primario); color:#fff; border-color: transparent; }
+.mm-btn--primary:hover{ background: var(--c-primario-hover); }
+
+/* sticky su viewport ampie */
+@media (min-width: 992px){
+  .mm-toolbar{ position: sticky; top: calc(var(--header-height) + 10px); z-index: 5; }
+}
+
+/* ========== 3) GRIGLIA RISULTATI ====================================== */
+.mm-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spazio-md);
+}
+
+/* ========== 4) CARD MATCH ============================================= */
+.mm-card{
+  background: var(--c-superficie);
+  border: 1px solid var(--c-bordi);
+  border-radius: var(--bordo-arrotondato);
+  box-shadow: var(--ombra-card);
+  padding: var(--spazio-md);
+  display: grid;
+  gap: .6rem;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.mm-card:hover{
+  transform: translateY(-3px);
+  box-shadow: var(--ombra-intensa);
+  border-color: color-mix(in oklab, currentColor 18%, transparent);
+}
+
+/* header della card: avatar + nome + score */
+.mm-card__head{
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--spazio-sm);
+}
+.mm-avatar{
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #eee center/cover no-repeat;
+  border: 1px solid var(--c-bordi);
+}
+.mm-name{
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: var(--c-testo);
+}
+.mm-username{
+  font-size: .8rem;
+  color: var(--c-testo-leggero);
+  word-break: break-all;
+}
+
+/* Punteggio/affinità */
+.mm-score{
+  display: grid; gap: 2px; justify-items: end;
+}
+.mm-score__value{
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.mm-score__hint{
+  font-size: .75rem; color: var(--c-testo-leggero);
+}
+.mm-score--gold .mm-score__value{ color: var(--c-oro); }
+.mm-score--silver .mm-score__value{ color: var(--c-argento); }
+.mm-score--bronze .mm-score__value{ color: var(--c-bronzo); }
+
+/* corpo: tag affinità + estratto */
+.mm-tags{ display: flex; flex-wrap: wrap; gap: 6px; }
+.mm-tag{
+  font-size: .72rem; padding: 4px 8px; border-radius: 999px;
+  border: 1px solid var(--c-bordi); background: #fff; color: var(--c-testo-leggero);
+}
+.mm-excerpt{
+  color: var(--c-testo); line-height: 1.6;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* footer: CTA */
+.mm-card__foot{
+  display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 4px;
+}
+
+/* Evidenze (stati) */
+.mm-card.is-new { outline: 2px solid color-mix(in oklab, var(--c-secondario) 35%, transparent); }
+.mm-card.is-me  { outline: 2px dashed color-mix(in oklab, var(--c-primario) 40%, transparent); }
+
+/* ========== 5) EMPTY / ERROR / LOADING ================================ */
+.mm-empty, .mm-error{
+  display: grid; place-items: center;
+  min-height: 160px; text-align: center;
+  background: var(--c-superficie);
+  border: 2px dashed var(--c-bordi);
+  color: var(--c-testo-leggero);
+  border-radius: 12px;
+}
+.mm-skel{
+  background: linear-gradient(90deg, #eee 25%, #f6f6f6 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: mm-skel 1.4s ease infinite;
+  border-radius: 10px;
+}
+@keyframes mm-skel{ 0%{background-position:100% 50%} 100%{background-position:0 50%} }
+
+/* ========== 6) RESPONSIVE ============================================= */
+/* tablet */
+@media (min-width: 768px){
+  .mm-toolbar .row{ grid-template-columns: 1.2fr 1fr 1fr; }
+  .mm-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* laptop */
+@media (min-width: 1024px){
+  .mm-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+/* desktop largo */
+@media (min-width: 1440px){
+  .mm-grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* ========== 7) ACCESSIBILITÀ & MOTION ================================ */
+.mm-card:focus-within{ outline: 3px solid var(--c-secondario-hover); outline-offset: 2px; border-radius: 12px; }
+@media (prefers-reduced-motion: reduce){
+  .mm-card, .mm-toolbar, .mm-skel{ transition: none !important; animation: none !important; }
+}
+
+/* ========== 8) UTILITY LOCALI ======================================== */
+.mm-hide{ display: none !important; }
+.mm-right{ margin-left: auto; }
