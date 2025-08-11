@@ -1,0 +1,213 @@
+/* =========================================================
+   07 — MODALI & AUTH (Responsive + A11y)
+   Dipendenze: 01-tokens.css
+   Mantiene le classi esistenti: .modal-backdrop, .modal-content, ecc.
+   ========================================================= */
+
+/* -------- Backdrop generico -------- */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: color-mix(in oklab, #000 55%, transparent);
+  display: grid; place-items: center;
+  padding: var(--spazio-sm);
+  z-index: 2000;
+  opacity: 0; visibility: hidden;
+  transition: opacity .25s ease, visibility .25s ease;
+  backdrop-filter: blur(6px);
+}
+.modal-backdrop.is-open { opacity: 1; visibility: visible; }
+
+/* Riduce il blur se richiesto dall’utente */
+@media (prefers-reduced-transparency: reduce) {
+  .modal-backdrop { backdrop-filter: none; }
+}
+
+/* -------- Finestra modale -------- */
+.modal-content {
+  background: var(--c-superficie);
+  color: var(--c-testo);
+  width: min(92vw, 720px);
+  border: 1px solid var(--c-bordi);
+  border-radius: 16px;
+  box-shadow: var(--ombra-intensa);
+  padding: clamp(16px, 2.6vw, 28px);
+  transform: translateY(10px) scale(.98);
+  opacity: 0;
+  transition: transform .25s ease, opacity .25s ease;
+}
+.modal-backdrop.is-open .modal-content {
+  transform: none; opacity: 1;
+}
+
+/* Header / titolo */
+.modal-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+  color: var(--c-primario);
+  margin-bottom: var(--spazio-sm);
+  text-align: center;
+}
+
+/* Close button (in alto a destra) */
+.modal-close-btn {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--c-bordi);
+  background: var(--c-superficie);
+  color: var(--c-testo-leggero);
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, transform .1s ease;
+}
+.modal-close-btn:hover {
+  background: color-mix(in oklab, var(--c-primario) 10%, #fff);
+  color: var(--c-primario);
+}
+.modal-close-btn:active { transform: scale(.98); }
+
+/* -------- Contenuti tipici -------- */
+.modal-body {
+  display: grid; gap: var(--spazio-sm);
+}
+
+/* paragrafi descrittivi (About / How-to) */
+.modal-body p {
+  line-height: 1.65;
+  color: var(--c-testo);
+}
+
+/* elenco puntato pulito */
+.modal-body ul {
+  padding-left: 1rem;
+  display: grid; gap: .35rem;
+}
+.modal-body li { color: var(--c-testo-leggero); }
+
+/* -------- Form di Submission -------- */
+.modal-form {
+  display: grid; gap: var(--spazio-sm);
+  margin-top: .25rem;
+}
+.modal-form .form-row {
+  display: grid; gap: .35rem;
+}
+.modal-form label {
+  font-weight: 700; font-size: .92rem; color: var(--c-testo);
+}
+
+.modal-form input,
+.modal-form textarea,
+.modal-form select {
+  width: 100%;
+  padding: .75rem .85rem;
+  border: 1px solid var(--c-bordi);
+  border-radius: 12px;
+  background: var(--c-superficie);
+  color: var(--c-testo);
+  transition: border-color .2s ease, box-shadow .2s ease;
+  font: inherit;
+}
+.modal-form textarea { min-height: 140px; resize: vertical; }
+
+.modal-form input:focus,
+.modal-form textarea:focus,
+.modal-form select:focus {
+  border-color: var(--c-primario);
+  box-shadow: 0 0 0 3px rgba(76,175,80,.15);
+  outline: none;
+}
+
+/* helper / error */
+.form-hint {
+  font-size: .85rem; color: var(--c-testo-leggero);
+}
+.form-error {
+  font-size: .9rem; font-weight: 700;
+  color: var(--c-errore);
+}
+
+/* CTA area */
+.modal-actions {
+  display: flex; flex-wrap: wrap;
+  gap: .6rem;
+  justify-content: center;
+  margin-top: .25rem;
+}
+.button {
+  padding: .75rem 1.1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  border: 1px solid var(--c-bordi);
+  background: var(--c-superficie);
+  color: var(--c-testo);
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .1s ease;
+}
+.button:hover {
+  border-color: var(--c-primario);
+  color: var(--c-primario);
+  background: color-mix(in oklab, var(--c-primario) 8%, #fff);
+}
+.button:active { transform: translateY(1px); }
+
+.button-primary {
+  background: var(--c-primario); color: #fff;
+  border-color: transparent;
+}
+.button-primary:hover { background: var(--c-primario-hover); }
+
+/* Social login */
+.button-social.google {
+  background: #4285F4; color: #fff; border-color: transparent;
+}
+.button-social.google:hover { background: #3b78e7; }
+
+/* Stato “busy” sul submit */
+.button[aria-busy="true"] {
+  opacity: .8; pointer-events: none;
+}
+
+/* -------- Toast/Feedback (riuso) -------- */
+.toast {
+  position: fixed; right: 16px; bottom: 16px; z-index: 2100;
+  display: grid; gap: .5rem;
+}
+.toast__item {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .6rem .85rem;
+  border-radius: 12px;
+  border: 1px solid var(--c-bordi);
+  background: var(--c-superficie);
+  color: var(--c-testo);
+  box-shadow: 0 6px 16px rgba(0,0,0,.1);
+}
+.toast__item--ok   { border-color: rgba(76,175,80,.35); background: rgba(76,175,80,.08); }
+.toast__item--err  { border-color: rgba(244,67,54,.35); background: rgba(244,67,54,.08); }
+
+/* -------- Responsive -------- */
+
+/* ≥768px: finestra un po’ più ampia e layout form 2 colonne facoltativo */
+@media (min-width: 768px) {
+  .modal-content { width: min(90vw, 760px); }
+
+  .modal-form[data-cols="2"] {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spazio-sm) var(--spazio-md);
+  }
+  .modal-form[data-cols="2"] .form-row--full {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ≥1024px: spaziatura più ariosa */
+@media (min-width: 1024px) {
+  .modal-content { padding: clamp(20px, 2.2vw, 32px); }
+}
+
+/* Riduzione movimento: disattiva animazioni */
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop, .modal-content, .button { transition: none !important; }
+}
