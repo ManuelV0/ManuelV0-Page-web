@@ -1,9 +1,11 @@
-import './globals.css'
+// app/layout.tsx
 import type { Metadata } from 'next'
+import '../css/style.css'
+import '../css/diario.css'
 
 export const metadata: Metadata = {
   title: 'TheItalianPoetry',
-  description: 'La tua dashboard artistica',
+  description: '…',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
