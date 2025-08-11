@@ -2,9 +2,10 @@
 
 /* i tuoi file reali: assicurati che esistano sotto /styles */
 
-import '../styles/style.css'
-import '../styles/diario.css'
-import '../styles/poetry-widget.css'
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+@import '../styles/style.css'
+@import '../styles/diario.css'
+@import '../styles/poetry-widget.css'
 
 /* global base/variabili */
 :root { /* … */ }
