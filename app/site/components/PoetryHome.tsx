@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link' // 👈 NEW
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 
@@ -8,6 +9,7 @@ type Poem = {
   title: string
   content: string
   author_name: string
+  author_id?: string | null // 👈 NEW (richiedi questo campo nella RPC)
   instagram_handle: string | null
   created_at: string
   vote_count: number | null
@@ -28,15 +30,16 @@ export default function PoetryHome() {
   const [submittingVote, setSubmittingVote] = useState(false)
   const [voteMsg, setVoteMsg] = useState<string | null>(null)
 
-  // fetch poems via RPC già esistente: get_poems_with_votes
+  // fetch poems via RPC: get_poems_with_votes
   useEffect(() => {
     const load = async () => {
       setLoading(true)
       setErr(null)
       try {
+        // ⚠️ Assicurati che la RPC ritorni anche author_id
         const { data, error } = await supabase.rpc('get_poems_with_votes')
         if (error) throw error
-        setPoems(data || [])
+        setPoems((data as Poem[]) || [])
       } catch (e: any) {
         setErr(e.message || 'Errore nel caricamento')
       } finally {
@@ -134,7 +137,7 @@ export default function PoetryHome() {
       setVoteMsg('Grazie per aver votato!')
       // soft refresh classifica
       const { data } = await supabase.rpc('get_poems_with_votes')
-      setPoems(data || [])
+      setPoems((data as Poem[]) || [])
       setTimeout(() => {
         setSelected(null)
         setRating(0)
@@ -147,7 +150,6 @@ export default function PoetryHome() {
     }
   }
 
-  // --- UI helpers
   const rankEmoji = (i: number) => (i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '')
 
   return (
@@ -200,6 +202,11 @@ export default function PoetryHome() {
                     <span className="poem-author golden-author">di {p.author_name}</span>
                   </div>
                   <div className="poem-actions">
+                    {p.author_id && (
+                      <Link className="button-vote" href={`/autori/${p.author_id}`}>
+                        Profilo
+                      </Link>
+                    )}
                     {p.instagram_handle && (
                       <a
                         href={`https://www.instagram.com/${p.instagram_handle}`}
@@ -222,7 +229,7 @@ export default function PoetryHome() {
           </div>
         )}
 
-        {/* Mese corrente (sidebar-like semplice) */}
+        {/* Mese corrente */}
         <div className="sidebar-box" style={{ marginTop: '2rem' }}>
           <h3>Poesie del Mese</h3>
           <div id="monthly-poems-list" className="mini-poems-list">
