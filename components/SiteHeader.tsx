@@ -31,7 +31,7 @@ export default function SiteHeader() {
   const starts = (p: string) => pathname?.startsWith(p)
 
   const openModal = (name: ModalName) =>
-    window.dispatchEvent(new CustomEvent<ModalName>('open-modal', { detail: name }))
+    window.dispatchEvent(new CustomEvent('open-modal', { detail: name }))
 
   const signInWithGoogle = async () => {
     try {
@@ -46,7 +46,7 @@ export default function SiteHeader() {
   return (
     <header className="main-header main-header--stacked">
       {/* Riga 1: brand centrale */}
-      <div className="header-brand">
+      <div className="header-brand" role="banner">
         <i className="fa-solid fa-feather-pointed" aria-hidden />
         <span className="brand-title">TheItalianPoetry</span>
       </div>
@@ -54,7 +54,7 @@ export default function SiteHeader() {
       {/* Toggle solo mobile */}
       <button
         className="mobile-nav-toggle"
-        aria-controls="primary-navigation"
+        aria-controls="primary-navigation primary-actions"
         aria-expanded={mobileOpen}
         onClick={() => setMobileOpen(v => !v)}
         aria-label="Apri/chiudi menu"
@@ -95,7 +95,11 @@ export default function SiteHeader() {
       </nav>
 
       {/* Riga 3: azioni centrate */}
-      <div className="header-actions header-actions--centered">
+      <div
+        id="primary-actions"
+        className="header-actions header-actions--centered"
+        data-visible={mobileOpen}
+      >
         {!email ? (
           <button className="button-social google" onClick={signInWithGoogle}>
             <i className="fab fa-google" /> Accedi con Google
