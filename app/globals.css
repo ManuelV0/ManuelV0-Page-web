@@ -3,19 +3,30 @@
 
 /* app/globals.css */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
-/* Vendor (icone + font) */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:wght@400;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400;500&display=swap');
-
-
 
 @import '../css/modules/01-header.css';
 /* app/globals.css */
 @import '../css/modules/12-diario.css';
 @import '../css/modules/13-poems.css';
 
+/* Vendor */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:wght@400;600&display=swap');
 
+/* Modules (ordine consigliato) */
+@import '../css/modules/01-tokens.css';
+@import '../css/modules/02-base.css';
+@import '../css/modules/03-layout.css';
+@import '../css/modules/04-header.css';
+@import '../css/modules/05-buttons.css';
+@import '../css/modules/06-forms.css';
+@import '../css/modules/07-cards.css';
+@import '../css/modules/08-poems.css';
+@import '../css/modules/09-modal.css';
+@import '../css/modules/10-utilities.css';
+@import '../css/modules/11-poetry-widget.css';
+@import '../css/modules/12-diario.css';
+@import '../css/modules/13-matchmaking-UI.css';
 
 
 /* app/globals.css – niente @import qui */
