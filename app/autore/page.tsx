@@ -1,4 +1,14 @@
-export const metadata = { title: 'Autore — TheItalianPoetry' }
+// app/autore/page.tsx
+export const metadata = {
+  title: 'Autore — TheItalianPoetry',
+  description:
+    'Pagina autore ufficiale di TheItalianPoetry: temi ricorrenti, diario poetico ed evoluzione.',
+  openGraph: {
+    title: 'Autore — TheItalianPoetry',
+    description:
+      'Pagina autore ufficiale di TheItalianPoetry: temi ricorrenti, diario poetico ed evoluzione.',
+  },
+}
 
 export default function AutorePage() {
   return (
@@ -8,12 +18,18 @@ export default function AutorePage() {
 
         <div className="author-card" style={{ marginTop: '1rem' }}>
           <div className="author-card__header">
-            <div className="author-card__avatar" style={{ backgroundImage: `url('/avatar.jpg')` }} />
+            <div
+              className="author-card__avatar"
+              style={{ backgroundImage: "url('/avatar.jpg')" }}
+              aria-hidden
+            />
             <div>
               <div className="author-card__name">TheItalianPoetry</div>
               <div className="author-card__id">owner</div>
             </div>
-            <div className="author-card__badges"><span className="badge">Founder</span></div>
+            <div className="author-card__badges">
+              <span className="badge">Founder</span>
+            </div>
           </div>
 
           <div className="journal-preview">
@@ -32,6 +48,7 @@ export default function AutorePage() {
                   <span className="journal-tag">Desiderio</span>
                 </div>
               </div>
+
               <div className="journal-block">
                 <h4>Evoluzione</h4>
                 <p>Ricerca di una lingua che inciampa e dice l’indicibile.</p>
@@ -39,6 +56,8 @@ export default function AutorePage() {
             </div>
           </div>
         </div>
+
+        {/* (Opzionale) Qui sotto possiamo aggiungere le due sezioni “L’origine del male” e “Frammenti” con le card-poesia */}
       </section>
     </main>
   )
