@@ -1,0 +1,32 @@
+/* 08) POEMS — lista, riga, info, azioni, stelle */
+.poems-list{display:flex; flex-direction:column; gap:var(--s-8)}
+.poem-row{
+  background:var(--c-superficie); border-radius:var(--r-lg); box-shadow:var(--shadow-card);
+  padding:var(--s-8); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--s-8)
+}
+.poem-info{display:flex; align-items:center; gap:var(--s-8); flex:1; min-width:260px}
+.poem-title{font-weight:700}
+.poem-author{font-style:italic; color:var(--c-testo-leggero)}
+.poem-rank{font-size:1.3rem}
+.golden-author{color:#DAA520; font-weight:700}
+.glow-rank{animation:glow 2s ease-in-out infinite alternate}
+@keyframes glow{
+  from{ text-shadow:0 0 5px rgba(255,215,0,.6),0 0 10px rgba(255,215,0,.4)}
+  to{   text-shadow:0 0 10px rgba(255,215,0,.9),0 0 20px rgba(255,215,0,.6)}
+}
+.poem-actions{display:flex; align-items:center; gap:var(--s-6)}
+.poem-votes{font-weight:600; color:var(--c-testo-leggero)}
+.button-vote{padding:.5rem 1rem; background:var(--c-primario); color:#fff; border:0; border-radius:var(--r-pill); cursor:pointer; transition:var(--t)}
+.button-vote:hover{background:var(--c-primario-hover)}
+.star-rating{display:flex; gap:.3rem; justify-content:center}
+.star{font-size:1.6rem; color:#ccc}
+.star i.selected{color:var(--c-stelle)}
+
+/* Grid desktop singola colonna elegante */
+@media (min-width:1024px){
+  .poems-list{gap:var(--s-16)}
+  .poem-row{flex-direction:column; align-items:flex-start; border:1px solid color-mix(in oklab, currentColor 12%, transparent)}
+  .poem-row:hover{transform:translateY(-3px); box-shadow:0 10px 24px rgba(0,0,0,.08); border-color:color-mix(in oklab, currentColor 22%, transparent)}
+  .poem-actions{opacity:0; transition:opacity .18s ease}
+  .poem-row:hover .poem-actions{opacity:1}
+}
