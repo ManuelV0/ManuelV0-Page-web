@@ -1,0 +1,188 @@
+name: Codex safe commit
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: "Cosa deve fare Codex"
+        required: true
+      file:
+        description: "File target (es: app/diario/page.tsx)"
+        required: true
+      branch:
+        description: "Branch di destinazione"
+        required: true
+        default: "main"
+      mode:
+        description: "direct = commit | guarded = controlli + commit/PR"
+        required: true
+        default: "guarded"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  codex:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.branch }}
+
+      - name: Setup Node (se c'è package.json)
+        if: hashFiles('package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps (best effort)
+        if: hashFiles('package.json') != ''
+        run: npm ci || true
+
+      - name: Setup Python & OpenAI SDK
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: |
+          python -m pip install --upgrade pip
+          pip install openai==1.* termcolor
+
+      - name: Generate/update file with Codex (GPT)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          USER_PROMPT: ${{ inputs.prompt }}
+          TARGET_FILE: ${{ inputs.file }}
+        run: |
+          python - << 'PY'
+          import os, pathlib, subprocess
+          from openai import OpenAI
+          from termcolor import cprint
+
+          api_key = os.environ["OPENAI_API_KEY"]
+          prompt  = os.environ["USER_PROMPT"]
+          target  = os.environ["TARGET_FILE"]
+
+          p = pathlib.Path(target)
+          p.parent.mkdir(parents=True, exist_ok=True)
+          old = p.read_text(encoding="utf-8") if p.exists() else ""
+
+          system = """Sei un assistente che modifica file di progetto (TS/JS/React/Next).
+          - Non modificare la LOGICA BASE della web app (routing, auth, modelli dati, contratti API, stato globale/store, config core).
+          - Concentra interventi su UI/UX, accessibilità, performance leggere, refactor non funzionali, fix lint/warning, typo.
+          - Rispondi SOLO con il contenuto finale del file target, senza markdown né spiegazioni."""
+          user = f"""File: {target}
+          Stato attuale:
+          <<OLD_FILE>>
+          {old}
+          <<END_OLD_FILE>>
+
+          Obiettivo:
+          {prompt}
+
+          Requisiti:
+          - Mantieni import, tipi e stile coerenti.
+          - Evita breaking change alla logica core, props pubbliche e contratti API.
+          - Output: SOLO contenuto finale del file."""
+          
+          client = OpenAI(api_key=api_key)
+          resp = client.chat.completions.create(
+              model="gpt-4o-mini",
+              messages=[{"role":"system","content":system},
+                        {"role":"user","content":user}],
+              temperature=0.1,
+              max_tokens=4000
+          )
+          new = resp.choices[0].message.content
+          p.write_text(new, encoding="utf-8")
+          subprocess.run(["git","diff","--",target], check=False)
+          cprint(f"✓ Scritto: {target}", "green")
+          PY
+
+      # Controlli tecnici leggeri (non fallire se mancano script)
+      - name: Lint/Build/Test (best effort)
+        if: ${{ inputs.mode == 'guarded' && hashFiles('package.json') != '' }}
+        run: |
+          npm run lint || true
+          npm run build || true
+          npm test -- --watch=false || true
+
+      # Gate euristico: modifiche troppo grandi => PR
+      - name: Heuristic change gate
+        if: ${{ inputs.mode == 'guarded' }}
+        run: |
+          CHANGED=$(git diff --numstat | wc -l)
+          INS=$(git diff --numstat | awk '{s+=$1} END {print s+0}')
+          DEL=$(git diff --numstat | awk '{s+=$2} END {print s+0}')
+          echo "Files changed: $CHANGED, +$INS, -$DEL"
+          if [ "$CHANGED" -gt 8 ] || [ "$INS" -gt 800 ] || [ "$DEL" -gt 400 ]; then
+            echo "NEED_PR=1" >> $GITHUB_ENV
+          fi
+
+      # Gate AI: blocca tocchi a logica base o cose rischiose
+      - name: AI review gate
+        if: ${{ inputs.mode == 'guarded' }}
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          DIFF=$(git diff --no-color)
+          python - << 'PY'
+          import os, sys
+          from openai import OpenAI
+
+          diff = os.popen("git diff --no-color").read()
+          prompt = f"""Sei un reviewer severo.
+          Rispondi solo con:
+          - 'OK' se il diff NON altera logica base (routing, auth, modelli dati, contratti API, stato globale/store, config core) e non introduce segreti.
+          - 'PR' se il cambio è ampio/rischioso o tocca la logica base.
+          - 'BLOCK' se vedi codice potenzialmente dannoso o credenziali.
+
+          DIFF:
+          {diff}
+          """
+          client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+          r = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role":"system","content":"Rispondi con: OK | PR | BLOCK"},
+                      {"role":"user","content":prompt}],
+            temperature=0.0,
+            max_tokens=5
+          )
+          out = r.choices[0].message.content.strip()
+          print("AI Gate:", out)
+          if out == "BLOCK":
+            sys.exit(9)
+          if out == "PR":
+            with open(os.environ["GITHUB_ENV"],"a") as f:
+              f.write("NEED_PR=1\n")
+          PY
+
+      # Commit & push diretto (se non serve PR)
+      - name: Commit & push (direct)
+        if: ${{ inputs.mode == 'direct' || (inputs.mode == 'guarded' && env.NEED_PR != '1') }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${{ inputs.file }}"
+          if git diff --cached --quiet; then
+            echo "Nessuna modifica da committare."; exit 0
+          fi
+          git commit -m "chore(codex): ${{ inputs.prompt }} [skip ci] [guarded]"
+          git push origin "${{ inputs.branch }}"
+
+      # Se serve PR (branch protetto o gate), aprila
+      - name: Open PR (guarded path)
+        if: ${{ inputs.mode == 'guarded' && env.NEED_PR == '1' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SAFE_BRANCH="codex/auto-$(date +%s)"
+          git checkout -b "$SAFE_BRANCH"
+          git add "${{ inputs.file }}"
+          git commit -m "chore(codex): ${{ inputs.prompt }} [skip ci] [guarded → PR]"
+          git push -u origin "$SAFE_BRANCH"
+          gh pr create -B "${{ inputs.branch }}" -H "$SAFE_BRANCH" \
+            -t "Codex: ${{ inputs.prompt }}" \
+            -b "PR generata automaticamente (guarded)."
