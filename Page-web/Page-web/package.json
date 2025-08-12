@@ -1,0 +1,28 @@
+{
+  "name": "theitalianpoetry",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "@supabase/ssr": "^0.4.0",
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "sass": "^1.77.6"
+  },
+  "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.8.1",
+    "typescript": "^5.5.4",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/node": "^20.14.9"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  }
+}

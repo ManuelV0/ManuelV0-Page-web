@@ -1,0 +1,10 @@
+/* 05) BUTTONS — primari, secondari, social */
+.button{display:inline-flex; align-items:center; justify-content:center; gap:var(--s-4);
+  padding:.8rem 1.2rem; border-radius:var(--r-pill); border:0; cursor:pointer; font-weight:700; transition:var(--t); font:inherit}
+.button-primary{background:var(--c-primario); color:#fff}
+.button-primary:hover{background:var(--c-primario-hover)}
+.button-secondary{background:transparent; border:2px solid var(--c-bordi); color:var(--c-testo-leggero)}
+.button-secondary:hover{border-color:var(--c-primario); color:var(--c-primario)}
+.button-social.google{background:#4285F4; color:#fff}
+.button-social.google:hover{background:#3b78e7}
+.full-width-btn{width:100%}
