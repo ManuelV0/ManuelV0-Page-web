@@ -12,7 +12,7 @@ export default function DiarioToolbar({
       <input
         id="searchInput"
         className="search-input"
-        placeholder="Cerca autore o descrizio­ne"
+        placeholder="Cerca autore o descrizione"
         onChange={(e) => onSearch(e.target.value)}
       />
       <select
