@@ -1,5 +1,4 @@
 [build]
-  base = "Page-web"
   command = "npm run build"
 
 [[plugins]]
