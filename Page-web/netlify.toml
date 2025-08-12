@@ -1,6 +1,7 @@
+# Netlify config for Next.js (App Router supported)
 [build]
   command = "npm run build"
-  publish = ".next"
+  # Note: don't set `publish` here; the Next.js Netlify plugin handles it.
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
