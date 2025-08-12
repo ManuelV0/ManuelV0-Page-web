@@ -3,5 +3,3 @@
   command = "npm run build"
   # Note: don't set `publish` here; the Next.js Netlify plugin handles it.
 
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
