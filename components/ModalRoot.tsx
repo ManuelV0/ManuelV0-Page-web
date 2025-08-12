@@ -1,18 +1,20 @@
+
 'use client'
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 
 type ModalName = 'how-to' | 'about' | 'submission' | null
+type OpenableModal = Exclude<ModalName, null>
+type OpenModalEvent = CustomEvent<OpenableModal>
 
 export default function ModalRoot() {
   const [open, setOpen] = useState<ModalName>(null)
 
   useEffect(() => {
     const handler = (e: Event) => {
-      // l’header fa: new CustomEvent('open-modal', { detail: 'how-to' })
-      const ce = e as CustomEvent<ModalName>
-      setOpen(ce.detail || null)
+      const ce = e as OpenModalEvent
+      setOpen(ce.detail ?? null)
     }
     window.addEventListener('open-modal', handler as EventListener)
     return () => window.removeEventListener('open-modal', handler as EventListener)
@@ -25,7 +27,7 @@ export default function ModalRoot() {
         <h2 className="modal-title">Come partecipare</h2>
         <p className="mb-sm">
           1) Accedi con Google. 2) Vai su “Partecipa!” e invia titolo + testo.
-          3) La poesia compare nella classifica e nel tuo Diario Autore.  
+          3) La poesia compare nella classifica e nel tuo Diario Autore.
         </p>
         <ul className="mb-sm" style={{ paddingLeft: '1rem' }}>
           <li>Max 1 invio al giorno per autore</li>
@@ -90,38 +92,60 @@ function SubmissionModal({
 
   const submit = async () => {
     setMsg(null)
-    if (!email) { setMsg('Devi accedere per inviare.'); return }
+
+    // validazioni base
+    if (!email) {
+      setMsg('Devi accedere per inviare.')
+      return
+    }
     if (title.trim().length < 2 || content.trim().length < 10) {
-      setMsg('Titolo o testo troppo corti.'); return
+      setMsg('Titolo o testo troppo corti.')
+      return
     }
 
     try {
       setBusy(true)
-      const { data: u } = await supabase.auth.getUser()
-      const authorId = u.user?.id
-      if (!authorId) throw new Error('Utente non valido')
 
-      // 1) crea poesia
-      const { data: ins, error: insErr } = await supabase
+      // 1) utente (safe-narrowing)
+      const { data: { user }, error: userErr } = await supabase.auth.getUser()
+      if (userErr) throw userErr
+      if (!user) {
+        setMsg('Devi essere loggato per inviare.')
+        return
+      }
+
+      // 2) crea poesia
+      const cleanIg = instagram.trim().replace(/^@/, '') || null
+      const { data: inserted, error: insErr } = await supabase
         .from('poems')
         .insert({
           title: title.trim(),
           content: content.trim(),
-          author_name: u.user.email,               // fallback
-          instagram_handle: instagram.trim() || null,
+          author_name: user.email ?? 'Anonimo',
+          instagram_handle: cleanIg,
         })
         .select('id')
         .single()
       if (insErr) throw insErr
 
-      // 2) lega autore↔poesia
-      await supabase.from('author_poem').insert({ author_id: authorId, poem_id: ins.id })
+      // 3) lega autore↔poesia (se hai la tabella ponte)
+      if (inserted?.id) {
+        const { error: linkErr } = await supabase
+          .from('author_poem')
+          .insert({ author_id: user.id, poem_id: inserted.id })
+        if (linkErr) throw linkErr
+      }
 
-      // 3) aggiorna last_updated del profilo (se presente)
-      await supabase.from('profiles').update({ last_updated: new Date().toISOString() }).eq('id', authorId)
+      // 4) aggiorna last_updated (se esiste la colonna)
+      await supabase
+        .from('profiles')
+        .update({ last_updated: new Date().toISOString() })
+        .eq('id', user.id)
 
       setMsg('Poesia inviata! Grazie ✨')
-      setTitle(''); setContent(''); setInstagram('')
+      setTitle('')
+      setContent('')
+      setInstagram('')
       setTimeout(onClose, 900)
     } catch (e: any) {
       setMsg(e.message || 'Errore durante l’invio')
@@ -133,27 +157,52 @@ function SubmissionModal({
   return (
     <Backdrop open={open} onClose={onClose}>
       <h2 className="modal-title">Invia la tua poesia</h2>
-      {!email ? (
+
+      {!email && (
         <p className="mb-sm">Accedi per inviare la poesia.</p>
-      ) : null}
+      )}
 
       <div className="form-group">
         <label htmlFor="p-title">Titolo</label>
-        <input id="p-title" className="comp-input" value={title} onChange={e => setTitle(e.target.value)} maxLength={120} />
+        <input
+          id="p-title"
+          className="comp-input"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          maxLength={120}
+        />
       </div>
+
       <div className="form-group">
         <label htmlFor="p-content">Testo</label>
-        <textarea id="p-content" className="comp-textarea" value={content} onChange={e => setContent(e.target.value)} />
+        <textarea
+          id="p-content"
+          className="comp-textarea"
+          value={content}
+          onChange={e => setContent(e.target.value)}
+        />
       </div>
+
       <div className="form-group">
         <label htmlFor="p-ig">Instagram (opzionale)</label>
-        <input id="p-ig" className="comp-input" value={instagram} onChange={e => setInstagram(e.target.value)} placeholder="nomeutente" />
+        <input
+          id="p-ig"
+          className="comp-input"
+          value={instagram}
+          onChange={e => setInstagram(e.target.value)}
+          placeholder="nomeutente"
+        />
       </div>
 
       <button className="button button-primary" onClick={submit} disabled={busy || !email}>
         {busy ? 'Invio…' : 'Invia'}
       </button>
-      {msg && <p id="form-message" className="mt-sm" role="status">{msg}</p>}
+
+      {msg && (
+        <p id="form-message" className="mt-sm" role="status">
+          {msg}
+        </p>
+      )}
     </Backdrop>
   )
 }
