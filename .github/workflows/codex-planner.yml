@@ -1,0 +1,103 @@
+name: Codex Planner (auto)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * 1-5"   # ogni giorno feriale alle 08:00 (modifica come vuoi)
+
+permissions:
+  contents: read
+
+jobs:
+  plan-and-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node (if package.json)
+        if: hashFiles('package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps (best effort)
+        if: hashFiles('package.json') != ''
+        run: npm ci || true
+
+      - name: Collect quick signals
+        id: snap
+        run: |
+          echo 'TREE<<EOF' >> $GITHUB_OUTPUT
+          (ls -R | head -n 400) >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+          echo 'LINT<<EOF' >> $GITHUB_OUTPUT
+          (npm run lint --silent || true | tail -n 200) >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+          echo 'BUILD<<EOF' >> $GITHUB_OUTPUT
+          (npm run build --silent || true | tail -n 200) >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Plan with AI (pick one file + prompt)
+        id: plan
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          TREE: ${{ steps.snap.outputs.TREE }}
+          LINT: ${{ steps.snap.outputs.LINT }}
+          BUILD: ${{ steps.snap.outputs.BUILD }}
+        run: |
+          python - << 'PY'
+          import os, json
+          from openai import OpenAI
+          client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+
+          system = "Sei un tech lead. Proponi UNA miglioria piccola, non funzionale, applicabile in UN file."
+          user = f"""
+          Branch: main
+          TREE:
+          {os.environ.get('TREE','')}
+          LINT (tail):
+          {os.environ.get('LINT','')}
+          BUILD (tail):
+          {os.environ.get('BUILD','')}
+
+          Regole:
+          - NON cambiare logica base (routing, auth, modelli dati, contratti API, stato globale/store, config core).
+          - Scegli UN solo file e una modifica utile (accessibilità/SEO, refactor sicuro, performance leggere, fix lint).
+          - Output JSON: {{ "file": "...", "prompt": "...", "rationale": "..." }}
+          """
+
+          r = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role":"system","content":system},
+                      {"role":"user","content":user}],
+            temperature=0.2,
+            max_tokens=500
+          )
+          try:
+            plan = json.loads(r.choices[0].message.content)
+          except Exception:
+            plan = {
+              "file":"README.md",
+              "prompt":"Aggiungi sezione 'Sviluppo' con istruzioni build/lint/test.",
+              "rationale":"Migliora onboarding, zero rischio."
+            }
+
+          print("FILE::" + plan["file"])
+          print("PROMPT::" + plan["prompt"])
+          with open(os.environ["GITHUB_OUTPUT"],"a") as f:
+            f.write(f"file={plan['file']}\n")
+            f.write(f"prompt={plan['prompt']}\n")
+          PY
+
+      - name: Auto-run Codex safe commit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run "Codex safe commit" \
+            -f prompt="${{ steps.plan.outputs.prompt }}" \
+            -f file="${{ steps.plan.outputs.file }}" \
+            -f branch="main" \
+            -f mode="guarded"
