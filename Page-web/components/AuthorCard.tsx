@@ -51,7 +51,7 @@ export default function AuthorCard({
         setPErr(null);
         // Se nel DB il riferimento è `profile_id` o `user_id`, cambia il filtro qui sotto:
         const { data, error } = await supabase
-          .from('poems')
+          .from('poesie')
           .select('id,title,content,categoria,ordine,author_id,profile_id,user_id')
           // .eq('profile_id', id)  // <-- usa questo se il legame è via profile_id
           // .eq('user_id', id)     // <-- oppure questo se è via user_id

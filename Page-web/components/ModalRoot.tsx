@@ -104,7 +104,7 @@ function SubmissionModal({
 
       // 1) crea poesia
       const { data: ins, error: insErr } = await supabase
-        .from('poems')
+        .from('poesie')
         .insert({
           title: title.trim(),
           content: content.trim(),
