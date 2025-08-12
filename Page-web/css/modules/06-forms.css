@@ -1,0 +1,11 @@
+/* 06) FORMS — gruppi, input, textarea, select */
+.form-group{margin-bottom:var(--s-8)}
+.form-group label{display:block; margin-bottom:var(--s-4); font-weight:600; color:var(--c-testo)}
+.form-group input,.form-group textarea,.form-group select{
+  width:100%; padding:.9rem .8rem; border:1px solid var(--c-bordi); border-radius:12px; background:var(--c-superficie);
+  transition:border-color var(--t), box-shadow var(--t); font:inherit; color:var(--c-testo)
+}
+.form-group textarea{min-height:130px; resize:vertical; line-height:1.6}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{
+  border-color:var(--c-primario); box-shadow:0 0 0 3px rgba(76,175,80,.15); outline:none
+}

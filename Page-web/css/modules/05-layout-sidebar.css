@@ -1,0 +1,264 @@
+/* =========================================================
+   05) LAYOUT & SIDEBAR — struttura principale pagina
+   Si appoggia a:
+   - markup tipo:
+     <div class="container">
+       <div class="content-area">…</div>
+       <aside class="sidebar">…</aside>
+     </div>
+   - classi già usate in progetto:
+     .sidebar-box, .diario-toolbar, .search-input, .filter-select,
+     .mini-poems-list, .participate-buttons, .badge, .btn, .button-*
+   ========================================================= */
+
+/* ---------------------------------------
+   5.1 CONTAINER — griglia responsiva base
+   --------------------------------------- */
+.container {
+  /* definita anche nel modulo 04; qui aggiungiamo regole layout */
+  display: grid;
+  gap: var(--s-2);
+}
+
+/* Tablet: due colonne (main + sidebar) se presente la sidebar */
+@media (min-width: 768px) {
+  .container {
+    grid-template-columns: 1fr 320px; /* main + sidebar */
+    align-items: start;
+  }
+}
+
+/* Desktop: sidebar leggermente più ariosa */
+@media (min-width: 1024px) {
+  .container {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: var(--s-3);
+  }
+}
+
+/* Ultra-wide: contenuto centrato con max */
+@media (min-width: 1440px) {
+  .container {
+    width: min(1200px, 100%);
+    margin-inline: auto;
+  }
+}
+
+/* ---------------------------------------
+   5.2 AREA CONTENUTI
+   --------------------------------------- */
+.content-area {
+  display: grid;
+  gap: var(--s-2);
+}
+
+@media (min-width: 1024px) {
+  .content-area {
+    gap: var(--s-3);
+  }
+}
+
+/* ---------------------------------------
+   5.3 SIDEBAR
+   --------------------------------------- */
+.sidebar {
+  display: grid;
+  gap: var(--s-2);
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    position: sticky;
+    top: calc(var(--header-height, 70px) + var(--s-2));
+    align-self: start;
+  }
+}
+
+/* Scatole della sidebar (card leggere) */
+.sidebar-box {
+  background: var(--c-superficie);
+  border: 1px solid var(--c-bordi);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm, 0 4px 12px rgba(0,0,0,.06));
+  padding: clamp(.9rem, 1.6vw, 1.1rem);
+  display: grid;
+  gap: .75rem;
+}
+
+.sidebar-box h3 {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold, 700);
+  color: var(--c-primario);
+  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  position: relative;
+  padding-bottom: .3rem;
+}
+.sidebar-box h3::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 42px; height: 3px;
+  border-radius: 2px;
+  background: var(--c-primario);
+}
+
+/* ---------------------------------------
+   5.4 TOOLBAR (ricerca + select)
+   --------------------------------------- */
+.diario-toolbar {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .6rem;
+}
+
+@media (min-width: 640px) {
+  .diario-toolbar {
+    grid-template-columns: 1fr minmax(160px, 220px);
+    align-items: center;
+  }
+}
+
+.search-input,
+.filter-select {
+  appearance: none;
+  width: 100%;
+  padding: .7rem .85rem;
+  border: 1px solid var(--c-bordi);
+  border-radius: var(--radius-md, 12px);
+  background: var(--c-superficie);
+  color: var(--c-testo);
+  font-size: .98rem;
+  transition: border-color var(--t-quick, .18s), box-shadow var(--t-quick, .18s);
+}
+
+.search-input::placeholder { color: var(--c-testo-leggero); }
+.search-input:focus,
+.filter-select:focus {
+  border-color: color-mix(in srgb, var(--c-primario) 45%, var(--c-bordi));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primario) 18%, transparent);
+  outline: none;
+}
+
+/* ---------------------------------------
+   5.5 LISTE COMPATTE IN SIDEBAR
+   --------------------------------------- */
+.mini-poems-list {
+  display: grid;
+  gap: .5rem;
+  max-height: 320px;
+  overflow: auto;
+  padding-right: .25rem;
+  -webkit-overflow-scrolling: touch;
+}
+.mini-poems-list::-webkit-scrollbar { width: 6px; }
+.mini-poems-list::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--c-testo) 14%, transparent);
+  border-radius: 999px;
+}
+
+.mini-poem-item {
+  display: grid;
+  gap: .1rem;
+  padding: .5rem .4rem;
+  border: 1px dashed color-mix(in srgb, var(--c-bordi) 70%, transparent);
+  border-radius: 10px;
+  transition: background var(--t-quick), border-color var(--t-quick);
+  cursor: pointer;
+}
+.mini-poem-item:hover {
+  background: color-mix(in srgb, var(--c-primario) 7%, transparent);
+  border-color: color-mix(in srgb, var(--c-primario) 25%, var(--c-bordi));
+}
+.mini-poem-title { font-weight: 600; }
+.mini-poem-author,
+.mini-poem-date { font-size: .85rem; color: var(--c-testo-leggero); }
+
+/* ---------------------------------------
+   5.6 CTA PARTECIPAZIONE/SHARE IN SIDEBAR
+   --------------------------------------- */
+.participate-buttons {
+  display: grid;
+  gap: .5rem;
+}
+
+.participation-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  width: 100%;
+  padding: .75rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(45deg, #1B5E20, #2E7D32, #4CAF50);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(0,0,0,.12);
+  transition: transform var(--t-quick), box-shadow var(--t-quick), filter var(--t-quick);
+}
+.participation-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,.16); }
+
+#share-cta-btn {
+  background: linear-gradient(45deg, #405DE6, #833AB4, #C13584);
+}
+#copy-link-btn {
+  background: var(--c-primario);
+  color: #fff;
+  border: 0;
+  padding: .6rem .8rem;
+  border-radius: 8px;
+}
+
+/* ---------------------------------------
+   5.7 BADGE, PILL, BOTTONI MINI
+   --------------------------------------- */
+.badge {
+  display: inline-grid;
+  place-items: center;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--c-primario) 10%, transparent);
+  color: var(--c-primario);
+  border: 1px solid color-mix(in srgb, var(--c-primario) 35%, transparent);
+  font-size: .78rem;
+  font-weight: 700;
+}
+
+.meta-pill {
+  display: inline-block;
+  padding: .2rem .5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--c-testo) 6%, transparent);
+  color: var(--c-testo-leggero);
+  font-size: .8rem;
+}
+
+/* Pulsanti sottili (sidebar/link) */
+.btn {
+  appearance: none;
+  border: 1px solid var(--c-bordi);
+  background: var(--c-superficie);
+  color: var(--c-testo);
+  padding: .45rem .7rem;
+  border-radius: 10px;
+  font-size: .9rem;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: .4rem;
+  transition: border-color var(--t-quick), background var(--t-quick), color var(--t-quick);
+}
+.btn:hover {
+  border-color: color-mix(in srgb, var(--c-primario) 35%, var(--c-bordi));
+  background: color-mix(in srgb, var(--c-primario) 6%, var(--c-superficie));
+  color: var(--c-primario);
+}
+
+/* ---------------------------------------
+   5.8 VARIANTI DARK (opzionali)
+   --------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .sidebar-box { border-color: color-mix(in srgb, var(--c-bordi) 60%, #000); }
+  .mini-poem-item { border-color: color-mix(in srgb, var(--c-bordi) 45%, transparent); }
+  .mini-poem-item:hover { background: color-mix(in srgb, var(--c-primario) 10%, transparent); }
+}
