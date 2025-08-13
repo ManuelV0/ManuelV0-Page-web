@@ -1,8 +1,8 @@
-/* app/diario.css */
-/* ⬇️ incolla qui tutto il CSS della sezione diario che usi nel progetto */
+/ * app/diario.css * /
+/ * ⬇️ incolla qui tutto il CSS della sezione diario che usi nel progetto * /
 .diario-section { background: #fff; }
 
-/* Miglioramenti per accessibilità e leggibilità */
+/ * Miglioramenti per accessibilità e leggibilità * /
 .diario-section h1, .diario-section h2, .diario-section h3 {
     font-family: 'Arial', sans-serif;
     color: #333;
@@ -12,6 +12,7 @@
     alt: 'Immagine descrittiva della sezione diario';
     max-width: 100%;
     height: auto;
+    display: block; /* Migliora l'accessibilità per lettori di schermo */
 }
 
 .diario-section a {

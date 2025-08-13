@@ -6,19 +6,35 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="it">
       <body>
         <header className="main-header" role="banner">
-          <div className="logo" aria-label="Logo The Italian Poetry">
+          <div className="logo" aria-label="Logo di The Italian Poetry">
             <i className="fa-solid fa-feather-pointed" aria-hidden="true" />
-            <span>TheItalianPoetry</span>
+            <span>The Italian Poetry</span>
           </div>
 
           <nav className="main-nav" aria-label="Navigazione principale">
-            <Link href="/">Home</Link>
-            <Link href="/#leaderboard">Classifica</Link>
-            <Link href="/diario">Diario</Link>
-            <Link href="/autore">Autore</Link>
-            <Link href="/come-partecipare">Come Partecipare</Link>
-            <Link href="/chi-siamo">Chi Siamo</Link>
-            <Link href="/login">Accedi</Link>
+            <ul>
+              <li>
+                <Link href="/">Home</Link>
+              </li>
+              <li>
+                <Link href="/#leaderboard">Classifica</Link>
+              </li>
+              <li>
+                <Link href="/diario">Diario</Link>
+              </li>
+              <li>
+                <Link href="/autore">Autore</Link>
+              </li>
+              <li>
+                <Link href="/come-partecipare">Come Partecipare</Link>
+              </li>
+              <li>
+                <Link href="/chi-siamo">Chi Siamo</Link>
+              </li>
+              <li>
+                <Link href="/login">Accedi</Link>
+              </li>
+            </ul>
           </nav>
         </header>
 
