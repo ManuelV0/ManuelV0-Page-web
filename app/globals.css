@@ -1,4 +1,4 @@
-
+```css
 /* app/globals.css
    ------------------------------------------------------------------ */
 
@@ -54,5 +54,4 @@ body { background: #F9F9F9; color: #222; }
   .main-nav[data-visible="true"],
   .header-actions[data-visible="true"] { display: flex; }
 }
-
-
+```

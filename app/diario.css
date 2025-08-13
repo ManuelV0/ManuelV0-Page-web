@@ -1,3 +1,24 @@
 /* app/diario.css */
 /* ⬇️ incolla qui tutto il CSS della sezione diario che usi nel progetto */
-.diario-section { background:#fff; }
+.diario-section { background: #fff; }
+
+/* Miglioramenti per accessibilità e leggibilità */
+.diario-section h1, .diario-section h2, .diario-section h3 {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+.diario-section img {
+    alt: 'Immagine descrittiva della sezione diario';
+    max-width: 100%;
+    height: auto;
+}
+
+.diario-section a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.diario-section a:hover {
+    text-decoration: underline;
+}

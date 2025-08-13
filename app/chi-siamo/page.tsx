@@ -1,4 +1,3 @@
-// app/chi-siamo/page.tsx
 import Link from 'next/link'
 
 export const metadata = {
@@ -25,7 +24,7 @@ export default function ChiSiamoPage() {
       {/* Sezione introduttiva */}
       <section className="card-section" aria-labelledby="chi-siamo-title">
         <div className="card-content">
-          <h2 id="chi-siamo-title">Chi Siamo</h2>
+          <h1 id="chi-siamo-title">Chi Siamo</h1>
 
           <p className="mt-sm">
             <strong>TheItalianPoetry</strong> è una community meritocratica di scrittura creativa:
@@ -60,7 +59,7 @@ export default function ChiSiamoPage() {
             Scopri come inviare i tuoi testi e come funziona la classifica.
           </p>
           <div className="flex-center mt-sm">
-            <Link href="/come-partecipare" className="button-primary" aria-label="Vai a Come partecipare">
+            <Link href="/come-partecipare" className="button-primary" aria-label="Vai alla pagina Come partecipare">
               Come partecipare
             </Link>
           </div>
