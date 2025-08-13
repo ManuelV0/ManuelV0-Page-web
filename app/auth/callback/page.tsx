@@ -10,7 +10,6 @@ export default function AuthCallback() {
   useEffect(() => {
     const run = async () => {
       try {
-        // Forza il parsing dei parametri e la creazione sessione
         await supabase.auth.getSession()
         setStatus('ok')
       } catch {
@@ -21,11 +20,11 @@ export default function AuthCallback() {
   }, [])
 
   return (
-    <main className="container">
-      <section className="card-section">
+    <main className="container" role="main">
+      <section className="card-section" aria-labelledby="auth-heading">
         <div className="card-content">
-          <h2>Accesso</h2>
-          {status === 'loading' && <p>Verifica in corso…</p>}
+          <h2 id="auth-heading">Accesso</h2>
+          {status === 'loading' && <p aria-live="polite">Verifica in corso…</p>}
           {status === 'ok' && <p>Accesso completato! Torna alla <Link href="/">Home</Link>.</p>}
           {status === 'error' && <p>Qualcosa è andato storto. Riprova dalla <Link href="/login">pagina di accesso</Link>.</p>}
         </div>

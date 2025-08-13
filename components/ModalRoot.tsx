@@ -10,7 +10,6 @@ export default function ModalRoot() {
 
   useEffect(() => {
     const handler = (e: Event) => {
-      // l’header fa: new CustomEvent('open-modal', { detail: 'how-to' })
       const ce = e as CustomEvent<ModalName>
       setOpen(ce.detail || null)
     }
@@ -22,7 +21,7 @@ export default function ModalRoot() {
     <>
       {/* HOW TO */}
       <Backdrop open={open === 'how-to'} onClose={() => setOpen(null)}>
-        <h2 className="modal-title">Come partecipare</h2>
+        <h2 className="modal-title" id="how-to-title">Come partecipare</h2>
         <p className="mb-sm">
           1) Accedi con Google. 2) Vai su “Partecipa!” e invia titolo + testo.
           3) La poesia compare nella classifica e nel tuo Diario Autore.  
@@ -39,13 +38,13 @@ export default function ModalRoot() {
 
       {/* ABOUT */}
       <Backdrop open={open === 'about'} onClose={() => setOpen(null)}>
-        <h2 className="modal-title">Chi siamo</h2>
+        <h2 className="modal-title" id="about-title">Chi siamo</h2>
         <p className="mb-sm">
           TheItalianPoetry è una community che valorizza voci nuove e autori emergenti.
           Condividi i tuoi versi, scopri affinità tematiche con altri autori e fatti leggere.
         </p>
         <p className="mb-sm">Seguici: @theitalianpoetry</p>
-        <button className="button button-secondary" onClick={() => setOpen(null)}>Chiudi</button>
+        <button className="button button-secondary" onClick={() => setOpen(null)} aria-label="Chiudi modal">Chiudi</button>
       </Backdrop>
 
       {/* SUBMISSION */}
@@ -102,23 +101,19 @@ function SubmissionModal({
       if (!user) throw new Error('Utente non valido')
       const authorId = user.id
 
-      // 1) crea poesia
       const { data: ins, error: insErr } = await supabase
         .from('poems')
         .insert({
           title: title.trim(),
           content: content.trim(),
-          author_name: user.email,               // fallback
+          author_name: user.email,
           instagram_handle: instagram.trim() || null,
         })
         .select('id')
         .single()
       if (insErr) throw insErr
 
-      // 2) lega autore↔poesia
       await supabase.from('author_poem').insert({ author_id: authorId, poem_id: ins.id })
-
-      // 3) aggiorna last_updated del profilo (se presente)
       await supabase.from('profiles').update({ last_updated: new Date().toISOString() }).eq('id', authorId)
 
       setMsg('Poesia inviata! Grazie ✨')
@@ -133,7 +128,7 @@ function SubmissionModal({
 
   return (
     <Backdrop open={open} onClose={onClose}>
-      <h2 className="modal-title">Invia la tua poesia</h2>
+      <h2 className="modal-title" id="submission-title">Invia la tua poesia</h2>
       {!email ? (
         <p className="mb-sm">Accedi per inviare la poesia.</p>
       ) : null}

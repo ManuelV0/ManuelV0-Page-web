@@ -47,10 +47,10 @@ export default function SiteHeader() {
   const signOut = async () => { try { await supabase.auth.signOut() } catch {} }
 
   return (
-    <header className="main-header main-header--stacked">
+    <header className="main-header main-header--stacked" role="banner">
       {/* Riga 1: brand */}
-      <div className="header-brand" role="banner">
-        <i className="fa-solid fa-feather-pointed" aria-hidden />
+      <div className="header-brand">
+        <i className="fa-solid fa-feather-pointed" aria-hidden="true" />
         <span className="brand-title">TheItalianPoetry</span>
       </div>
 
@@ -62,7 +62,7 @@ export default function SiteHeader() {
         onClick={() => setMobileOpen(v => !v)}
         aria-label={mobileOpen ? 'Chiudi menu' : 'Apri menu'}
       >
-        <i className="fas fa-bars" aria-hidden />
+        <i className="fas fa-bars" aria-hidden="true" />
         <span className="sr-only">Menu</span>
       </button>
 
@@ -89,7 +89,7 @@ export default function SiteHeader() {
       >
         {!email ? (
           <button className="button-social google" onClick={signInWithGoogle}>
-            <i className="fab fa-google" /> Accedi con Google
+            <i className="fab fa-google" aria-hidden="true" /> Accedi con Google
           </button>
         ) : (
           <div className="user-chip">

@@ -1,4 +1,4 @@
-```css
+
 /* app/globals.css
    ------------------------------------------------------------------ */
 
@@ -54,4 +54,15 @@ body { background: #F9F9F9; color: #222; }
   .main-nav[data-visible="true"],
   .header-actions[data-visible="true"] { display: flex; }
 }
-```
+
+/* Miglioramenti accessibilità */
+.main-nav a,
+.main-nav button {
+  outline: none; /* Rimuove il contorno predefinito */
+}
+
+.main-nav a:focus,
+.main-nav button:focus {
+  outline: 2px solid var(--c-primario); /* Aggiunge un contorno visibile per la navigazione tramite tastiera */
+}
+

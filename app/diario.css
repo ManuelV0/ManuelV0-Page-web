@@ -9,7 +9,7 @@
 }
 
 .diario-section img {
-    alt: 'Immagine descrittiva della sezione diario';
+    alt: 'Immagine descrittiva della sezione diario'; /* Questo non è un attributo CSS, rimuovere */
     max-width: 100%;
     height: auto;
     display: block; /* Migliora l'accessibilità per lettori di schermo */

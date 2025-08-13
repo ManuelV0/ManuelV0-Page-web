@@ -1,3 +1,4 @@
+```typescript
 // lib/supabaseServer.ts
 import { cookies } from 'next/headers'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
@@ -6,8 +7,8 @@ export function supabaseServer() {
   const cookieStore = cookies()
 
   // NB: usa le env pubbliche già presenti su Netlify
-  const url  = process.env.NEXT_PUBLIC_SUPABASE_URL!
-  const key  = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
   const supabase = createServerClient(url, key, {
     cookies: {
@@ -17,13 +18,22 @@ export function supabaseServer() {
       // In Server Components puri non si possono settare cookie.
       // Queste try/catch evitano errori quando non siamo in Server Action/Route.
       set(name: string, value: string, options: CookieOptions) {
-        try { cookieStore.set({ name, value, ...options }) } catch {}
+        try {
+          cookieStore.set({ name, value, ...options })
+        } catch {
+          // Ignora errori nel tentativo di impostare i cookie
+        }
       },
       remove(name: string, options: CookieOptions) {
-        try { cookieStore.set({ name, value: '', ...options, maxAge: 0 }) } catch {}
+        try {
+          cookieStore.set({ name, value: '', ...options, maxAge: 0 })
+        } catch {
+          // Ignora errori nel tentativo di rimuovere i cookie
+        }
       },
     },
   })
 
   return supabase
 }
+```

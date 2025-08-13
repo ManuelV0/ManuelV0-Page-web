@@ -90,12 +90,12 @@ export default function Modals() {
     <div
       className="modal-backdrop"
       onClick={(e) => e.currentTarget === e.target && setOpen(null)}
+      role="dialog"
+      aria-modal="true"
     >
       <div
         ref={dialogRef}
         className="modal-content"
-        role="dialog"
-        aria-modal="true"
         aria-labelledby="modal-title"
       >
         <button

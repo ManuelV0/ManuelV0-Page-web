@@ -1,4 +1,3 @@
-// app/autore/page.tsx
 export const metadata = {
   title: 'Autore — TheItalianPoetry',
   description:
@@ -21,7 +20,9 @@ export default function AutorePage() {
             <div
               className="author-card__avatar"
               style={{ backgroundImage: "url('/avatar.jpg')" }}
-              aria-hidden
+              aria-hidden="true"
+              role="img"
+              aria-label="Avatar di TheItalianPoetry"
             />
             <div>
               <div className="author-card__name">TheItalianPoetry</div>

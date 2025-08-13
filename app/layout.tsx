@@ -38,7 +38,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </nav>
         </header>
 
-        {children}
+        <main role="main">
+          {children}
+        </main>
       </body>
     </html>
   )

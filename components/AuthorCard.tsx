@@ -49,13 +49,10 @@ export default function AuthorCard({
       try {
         setLoading(true);
         setPErr(null);
-        // Se nel DB il riferimento è `profile_id` o `user_id`, cambia il filtro qui sotto:
         const { data, error } = await supabase
           .from('poems')
           .select('id,title,content,categoria,ordine,author_id,profile_id,user_id')
-          // .eq('profile_id', id)  // <-- usa questo se il legame è via profile_id
-          // .eq('user_id', id)     // <-- oppure questo se è via user_id
-          .eq('author_id', id)      // <-- default: author_id
+          .eq('author_id', id)
           .order('ordine', { ascending: true });
 
         if (error) throw error;
@@ -75,11 +72,11 @@ export default function AuthorCard({
   const frammenti = useMemo(() => (poems || []).filter(p => (p.categoria || '') === 'frammenti'), [poems]);
 
   return (
-    <div className="author-card">
+    <div className="author-card" role="region" aria-labelledby={`author-${id}`}>
       <div className="author-card__header">
-        <div className="author-card__avatar" style={{ backgroundImage: `url('${avatar_url || ''}')` }} />
+        <div className="author-card__avatar" style={{ backgroundImage: `url('${avatar_url || ''}')` }} aria-label="Avatar dell'autore" />
         <div>
-          <div className="author-card__name">{username || 'Senza nome'}</div>
+          <div className="author-card__name" id={`author-${id}`}>{username || 'Senza nome'}</div>
           <div className="author-card__id">{id}</div>
         </div>
         <div className="author-card__badges">
@@ -92,7 +89,7 @@ export default function AuthorCard({
           <span className="meta-pill">Agg.: {last_updated ? new Date(last_updated).toLocaleDateString() : '-'}</span>
         </div>
         {public_page_url && (
-          <a className="btn" href={public_page_url} target="_blank" rel="noreferrer">Pagina</a>
+          <a className="btn" href={public_page_url} target="_blank" rel="noreferrer" aria-label="Visita la pagina pubblica dell'autore">Pagina</a>
         )}
       </div>
 
@@ -102,14 +99,14 @@ export default function AuthorCard({
 
       <div className="author-card__footer">
         <div className="author-card__actions">
-          <button className="btn btn--primary" onClick={() => setOpen(!open)}>
+          <button className="btn btn--primary" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls={`journal-details-${id}`}>
             {open ? 'Chiudi' : 'Espandi'}
           </button>
         </div>
-        {qr_code_url && <div className="author-card__qr" style={{ backgroundImage: `url('${qr_code_url}')` }} />}
+        {qr_code_url && <div className="author-card__qr" style={{ backgroundImage: `url('${qr_code_url}')` }} aria-label="Codice QR dell'autore" />}
       </div>
 
-      <div className={`journal-details ${open ? 'is-open' : ''}`}>
+      <div className={`journal-details ${open ? 'is-open' : ''}`} id={`journal-details-${id}`}>
         <div className="journal-details__inner">
           <div className="journal-block">
             <h4>Temi ricorrenti</h4>
@@ -187,8 +184,8 @@ function PoemCard({ poem, highlightInitials = false }: { poem: Poem; highlightIn
   const verses = (poem.content || '').split('\n');
 
   return (
-    <article ref={cardRef} className="poem-card">
-      <h4>{poem.title}</h4>
+    <article ref={cardRef} className="poem-card" aria-labelledby={`poem-${poem.id}`}>
+      <h4 id={`poem-${poem.id}`}>{poem.title}</h4>
       <p className="poem-text">
         {verses.map((line, i) => {
           const first = line.charAt(0);

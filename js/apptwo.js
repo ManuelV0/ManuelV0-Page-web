@@ -43,29 +43,29 @@ function showSkeleton(count = 6) {
     wrap.className = 'author-card'
     wrap.innerHTML = `
       <div class="author-card__header">
-        <div class="author-card__avatar skel"></div>
+        <div class="author-card__avatar skel" aria-hidden="true"></div>
         <div style="width:100%">
-          <div class="skel" style="height:16px; width:60%; margin-bottom:8px;"></div>
-          <div class="skel" style="height:12px; width:40%;"></div>
+          <div class="skel" style="height:16px; width:60%; margin-bottom:8px;" aria-hidden="true"></div>
+          <div class="skel" style="height:12px; width:40%;" aria-hidden="true"></div>
         </div>
         <div class="author-card__badges">
-          <span class="badge skel" style="width:64px; height:22px;"></span>
+          <span class="badge skel" style="width:64px; height:22px;" aria-hidden="true"></span>
         </div>
       </div>
       <div class="author-card__meta">
         <div class="meta-row">
-          <span class="meta-pill skel" style="width:110px; height:24px;"></span>
+          <span class="meta-pill skel" style="width:110px; height:24px;" aria-hidden="true"></span>
         </div>
-        <span class="btn skel" style="width:80px; height:36px;"></span>
+        <span class="btn skel" style="width:80px; height:36px;" aria-hidden="true"></span>
       </div>
       <div class="journal-preview">
-        <div class="journal-preview__text skel" style="height:48px;"></div>
+        <div class="journal-preview__text skel" style="height:48px;" aria-hidden="true"></div>
       </div>
       <div class="author-card__footer">
         <div class="author-card__actions">
-          <span class="btn skel" style="width:90px; height:36px;"></span>
+          <span class="btn skel" style="width:90px; height:36px;" aria-hidden="true"></span>
         </div>
-        <div class="author-card__qr skel"></div>
+        <div class="author-card__qr skel" aria-hidden="true"></div>
       </div>
     `
     grid.appendChild(wrap)
@@ -125,7 +125,7 @@ function renderAuthors(authors) {
     card.className = 'author-card'
     card.innerHTML = `
       <div class="author-card__header">
-        <div class="author-card__avatar" style="background-image:url('${author.avatar_url || ''}')"></div>
+        <div class="author-card__avatar" style="background-image:url('${author.avatar_url || ''}')" aria-label="${esc(author.username || 'Avatar')}"></div>
         <div>
           <div class="author-card__name">${esc(author.username) || 'Senza nome'}</div>
           <div class="author-card__id">${esc(author.id)}</div>
@@ -148,12 +148,12 @@ function renderAuthors(authors) {
 
       <div class="author-card__footer">
         <div class="author-card__actions">
-          <button class="btn btn--primary btn-expand">Espandi</button>
+          <button class="btn btn--primary btn-expand" aria-expanded="false">Espandi</button>
         </div>
-        ${author.qr_code_url ? `<div class="author-card__qr" style="background-image:url('${author.qr_code_url}')"></div>` : ''}
+        ${author.qr_code_url ? `<div class="author-card__qr" style="background-image:url('${author.qr_code_url}')" aria-label="QR Code"></div>` : ''}
       </div>
 
-      <div class="journal-details">
+      <div class="journal-details" aria-hidden="true">
         <div class="journal-details__inner">
           <div class="journal-block">
             <h4>Temi ricorrenti</h4>
@@ -179,6 +179,7 @@ function attachExpandHandlers() {
       const details = btn.closest('.author-card').querySelector('.journal-details')
       details.classList.toggle('is-open')
       btn.textContent = details.classList.contains('is-open') ? 'Chiudi' : 'Espandi'
+      btn.setAttribute('aria-expanded', details.classList.contains('is-open'))
     })
   })
 }

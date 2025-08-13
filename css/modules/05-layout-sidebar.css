@@ -1,10 +1,11 @@
+```css
 /* =========================================================
    05) LAYOUT & SIDEBAR — struttura principale pagina
    Si appoggia a:
    - markup tipo:
-     <div class="container">
-       <div class="content-area">…</div>
-       <aside class="sidebar">…</aside>
+     <div class="container" role="main">
+       <div class="content-area" aria-label="Contenuti principali">…</div>
+       <aside class="sidebar" aria-label="Barra laterale">…</aside>
      </div>
    - classi già usate in progetto:
      .sidebar-box, .diario-toolbar, .search-input, .filter-select,
@@ -15,7 +16,6 @@
    5.1 CONTAINER — griglia responsiva base
    --------------------------------------- */
 .container {
-  /* definita anche nel modulo 04; qui aggiungiamo regole layout */
   display: grid;
   gap: var(--s-2);
 }
@@ -262,3 +262,4 @@
   .mini-poem-item { border-color: color-mix(in srgb, var(--c-bordi) 45%, transparent); }
   .mini-poem-item:hover { background: color-mix(in srgb, var(--c-primario) 10%, transparent); }
 }
+```

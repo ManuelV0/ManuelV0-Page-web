@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link' // 👈 NEW
+import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 
@@ -9,7 +9,7 @@ type Poem = {
   title: string
   content: string
   author_name: string
-  author_id?: string | null // 👈 NEW (richiedi questo campo nella RPC)
+  author_id?: string | null
   instagram_handle: string | null
   created_at: string
   vote_count: number | null
@@ -36,7 +36,6 @@ export default function PoetryHome() {
       setLoading(true)
       setErr(null)
       try {
-        // ⚠️ Assicurati che la RPC ritorni anche author_id
         const { data, error } = await supabase.rpc('get_poems_with_votes')
         if (error) throw error
         setPoems((data as Poem[]) || [])
@@ -118,7 +117,6 @@ export default function PoetryHome() {
       setVoteMsg('Seleziona da 1 a 5 stelle')
       return
     }
-    // blocco “già votato” lato client (cookie semplice)
     if (document.cookie.includes(`voted-poem-${selected.id}=true`)) {
       setVoteMsg('Hai già votato questa poesia. Grazie!')
       return
@@ -132,10 +130,8 @@ export default function PoetryHome() {
       })
       if (error) throw error
 
-      // cookie 1 anno
       document.cookie = `voted-poem-${selected.id}=true; max-age=31536000; path=/`
       setVoteMsg('Grazie per aver votato!')
-      // soft refresh classifica
       const { data } = await supabase.rpc('get_poems_with_votes')
       setPoems((data as Poem[]) || [])
       setTimeout(() => {
@@ -180,8 +176,8 @@ export default function PoetryHome() {
         </div>
 
         {/* Stato */}
-        {err && <div className="diario-error">{err}</div>}
-        {loading && <p>Caricamento…</p>}
+        {err && <div className="diario-error" role="alert">{err}</div>}
+        {loading && <p aria-live="polite">Caricamento…</p>}
 
         {/* Top 10 */}
         {!loading && !err && (
@@ -196,6 +192,7 @@ export default function PoetryHome() {
                     onClick={() => setSelected(p)}
                     role="button"
                     tabIndex={0}
+                    aria-label={`Seleziona poesia: ${p.title} di ${p.author_name}`}
                   >
                     <span className="poem-rank">{rankEmoji(i)}</span>
                     <span className="poem-title">{p.title}</span>
@@ -213,7 +210,7 @@ export default function PoetryHome() {
                         target="_blank"
                         rel="noreferrer"
                         className="social-icon"
-                        aria-label="Instagram"
+                        aria-label={`Profilo Instagram di ${p.author_name}`}
                       >
                         <i className="fab fa-instagram" />
                       </a>
@@ -245,6 +242,7 @@ export default function PoetryHome() {
                     onClick={() => setSelected(p)}
                     role="button"
                     tabIndex={0}
+                    aria-label={`Seleziona poesia: ${p.title} di ${p.author_name}`}
                   >
                     <span className="mini-poem-title">{p.title}</span>
                     <span className="mini-poem-author">di {p.author_name}</span>
@@ -261,7 +259,7 @@ export default function PoetryHome() {
       {selected && (
         <div className="modal-backdrop" onClick={(e) => e.currentTarget === e.target && setSelected(null)}>
           <div className="modal-content" role="dialog" aria-modal="true">
-            <button className="modal-close-btn" onClick={() => setSelected(null)}>×</button>
+            <button className="modal-close-btn" onClick={() => setSelected(null)} aria-label="Chiudi modale">×</button>
             <div id="vote-poem-details">
               <h2 id="vote-poem-title">{selected.title}</h2>
               <p className="poem-author" id="vote-poem-author">di {selected.author_name}</p>

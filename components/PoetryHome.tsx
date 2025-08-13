@@ -1,4 +1,3 @@
-// components/PoetryHome.tsx
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
@@ -190,7 +189,7 @@ export default function PoetryHome() {
           </div>
 
           {/* Stato */}
-          {err && <div className="diario-error">{err}</div>}
+          {err && <div className="diario-error" role="alert">{err}</div>}
           {loading && <p>Caricamento…</p>}
 
           {/* Top 10 */}
@@ -206,6 +205,7 @@ export default function PoetryHome() {
                       onClick={() => setSelected(p)}
                       role="button"
                       tabIndex={0}
+                      aria-label={`Seleziona poesia: ${p.title} di ${p.author_name}`}
                     >
                       <span className="poem-rank">{rankEmoji(i)}</span>
                       <span className="poem-title">{p.title}</span>
@@ -218,7 +218,7 @@ export default function PoetryHome() {
                           target="_blank"
                           rel="noreferrer"
                           className="social-icon"
-                          aria-label="Instagram"
+                          aria-label={`Instagram di ${p.author_name}`}
                         >
                           <i className="fab fa-instagram" />
                         </a>
@@ -250,6 +250,7 @@ export default function PoetryHome() {
                       onClick={() => setSelected(p)}
                       role="button"
                       tabIndex={0}
+                      aria-label={`Seleziona poesia: ${p.title} di ${p.author_name}`}
                     >
                       <span className="mini-poem-title">{p.title}</span>
                       <span className="mini-poem-author">di {p.author_name}</span>
@@ -267,7 +268,7 @@ export default function PoetryHome() {
       {selected && (
         <div className="modal-backdrop" onClick={(e) => e.currentTarget === e.target && setSelected(null)}>
           <div className="modal-content" role="dialog" aria-modal="true">
-            <button className="modal-close-btn" onClick={() => setSelected(null)}>×</button>
+            <button className="modal-close-btn" onClick={() => setSelected(null)} aria-label="Chiudi modale">×</button>
             <div id="vote-poem-details">
               <h2 id="vote-poem-title">{selected.title}</h2>
               <p className="poem-author" id="vote-poem-author">di {selected.author_name}</p>

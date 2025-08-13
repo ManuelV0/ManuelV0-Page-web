@@ -1,4 +1,3 @@
-// app/diario/page.tsx
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
@@ -203,6 +202,7 @@ export default function DiarioPage() {
                   options: { redirectTo: typeof window !== 'undefined' ? location.origin + '/diario' : undefined }
                 })
               }
+              aria-label="Accedi con Google"
             >
               Accedi con Google
             </button>
@@ -217,7 +217,7 @@ export default function DiarioPage() {
       <section className="diario-section" aria-labelledby="diario-title">
         <h1 id="diario-title" className="section-title">Il tuo Diario</h1>
 
-        {err && <div className="diario-error">{err}</div>}
+        {err && <div className="diario-error" role="alert">{err}</div>}
 
         {/* --- Il tuo profilo --- */}
         {me && <AuthorCard author={me} isMe />}
@@ -242,11 +242,12 @@ export default function DiarioPage() {
                   maxHeight: '240px',
                   overflowY: 'auto'
                 }}
+                role="list"
               >
                 {matches.map(({ prof, themesInCommon, score }) => (
-                  <li key={prof.id} className="author-card" style={{ padding: '12px' }}>
+                  <li key={prof.id} className="author-card" style={{ padding: '12px' }} role="listitem">
                     <div className="author-card__header">
-                      <div className="author-card__avatar" aria-hidden />
+                      <div className="author-card__avatar" aria-hidden="true" />
                       <div>
                         <div className="author-card__name">{prof.username || 'Senza nome'}</div>
                         <div className="author-card__id">{prof.id}</div>
@@ -261,7 +262,7 @@ export default function DiarioPage() {
                     </div>
                     <div className="author-card__meta">
                       {prof.public_page_url && (
-                        <Link className="btn" href={prof.public_page_url} target="_blank">
+                        <Link className="btn" href={prof.public_page_url} target="_blank" rel="noreferrer" aria-label={`Pagina di ${prof.username || 'autore sconosciuto'}`}>
                           Pagina
                         </Link>
                       )}
@@ -293,6 +294,7 @@ export default function DiarioPage() {
                 onChange={(e) => setOrder(e.target.value as any)}
                 disabled={!exploreOpen}
                 aria-disabled={!exploreOpen}
+                aria-label="Ordina per"
               >
                 <option value="recenti">Più recenti</option>
                 <option value="piu-poesie">Con più opere</option>
@@ -301,6 +303,7 @@ export default function DiarioPage() {
                 className="button-secondary"
                 onClick={() => setExploreOpen(v => !v)}
                 aria-pressed={exploreOpen}
+                aria-label={exploreOpen ? 'Chiudi Esplora' : 'Apri Esplora'}
               >
                 {exploreOpen ? 'Chiudi Esplora' : 'Apri Esplora'}
               </button>
@@ -341,7 +344,7 @@ function AuthorCard({ author, isMe = false }: { author: ProfileWithCount, isMe?:
   return (
     <div className="author-card">
       <div className="author-card__header">
-        <div className="author-card__avatar" aria-hidden>
+        <div className="author-card__avatar" aria-hidden="true">
           <span style={{
             display: 'grid', placeItems: 'center', width: '100%', height: '100%', color: '#fff',
             fontWeight: 700
@@ -365,7 +368,7 @@ function AuthorCard({ author, isMe = false }: { author: ProfileWithCount, isMe?:
           </span>
         </div>
         {author.public_page_url && (
-          <a className="btn" href={author.public_page_url} target="_blank" rel="noreferrer">
+          <a className="btn" href={author.public_page_url} target="_blank" rel="noreferrer" aria-label={`Pagina di ${author.username || 'autore sconosciuto'}`}>
             Pagina
           </a>
         )}
@@ -379,7 +382,7 @@ function AuthorCard({ author, isMe = false }: { author: ProfileWithCount, isMe?:
         <>
           <div className="author-card__footer">
             <div className="author-card__actions">
-              <button className="btn btn--primary" onClick={() => setOpen(o => !o)}>
+              <button className="btn btn--primary" onClick={() => setOpen(o => !o)} aria-label={open ? 'Chiudi dettagli' : 'Espandi dettagli'}>
                 {open ? 'Chiudi dettagli' : 'Espandi dettagli'}
               </button>
             </div>

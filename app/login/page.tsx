@@ -13,13 +13,18 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="container">
-      <section className="card-section">
+    <main className="container" role="main">
+      <section className="card-section" aria-labelledby="login-heading">
         <div className="card-content">
-          <h2>Accedi</h2>
+          <h2 id="login-heading">Accedi</h2>
           <p className="mb-sm">Accedi per inviare e votare poesie.</p>
-          <button className="button button-primary" onClick={signIn}>
-            <i className="fab fa-google" style={{ marginRight: 8 }} /> Accedi con Google
+          <button 
+            className="button button-primary" 
+            onClick={signIn} 
+            aria-label="Accedi con Google"
+          >
+            <i className="fab fa-google" style={{ marginRight: 8 }} aria-hidden="true" /> 
+            Accedi con Google
           </button>
         </div>
       </section>

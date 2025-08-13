@@ -1,3 +1,4 @@
+```css
 /* ==========================================================================
    TheItalianPoetry — Widget CSS (final, mobile‑first, a11y & dark‑aware)
    NOTE: mantiene i selettori forniti; aggiunge focus, motion-safe e fix vari.
@@ -456,33 +457,4 @@ button {
   .audio-controls { border-bottom-color: #2a2f37; }
   .play-button, .stop-button { background: #1a1d22; color: var(--text-dark); border-color: var(--border); }
   .speed-button { background: #1a1d22; border-color: var(--border); color: var(--text-medium); }
-  .speed-button:hover { background: #21252b; }
-  .progress-bar { background: #1f2429; border-color: #2a2f37; }
-  .content-highlight { color: var(--text-medium); }
-  .word.highlight { background: var(--primary); color: #0b1410; }
-}
-
-/* ===== REDUCED MOTION ===== */
-@media (prefers-reduced-motion: reduce) {
-  * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
-}
-
-/* ===== MOBILE RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .poetry-header h1 { font-size: 1.8rem; }
-  .poetry-text pre { font-size: 1rem; padding: 1rem; }
-  .audio-options { flex-direction: column; }
-  .audio-options .listen-button,
-  .audio-download-link { width: 100%; justify-content: center; }
-  .content-highlight { font-size: 1.2rem; }
-  .audio-controls { flex-direction: column; align-items: stretch; }
-  .progress-bar { margin: .5rem 0; }
-  .back-button { margin-top: .25rem; }
-}
-
-@media (max-width: 480px) {
-  .poesie-list { grid-template-columns: 1fr; }
-  .analysis-sections { grid-template-columns: 1fr; }
-  .speed-controls { flex-wrap: wrap; justify-content: center; gap: .35rem; }
-  .speed-button { padding: .4rem .8rem; font-size: .92rem; }
-}
+  .speed-button:hover { background: #21252b;

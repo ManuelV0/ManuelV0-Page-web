@@ -1,5 +1,3 @@
-
-// app/come-partecipare/page.tsx
 export const metadata = {
   title: 'Come partecipare — TheItalianPoetry',
   description:
@@ -8,10 +6,10 @@ export const metadata = {
 
 export default function ComeParteciparePage() {
   return (
-    <main className="container">
-      <section className="card-section">
+    <main className="container" role="main">
+      <section className="card-section" aria-labelledby="come-partecipare-heading">
+        <h2 id="come-partecipare-heading">Come Partecipare</h2>
         <div className="card-content">
-          <h2>Come Partecipare</h2>
           <ol style={{ textAlign: 'left', lineHeight: 1.8, marginTop: '1rem' }}>
             <li>
               Accedi con Google dalla pagina <strong>Accedi</strong> (o dal pulsante in header).

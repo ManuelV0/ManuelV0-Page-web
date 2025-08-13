@@ -1,6 +1,38 @@
 /* 10) UTILITIES — spazi, testo, helper */
-.text-center{text-align:center}
-.flex-center{display:flex; align-items:center; justify-content:center}
-.mt-0{margin-top:0!important} .mt-sm{margin-top:var(--s-8)!important} .mt-md{margin-top:var(--s-12)!important}
-.mb-0{margin-bottom:0!important} .mb-sm{margin-bottom:var(--s-8)!important} .mb-md{margin-bottom:var(--s-12)!important}
-.hidden{display:none!important}
+.text-center {
+    text-align: center;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mt-0 {
+    margin-top: 0 !important;
+}
+
+.mt-sm {
+    margin-top: var(--s-8) !important;
+}
+
+.mt-md {
+    margin-top: var(--s-12) !important;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.mb-sm {
+    margin-bottom: var(--s-8) !important;
+}
+
+.mb-md {
+    margin-bottom: var(--s-12) !important;
+}
+
+.hidden {
+    display: none !important;
+}

@@ -23,7 +23,6 @@ async function getData(id: string) {
     .eq('profile_id', id)
   if (cntErr) throw cntErr
 
-  // opzionale: poesie recenti per la scheda
   const { data: recentPoems } = await supabase
     .from('poesie')
     .select('id, title, titolo, created_at')
@@ -61,7 +60,12 @@ export default async function AutorePage({ params }: { params: { id: string } })
 
         <div className="author-card" style={{ marginTop: '1rem' }}>
           <div className="author-card__header">
-            <div className="author-card__avatar" style={{ backgroundImage: `url('${profile.avatar_url || ''}')` }} />
+            <div
+              className="author-card__avatar"
+              style={{ backgroundImage: `url('${profile.avatar_url || ''}')` }}
+              role="img"
+              aria-label={`Avatar di ${profile.username || 'Senza nome'}`}
+            />
             <div>
               <div className="author-card__name">{profile.username || 'Senza nome'}</div>
               <div className="author-card__id">{profile.id}</div>
@@ -89,7 +93,12 @@ export default async function AutorePage({ params }: { params: { id: string } })
           <div className="author-card__footer">
             <div className="author-card__actions" />
             {profile.qr_code_url && (
-              <div className="author-card__qr" style={{ backgroundImage: `url('${profile.qr_code_url}')` }} />
+              <div
+                className="author-card__qr"
+                style={{ backgroundImage: `url('${profile.qr_code_url}')` }}
+                role="img"
+                aria-label="Codice QR"
+              />
             )}
           </div>
 
