@@ -14,8 +14,8 @@ export default function ComeParteciparePage() {
             <li>
               Accedi con Google dalla pagina <strong>Accedi</strong> (o dal pulsante in header).
             </li>
-            <li>Invia la tua poesia dalla Home con “Partecipa!”.</li>
-            <li>Condividi il link e raccogli voti: i più votati entrano in classifica.</li>
+            <li>Invia la tua poesia dalla Home con il pulsante “Partecipa!”.</li>
+            <li>Condividi il link e raccogli voti: i più votati entreranno in classifica.</li>
           </ol>
         </div>
       </section>

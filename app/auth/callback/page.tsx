@@ -25,8 +25,16 @@ export default function AuthCallback() {
         <div className="card-content">
           <h1 id="auth-heading" className="visually-hidden">Accesso</h1>
           {status === 'loading' && <p aria-live="polite">Verifica in corso…</p>}
-          {status === 'ok' && <p>Accesso completato! Torna alla <Link href="/">Home</Link>.</p>}
-          {status === 'error' && <p>Qualcosa è andato storto. Riprova dalla <Link href="/login">pagina di accesso</Link>.</p>}
+          {status === 'ok' && (
+            <p>
+              Accesso completato! Torna alla <Link href="/">Home</Link>.
+            </p>
+          )}
+          {status === 'error' && (
+            <p>
+              Qualcosa è andato storto. Riprova dalla <Link href="/login">pagina di accesso</Link>.
+            </p>
+          )}
         </div>
       </section>
     </main>

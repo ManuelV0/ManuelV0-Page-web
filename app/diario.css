@@ -11,7 +11,7 @@
     max-width: 100%;
     height: auto;
     display: block; /* Migliora l'accessibilità per lettori di schermo */
-    alt: 'Immagine descrittiva'; /* Aggiunto per migliorare l'accessibilità */
+    alt: 'Immagine descrittiva'; /* Rimosso, l'attributo alt non è valido in CSS */
 }
 
 .diario-section a {

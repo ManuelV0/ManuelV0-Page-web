@@ -1,4 +1,4 @@
-/* app/globals.css
+/ * app/globals.css
    ------------------------------------------------------------------ */
 
 /* Vendor (icone + font) */
@@ -68,4 +68,10 @@ body { background: #F9F9F9; color: #222; }
 img[alt=""], 
 .icon[aria-hidden="true"] {
   display: none; /* Nasconde immagini senza alt e icone non pertinenti per screen reader */
+}
+
+/* Miglioramenti accessibilità per link e pulsanti */
+.main-nav a:not([aria-disabled]):hover,
+.main-nav button:not([aria-disabled]):hover {
+  cursor: pointer; /* Cambia il cursore per indicare che è interattivo */
 }
