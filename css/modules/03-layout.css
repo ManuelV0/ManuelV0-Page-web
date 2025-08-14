@@ -68,3 +68,23 @@
     top: calc(var(--header-h) + var(--s-12));
   }
 }
+
+/* Accessibility improvements */
+.hero-section {
+  role: banner;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: var(--s-8);
+}
+
+.hero-content p {
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+.sidebar-box {
+  role: complementary;
+  aria-label: "Sidebar content";
+}

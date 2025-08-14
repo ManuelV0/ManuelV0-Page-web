@@ -36,4 +36,5 @@
 .hidden {
     display: none !important;
     visibility: hidden; /* Aggiunto per migliorare l'accessibilità */
+    aria-hidden: true; /* Aggiunto per migliorare l'accessibilità */
 }

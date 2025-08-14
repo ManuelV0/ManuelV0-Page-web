@@ -1,4 +1,4 @@
-/* 06) FORMS — gruppi, input, textarea, select */
+/ * 06) FORMS — gruppi, input, textarea, select */
 .form-group {
   margin-bottom: var(--s-8);
 }
@@ -8,6 +8,7 @@
   margin-bottom: var(--s-4);
   font-weight: 600;
   color: var(--c-testo);
+  font-size: 1rem;
 }
 
 .form-group input,
@@ -21,6 +22,7 @@
   transition: border-color var(--t), box-shadow var(--t);
   font: inherit;
   color: var(--c-testo);
+  font-size: 1rem;
 }
 
 .form-group textarea {
@@ -48,15 +50,4 @@
 .form-group textarea:focus[aria-invalid="true"],
 .form-group select:focus[aria-invalid="true"] {
   box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.15);
-}
-
-/* Improved readability */
-.form-group label {
-  font-size: 1rem;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-  font-size: 1rem;
 }

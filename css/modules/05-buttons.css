@@ -51,3 +51,12 @@
   outline: 2px solid var(--c-primario); /* Aggiunta per migliorare l'accessibilità */
   outline-offset: 2px; /* Aggiunta per migliorare l'accessibilità */
 }
+
+/* Aggiunta per migliorare l'accessibilità */
+.button[aria-label] {
+  position: relative;
+}
+
+.button[aria-label]:focus {
+  z-index: 1;
+}

@@ -1,4 +1,4 @@
-/* 10) UTILITIES — spazi, testo, helper */
+/ * 10) UTILITIES — spazi, testo, helper */
 .text-center {
     text-align: center;
 }
@@ -40,4 +40,9 @@
 /* Accessibility improvements */
 .hidden[aria-hidden="true"] {
     display: none !important;
+}
+
+/* Improved readability */
+.hidden {
+    visibility: hidden !important; /* Consider using visibility for better a11y */
 }

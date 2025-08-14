@@ -1,4 +1,4 @@
-/* * 13) MATCHMAKING UI — lista match, punteggi * / */
+/ * 13) MATCHMAKING UI — lista match, punteggi * /
 .match-list {
     list-style: none; 
     padding: 0; 
@@ -43,4 +43,6 @@
 
 .mm-header img {
     alt: "Icon representing the match"; /* Add alt text for images */
+    width: 24px; /* Ensure images have a defined size for better layout */
+    height: 24px; /* Ensure images have a defined size for better layout */
 }
