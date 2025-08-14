@@ -24,7 +24,7 @@
   --c-superficie:         #FFFFFF;         /* carte, header */
   --c-elevata:            #FBFBFD;         /* superfici più “airy” */
   --c-bordi:              #E6E8EC;
-  --c-ombra:              rgba(0,0,0,0.08);
+  --c-ombra:              rgba(0, 0, 0, 0.08);
 
   /* Testo */
   --c-testo:              #1F2328;
@@ -105,8 +105,8 @@
   --r-pill:               999px;
 
   --shadow-1:             0 4px 12px var(--c-ombra);
-  --shadow-2:             0 8px 24px rgba(0,0,0,0.06);
-  --shadow-strong:        0 12px 28px rgba(0,0,0,0.12);
+  --shadow-2:             0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-strong:        0 12px 28px rgba(0, 0, 0, 0.12);
 
   /* Layer (z-index semantic) */
   --z-header:             1000;
@@ -132,7 +132,7 @@
   /* -----------------------
      Motion & timing
      ----------------------- */
-  --ease:                 cubic-bezier(.2,.6,.2,1);
+  --ease:                 cubic-bezier(.2, .6, .2, 1);
   --t-quick:              120ms var(--ease);
   --t-normal:             200ms var(--ease);
   --t-slow:               320ms var(--ease);
@@ -147,7 +147,7 @@
   --c-superficie:   #0F141A;
   --c-elevata:      #0B0F14;
   --c-bordi:        #1E2630;
-  --c-ombra:        rgba(0,0,0,0.35);
+  --c-ombra:        rgba(0, 0, 0, 0.35);
 
   --c-testo:        #E6EAF0;
   --c-testo-leggero:#B5BECA;
@@ -166,8 +166,8 @@
   --c-errore-bg:    #2A1210;
   --c-info-bg:      #0E2230;
 
-  --shadow-1:       0 6px 18px rgba(0,0,0,.35);
-  --shadow-2:       0 10px 28px rgba(0,0,0,.45);
+  --shadow-1:       0 6px 18px rgba(0, 0, 0, .35);
+  --shadow-2:       0 10px 28px rgba(0, 0, 0, .45);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -176,7 +176,7 @@
     --c-superficie:   #0F141A;
     --c-elevata:      #0B0F14;
     --c-bordi:        #1E2630;
-    --c-ombra:        rgba(0,0,0,0.35);
+    --c-ombra:        rgba(0, 0, 0, 0.35);
 
     --c-testo:        #E6EAF0;
     --c-testo-leggero:#B5BECA;
@@ -195,8 +195,8 @@
     --c-errore-bg:    #2A1210;
     --c-info-bg:      #0E2230;
 
-    --shadow-1:       0 6px 18px rgba(0,0,0,.35);
-    --shadow-2:       0 10px 28px rgba(0,0,0,.45);
+    --shadow-1:       0 6px 18px rgba(0, 0, 0, .35);
+    --shadow-2:       0 10px 28px rgba(0, 0, 0, .45);
   }
 }
 

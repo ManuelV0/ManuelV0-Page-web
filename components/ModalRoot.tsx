@@ -24,7 +24,7 @@ export default function ModalRoot() {
         <h2 className="modal-title" id="how-to-title">Come partecipare</h2>
         <p className="mb-sm">
           1) Accedi con Google. 2) Vai su “Partecipa!” e invia titolo + testo.
-          3) La poesia compare nella classifica e nel tuo Diario Autore.  
+          3) La poesia compare nella classifica e nel tuo Diario Autore.
         </p>
         <ul className="mb-sm" style={{ paddingLeft: '1rem' }}>
           <li>Max 1 invio al giorno per autore</li>
@@ -57,7 +57,11 @@ export default function ModalRoot() {
 
 function Backdrop({
   open, onClose, children,
-}: { open: boolean; onClose: () => void; children: React.ReactNode }) {
+}: {
+  open: boolean; 
+  onClose: () => void; 
+  children: React.ReactNode 
+}) {
   return (
     <div
       className={`modal-backdrop ${open ? '' : 'hidden'}`}
@@ -75,7 +79,10 @@ function Backdrop({
 
 function SubmissionModal({
   open, onClose,
-}: { open: boolean; onClose: () => void }) {
+}: {
+  open: boolean; 
+  onClose: () => void 
+}) {
   const [email, setEmail] = useState<string | null>(null)
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -89,9 +96,13 @@ function SubmissionModal({
 
   const submit = async () => {
     setMsg(null)
-    if (!email) { setMsg('Devi accedere per inviare.'); return }
+    if (!email) { 
+      setMsg('Devi accedere per inviare.') 
+      return 
+    }
     if (title.trim().length < 2 || content.trim().length < 10) {
-      setMsg('Titolo o testo troppo corti.'); return
+      setMsg('Titolo o testo troppo corti.') 
+      return 
     }
 
     try {

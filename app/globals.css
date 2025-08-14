@@ -1,5 +1,4 @@
-
-/* app/globals.css
+/ * app/globals.css
    ------------------------------------------------------------------ */
 
 /* Vendor (icone + font) */
@@ -45,8 +44,7 @@ body { background: #F9F9F9; color: #222; }
   cursor: pointer;
 }
 
-/* Supporto hamburger: mostra/nascondi nav & actions su mobile
-   (se già gestito in 04-header.css puoi rimuovere queste regole) */
+/* Supporto hamburger: mostra/nascondi nav & actions su mobile */
 @media (max-width: 767.98px) {
   .main-nav[data-visible="false"],
   .header-actions[data-visible="false"] { display: none; }
@@ -65,4 +63,3 @@ body { background: #F9F9F9; color: #222; }
 .main-nav button:focus {
   outline: 2px solid var(--c-primario); /* Aggiunge un contorno visibile per la navigazione tramite tastiera */
 }
-

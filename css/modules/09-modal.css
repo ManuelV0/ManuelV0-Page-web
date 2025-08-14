@@ -6,7 +6,7 @@
   align-items: center; 
   justify-content: center; 
   padding: var(--s-8);
-  background: rgba(34, 34, 34, .6); 
+  background: rgba(34, 34, 34, 0.6); 
   backdrop-filter: blur(5px); 
   z-index: 2000;
 }
@@ -20,7 +20,7 @@
   padding: var(--s-12); 
   position: relative; 
   transform: translateY(6px); 
-  animation: modal-in .2s ease forwards;
+  animation: modal-in 0.2s ease forwards;
 }
 
 @keyframes modal-in {
@@ -46,7 +46,7 @@
 }
 
 .modal-close-btn:hover {
-  background: rgba(0, 0, 0, .05); 
+  background: rgba(0, 0, 0, 0.05); 
   color: var(--c-primario);
 }
 

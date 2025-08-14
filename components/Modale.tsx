@@ -75,7 +75,9 @@ export default function Modals() {
       if (error) throw error
 
       setMsg('Poesia inviata! Grazie ✨')
-      setTitle(''); setContent(''); setInsta('')
+      setTitle('')
+      setContent('')
+      setInsta('')
       setTimeout(() => setOpen(null), 1200)
     } catch (err: any) {
       setMsg(err?.message || 'Errore durante l’invio.')
@@ -124,8 +126,7 @@ export default function Modals() {
         {open === 'about' && (
           <>
             <h2 id="modal-title" className="modal-title">Chi Siamo</h2>
-            <p><strong>TheItalianPoetry</strong> è una community libera dove il merito conta.
-              Manteniamo la piattaforma gratuita grazie a sponsorizzazioni non invasive.</p>
+            <p><strong>TheItalianPoetry</strong> è una community libera dove il merito conta. Manteniamo la piattaforma gratuita grazie a sponsorizzazioni non invasive.</p>
             <p style={{ marginTop: '.5rem' }}>Segui i canali social per novità e selezioni di curatela.</p>
           </>
         )}

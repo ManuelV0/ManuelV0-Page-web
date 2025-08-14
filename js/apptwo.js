@@ -2,8 +2,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 // ------- ENV (solo browser/Netlify) -------
-const SUPABASE_URL     = (typeof window !== 'undefined' && window.ENV?.SUPABASE_URL_PUBLIC) || ''
-const SUPABASE_ANON_KEY= (typeof window !== 'undefined' && window.ENV?.SUPABASE_ANON_KEY)    || ''
+const SUPABASE_URL = (typeof window !== 'undefined' && window.ENV?.SUPABASE_URL_PUBLIC) || ''
+const SUPABASE_ANON_KEY = (typeof window !== 'undefined' && window.ENV?.SUPABASE_ANON_KEY) || ''
 
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   console.warn('⚠️ Mancano le ENV di Supabase (SUPABASE_URL_PUBLIC, SUPABASE_ANON_KEY)')
@@ -12,11 +12,11 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 // ------- DOM -------
-const grid         = document.getElementById('authorsGrid')
-const searchInput  = document.getElementById('searchInput')
+const grid = document.getElementById('authorsGrid')
+const searchInput = document.getElementById('searchInput')
 const filterSelect = document.getElementById('filterSelect')
-const emptyEl      = document.getElementById('diarioEmpty')
-const errorEl      = document.getElementById('diarioError')
+const emptyEl = document.getElementById('diarioEmpty')
+const errorEl = document.getElementById('diarioError')
 
 // Stato
 let allAuthors = []
@@ -33,7 +33,11 @@ const esc = (s) =>
 
 const fmtDate = (iso) => {
   if (!iso) return '-'
-  try { return new Date(iso).toLocaleDateString() } catch { return '-' }
+  try {
+    return new Date(iso).toLocaleDateString()
+  } catch {
+    return '-'
+  }
 }
 
 function showSkeleton(count = 6) {

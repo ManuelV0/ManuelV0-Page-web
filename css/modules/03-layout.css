@@ -20,7 +20,7 @@
   padding: calc(var(--header-h) + var(--s-16)) var(--s-8) var(--s-16);
   color: #fff;
   text-align: center;
-  background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)),
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url('https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=2873&auto=format&fit=crop') center/cover no-repeat;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .hero-content p {
-  opacity: .9;
+  opacity: 0.9;
 }
 
 /* Sidebar (optional) */

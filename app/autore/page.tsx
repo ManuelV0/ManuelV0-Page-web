@@ -57,8 +57,6 @@ export default function AutorePage() {
             </div>
           </div>
         </div>
-
-        {/* (Opzionale) Qui sotto possiamo aggiungere le due sezioni “L’origine del male” e “Frammenti” con le card-poesia */}
       </section>
     </main>
   )

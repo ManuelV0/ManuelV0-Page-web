@@ -22,7 +22,7 @@
 .header-brand .brand-title {
   font-family: var(--font-heading);
   font-weight: 800;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
   font-size: clamp(1.25rem, 2.2vw, 1.8rem);
   color: var(--c-primario);
 }
@@ -62,7 +62,7 @@
   padding: 6px 10px;
   border-radius: 8px;
   cursor: pointer;
-  transition: color .15s ease, background .15s ease;
+  transition: color 0.15s ease, background 0.15s ease;
   color: var(--c-testo);
   white-space: nowrap;
   font: inherit;
@@ -100,7 +100,7 @@
 }
 
 .chip-email {
-  font-size: .85rem;
+  font-size: 0.85rem;
   color: var(--c-testo-leggero);
   max-width: 38ch;
   overflow: hidden;
@@ -113,7 +113,7 @@
   .header-actions[data-visible="false"] {
     display: none;
   }
-  
+
   .main-nav[data-visible="true"],
   .header-actions[data-visible="true"] {
     display: flex;
@@ -125,7 +125,7 @@
   .mobile-nav-toggle {
     display: none;
   }
-  
+
   .main-nav,
   .header-actions {
     display: flex !important;

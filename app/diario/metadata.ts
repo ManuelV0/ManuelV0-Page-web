@@ -4,6 +4,6 @@ export const metadata = {
   openGraph: {
     title: 'Diario Autore',
     type: 'website',
-    description: 'Esplora i profili poetici e le opere recenti.'
-  }
-}
+    description: 'Esplora i profili poetici e le opere recenti.',
+  },
+};

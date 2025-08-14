@@ -1,24 +1,24 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import { supabase } from '@/lib/supabaseClient'
-import Link from 'next/link'
+import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
+import { supabase } from '@/lib/supabaseClient';
 
 /* ---------- Tipi ---------- */
-type PoeticJournal = any // struttura aperta: { descrizione_autore, profilo_poetico:{temi_ricorrenti,evoluzione}, ... }
-type PoeticProfile = any // struttura aperta: { temi_ricorrenti: string[], ... }
+type PoeticJournal = any; // struttura aperta: { descrizione_autore, profilo_poetico:{temi_ricorrenti,evoluzione}, ... }
+type PoeticProfile = any; // struttura aperta: { temi_ricorrenti: string[], ... }
 
 type Profile = {
-  id: string
-  username: string | null
-  poetic_journal: PoeticJournal | null
-  poetic_profile: PoeticProfile | null
-  qr_code_url: string | null
-  public_page_url: string | null
-  last_updated: string | null
-}
+  id: string;
+  username: string | null;
+  poetic_journal: PoeticJournal | null;
+  poetic_profile: PoeticProfile | null;
+  qr_code_url: string | null;
+  public_page_url: string | null;
+  last_updated: string | null;
+};
 
-type ProfileWithCount = Profile & { poems_count: number }
+type ProfileWithCount = Profile & { poems_count: number };
 
 /* =========================================================
    Diario Autore:
@@ -26,34 +26,33 @@ type ProfileWithCount = Profile & { poems_count: number }
    - se non loggato: CTA di login
    ========================================================= */
 export default function DiarioPage() {
-  const [authEmail, setAuthEmail] = useState<string | null>(null)
-  const [me, setMe] = useState<ProfileWithCount | null>(null)
-
-  const [others, setOthers] = useState<ProfileWithCount[]>([])
-  const [loading, setLoading] = useState(true)
-  const [err, setErr] = useState<string | null>(null)
+  const [authEmail, setAuthEmail] = useState<string | null>(null);
+  const [me, setMe] = useState<ProfileWithCount | null>(null);
+  const [others, setOthers] = useState<ProfileWithCount[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
 
   // Esplora
-  const [exploreOpen, setExploreOpen] = useState(false)
-  const [q, setQ] = useState('')
-  const [order, setOrder] = useState<'recenti' | 'piu-poesie'>('recenti')
+  const [exploreOpen, setExploreOpen] = useState(false);
+  const [q, setQ] = useState('');
+  const [order, setOrder] = useState<'recenti' | 'piu-poesie'>('recenti');
 
   useEffect(() => {
-    let alive = true
-    setLoading(true)
-    setErr(null)
+    let alive = true;
+    setLoading(true);
+    setErr(null);
 
-    ;(async () => {
+    (async () => {
       // 1) Stato auth
-      const { data: u1 } = await supabase.auth.getUser()
-      const user = u1.user ?? null
-      setAuthEmail(user?.email ?? null)
+      const { data: u1 } = await supabase.auth.getUser();
+      const user = u1.user ?? null;
+      setAuthEmail(user?.email ?? null);
 
       if (!user) {
-        setMe(null)
-        setOthers([])
-        setLoading(false)
-        return
+        setMe(null);
+        setOthers([]);
+        setLoading(false);
+        return;
       }
 
       // 2) Mio profilo
@@ -61,117 +60,117 @@ export default function DiarioPage() {
         .from('profiles')
         .select('id,username,poetic_journal,poetic_profile,qr_code_url,public_page_url,last_updated')
         .eq('id', user.id)
-        .single()
+        .single();
 
       if (pErr) {
-        if (alive) { setErr(pErr.message); setLoading(false) }
-        return
+        if (alive) { setErr(pErr.message); setLoading(false); }
+        return;
       }
 
       // 3) Conteggio mie poesie
       const { count: myCount, error: cErr } = await supabase
         .from('poesie')
         .select('*', { count: 'exact', head: true })
-        .eq('profile_id', user.id)
+        .eq('profile_id', user.id);
 
       if (cErr) {
-        if (alive) { setErr(cErr.message); setLoading(false) }
-        return
+        if (alive) { setErr(cErr.message); setLoading(false); }
+        return;
       }
 
       if (alive) {
-        setMe({ ...(myProfile as Profile), poems_count: myCount ?? 0 })
+        setMe({ ...(myProfile as Profile), poems_count: myCount ?? 0 });
       }
 
       // 4) Altri profili (per match + esplora) — richiede login
       const { data: othersRaw, error: oErr } = await supabase
         .from('profiles')
         .select('id,username,poetic_journal,poetic_profile,qr_code_url,public_page_url,last_updated')
-        .neq('id', user.id)
+        .neq('id', user.id);
 
       if (oErr) {
-        if (alive) { setErr(oErr.message); setLoading(false) }
-        return
+        if (alive) { setErr(oErr.message); setLoading(false); }
+        return;
       }
 
-      const otherIds = (othersRaw ?? []).map(p => p.id)
-      let countsMap = new Map<string, number>()
+      const otherIds = (othersRaw ?? []).map(p => p.id);
+      let countsMap = new Map<string, number>();
 
       if (otherIds.length) {
         const { data: rows } = await supabase
           .from('poesie')
           .select('profile_id')
-          .in('profile_id', otherIds)
+          .in('profile_id', otherIds);
 
         rows?.forEach(r => {
-          const k = (r as any).profile_id as string
-          countsMap.set(k, (countsMap.get(k) || 0) + 1)
-        })
+          const k = (r as any).profile_id as string;
+          countsMap.set(k, (countsMap.get(k) || 0) + 1);
+        });
       }
 
       const mergedOthers: ProfileWithCount[] = (othersRaw ?? []).map(p => ({
         ...(p as Profile),
-        poems_count: countsMap.get(p.id) || 0
-      }))
+        poems_count: countsMap.get(p.id) || 0,
+      }));
 
       if (alive) {
-        setOthers(mergedOthers)
-        setLoading(false)
+        setOthers(mergedOthers);
+        setLoading(false);
       }
-    })()
+    })();
 
-    return () => { alive = false }
-  }, [])
+    return () => { alive = false; };
+  }, []);
 
   /* ---------- Match-making (semplice sui temi ricorrenti) ---------- */
   const matches = useMemo(() => {
-    if (!me) return []
+    if (!me) return [];
     const myThemes = new Set<string>(
       ((me.poetic_profile as any)?.temi_ricorrenti ?? []).map((s: string) => s.toLowerCase())
-    )
+    );
 
-    if (myThemes.size === 0) return []
+    if (myThemes.size === 0) return [];
 
     const scored = others
       .map(o => {
         const oThemes: string[] = ((o.poetic_profile as any)?.temi_ricorrenti ?? []).map((s: string) =>
           String(s).toLowerCase()
-        )
-        const inter = oThemes.filter(t => myThemes.has(t))
-        const union = new Set<string>([...Array.from(myThemes), ...oThemes])
-        const jaccard = inter.length / Math.max(1, union.size)
+        );
+        const inter = oThemes.filter(t => myThemes.has(t));
+        const union = new Set<string>([...Array.from(myThemes), ...oThemes]);
+        const jaccard = inter.length / Math.max(1, union.size);
         // Punteggio 0..100, più “bonus” per numero assoluto di match
-        const score = Math.round(jaccard * 80 + inter.length * 5)
-        return { prof: o, themesInCommon: inter, score }
+        const score = Math.round(jaccard * 80 + inter.length * 5);
+        return { prof: o, themesInCommon: inter, score };
       })
       .filter(x => x.score > 0)
       .sort((a, b) => b.score - a.score)
-      .slice(0, 6)
+      .slice(0, 6);
 
-    return scored
-  }, [me, others])
+    return scored;
+  }, [me, others]);
 
   /* ---------- Esplora filtrato ---------- */
   const explore = useMemo(() => {
-    let v = [...others]
+    let v = [...others];
     if (q.trim()) {
-      const term = q.trim().toLowerCase()
+      const term = q.trim().toLowerCase();
       v = v.filter(a =>
         (a.username || '').toLowerCase().includes(term) ||
         ((a.poetic_journal as any)?.descrizione_autore || '').toLowerCase().includes(term)
-      )
+      );
     }
     if (order === 'recenti') {
       v.sort(
         (a, b) =>
           new Date(b.last_updated || 0).getTime() -
           new Date(a.last_updated || 0).getTime()
-      )
+      );
     } else {
-      v.sort((a, b) => (b.poems_count || 0) - (a.poems_count || 0))
+      v.sort((a, b) => (b.poems_count || 0) - (a.poems_count || 0));
     }
-    return v
-  }, [others, q, order])
+    return v;
+  }, [others, q, order]);
 
   /* ---------- UI ---------- */
   if (loading) {
@@ -182,7 +181,7 @@ export default function DiarioPage() {
           <p>Caricamento…</p>
         </section>
       </main>
-    )
+    );
   }
 
   if (!authEmail) {
@@ -199,7 +198,7 @@ export default function DiarioPage() {
               onClick={() =>
                 supabase.auth.signInWithOAuth({
                   provider: 'google',
-                  options: { redirectTo: typeof window !== 'undefined' ? location.origin + '/diario' : undefined }
+                  options: { redirectTo: typeof window !== 'undefined' ? location.origin + '/diario' : undefined },
                 })
               }
               aria-label="Accedi con Google"
@@ -209,7 +208,7 @@ export default function DiarioPage() {
           </div>
         </section>
       </main>
-    )
+    );
   }
 
   return (
@@ -240,7 +239,7 @@ export default function DiarioPage() {
                   display: 'grid',
                   gap: '12px',
                   maxHeight: '240px',
-                  overflowY: 'auto'
+                  overflowY: 'auto',
                 }}
                 role="list"
               >
@@ -322,24 +321,24 @@ export default function DiarioPage() {
         </div>
       </section>
     </main>
-  )
+  );
 }
 
 /* =========================================================
    Componenti interni
    ========================================================= */
 
-function AuthorCard({ author, isMe = false }: { author: ProfileWithCount, isMe?: boolean }) {
-  const j = author.poetic_journal || {}
-  const descrizione = (j as any).descrizione_autore || '(nessuna descrizione)'
-  const temi = (j as any)?.profilo_poetico?.temi_ricorrenti || []
-  const evol = (j as any)?.profilo_poetico?.evoluzione
-  const opere = (j as any)?.ultime_opere_rilevanti || []
+function AuthorCard({ author, isMe = false }: { author: ProfileWithCount; isMe?: boolean }) {
+  const j = author.poetic_journal || {};
+  const descrizione = (j as any).descrizione_autore || '(nessuna descrizione)';
+  const temi = (j as any)?.profilo_poetico?.temi_ricorrenti || [];
+  const evol = (j as any)?.profilo_poetico?.evoluzione;
+  const opere = (j as any)?.ultime_opere_rilevanti || [];
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   // placeholder avatar (non esiste avatar_url in schema)
-  const initials = (author.username || 'A').slice(0, 2).toUpperCase()
+  const initials = (author.username || 'A').slice(0, 2).toUpperCase();
 
   return (
     <div className="author-card">
@@ -347,7 +346,7 @@ function AuthorCard({ author, isMe = false }: { author: ProfileWithCount, isMe?:
         <div className="author-card__avatar" aria-hidden="true">
           <span style={{
             display: 'grid', placeItems: 'center', width: '100%', height: '100%', color: '#fff',
-            fontWeight: 700
+            fontWeight: 700,
           }}>{initials}</span>
         </div>
         <div>
@@ -412,5 +411,5 @@ function AuthorCard({ author, isMe = false }: { author: ProfileWithCount, isMe?:
         </>
       ) : null}
     </div>
-  )
+  );
 }

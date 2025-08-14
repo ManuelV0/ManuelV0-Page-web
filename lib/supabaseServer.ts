@@ -1,5 +1,3 @@
-```typescript
-// lib/supabaseServer.ts
 import { cookies } from 'next/headers'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 
@@ -36,4 +34,3 @@ export function supabaseServer() {
 
   return supabase
 }
-```

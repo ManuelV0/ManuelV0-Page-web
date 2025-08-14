@@ -1,6 +1,9 @@
 // next.config.mjs
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: { optimizeCss: false },
+  experimental: {
+    optimizeCss: false,
+  },
 };
+
 export default nextConfig;
