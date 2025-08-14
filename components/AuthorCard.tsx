@@ -13,15 +13,22 @@ type Poem = {
   id: string | number;
   title: string;
   content: string;
-  categoria?: 'origine' | 'frammenti' | string; // usiamo 'origine' e 'frammenti'
+  categoria?: 'origine' | 'frammenti' | string;
   ordine?: number | null;
-  author_id?: string | null;   // adattalo se usi profile_id / user_id
+  author_id?: string | null;
   profile_id?: string | null;
   user_id?: string | null;
 };
 
 export default function AuthorCard({
-  id, username, avatar_url, poetic_journal, qr_code_url, public_page_url, last_updated, poems_count
+  id,
+  username,
+  avatar_url,
+  poetic_journal,
+  qr_code_url,
+  public_page_url,
+  last_updated,
+  poems_count
 }: {
   id: string;
   username?: string | null;
@@ -38,7 +45,6 @@ export default function AuthorCard({
   const evol = j.profilo_poetico?.evoluzione || '';
   const opere = j.ultime_opere_rilevanti || [];
 
-  // ---- POESIE DELL’AUTORE ----
   const [poems, setPoems] = useState<Poem[] | null>(null);
   const [pErr, setPErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -129,7 +135,6 @@ export default function AuthorCard({
         </div>
       </div>
 
-      {/* --- POESIE (due sezioni) --- */}
       <div className="poems-section">
         <h3 className="section-title">L’origine del Male</h3>
         {loading && <p>Caricamento…</p>}
@@ -156,8 +161,6 @@ export default function AuthorCard({
     </div>
   );
 }
-
-/* ---------------- PoemCard con “iniziale che si illumina” ---------------- */
 
 function PoemCard({ poem, highlightInitials = false }: { poem: Poem; highlightInitials?: boolean }) {
   const cardRef = useRef<HTMLDivElement | null>(null);

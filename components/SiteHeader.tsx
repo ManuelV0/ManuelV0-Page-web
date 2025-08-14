@@ -15,17 +15,26 @@ export default function SiteHeader() {
   // Auth status
   useEffect(() => {
     let active = true
-    supabase.auth.getUser().then(({ data }) => { if (active) setEmail(data.user?.email ?? null) })
+    supabase.auth.getUser().then(({ data }) => {
+      if (active) setEmail(data.user?.email ?? null)
+    })
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setEmail(s?.user?.email ?? null))
-    return () => { active = false; sub?.subscription.unsubscribe() }
+    return () => {
+      active = false
+      sub?.subscription.unsubscribe()
+    }
   }, [])
 
   // Chiudi il menu quando cambi route
-  useEffect(() => { setMobileOpen(false) }, [pathname])
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [pathname])
 
   // Chiudi con ESC
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileOpen(false) }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileOpen(false)
+    }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
@@ -44,7 +53,12 @@ export default function SiteHeader() {
       })
     } catch {}
   }
-  const signOut = async () => { try { await supabase.auth.signOut() } catch {} }
+
+  const signOut = async () => {
+    try {
+      await supabase.auth.signOut()
+    } catch {}
+  }
 
   return (
     <header className="main-header main-header--stacked" role="banner">

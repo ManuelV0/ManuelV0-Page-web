@@ -274,7 +274,7 @@ export default function PoetryHome() {
             <div className="voting-area" style={{ marginTop: '1rem' }}>
               <h3>Il tuo voto:</h3>
               <div className="star-rating" role="radiogroup" aria-label="Valuta questa poesia con le stelle">
-                {[1,2,3,4,5].map(n => (
+                {[1, 2, 3, 4, 5].map(n => (
                   <label key={n} className="star" aria-label={`${n} stella`}>
                     <input
                       type="radio"

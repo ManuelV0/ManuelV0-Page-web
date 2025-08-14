@@ -1,156 +1,156 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import { supabase } from '@/lib/supabaseClient'
+import { useEffect, useMemo, useState } from 'react';
+import { supabase } from '@/lib/supabaseClient';
 
 type Poem = {
-  id: number
-  title: string
-  content: string
-  author_name: string
-  instagram_handle: string | null
-  created_at: string
-  vote_count: number | null
-}
+  id: number;
+  title: string;
+  content: string;
+  author_name: string;
+  instagram_handle: string | null;
+  created_at: string;
+  vote_count: number | null;
+};
 
-type Order = 'recent' | 'popular' | 'title-asc' | 'title-desc'
+type Order = 'recent' | 'popular' | 'title-asc' | 'title-desc';
 
 export default function PoetryHome() {
-  const [poems, setPoems] = useState<Poem[]>([])
-  const [loading, setLoading] = useState(true)
-  const [err, setErr] = useState<string | null>(null)
+  const [poems, setPoems] = useState<Poem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
 
   // UI state
-  const [search, setSearch] = useState('')
-  const [order, setOrder] = useState<Order>('recent')
-  const [selected, setSelected] = useState<Poem | null>(null)
-  const [rating, setRating] = useState<number>(0)
-  const [submittingVote, setSubmittingVote] = useState(false)
-  const [voteMsg, setVoteMsg] = useState<string | null>(null)
+  const [search, setSearch] = useState('');
+  const [order, setOrder] = useState<Order>('recent');
+  const [selected, setSelected] = useState<Poem | null>(null);
+  const [rating, setRating] = useState<number>(0);
+  const [submittingVote, setSubmittingVote] = useState(false);
+  const [voteMsg, setVoteMsg] = useState<string | null>(null);
 
   // Caricamento poesie via RPC: get_poems_with_votes
   useEffect(() => {
     const load = async () => {
-      setLoading(true)
-      setErr(null)
+      setLoading(true);
+      setErr(null);
       try {
-        const { data, error } = await supabase.rpc('get_poems_with_votes')
-        if (error) throw error
-        setPoems(data || [])
+        const { data, error } = await supabase.rpc('get_poems_with_votes');
+        if (error) throw error;
+        setPoems(data || []);
       } catch (e: any) {
-        setErr(e.message || 'Errore nel caricamento')
+        setErr(e.message || 'Errore nel caricamento');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    load()
-  }, [])
+    };
+    load();
+  }, []);
 
   // filtro + ordinamento + top10
   const topTen = useMemo(() => {
-    const term = search.trim().toLowerCase()
+    const term = search.trim().toLowerCase();
     let list = poems.filter(p =>
       p.title.toLowerCase().includes(term) ||
       p.author_name.toLowerCase().includes(term)
-    )
+    );
 
     switch (order) {
       case 'popular':
-        list = list.sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0))
-        break
+        list = list.sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0));
+        break;
       case 'title-asc':
-        list = list.sort((a, b) => a.title.localeCompare(b.title))
-        break
+        list = list.sort((a, b) => a.title.localeCompare(b.title));
+        break;
       case 'title-desc':
-        list = list.sort((a, b) => b.title.localeCompare(a.title))
-        break
+        list = list.sort((a, b) => b.title.localeCompare(a.title));
+        break;
       default:
         list = list.sort(
           (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        )
+        );
     }
 
-    return list.slice(0, 10)
-  }, [poems, search, order])
+    return list.slice(0, 10);
+  }, [poems, search, order]);
 
   // poesie del mese corrente
   const monthly = useMemo(() => {
-    const now = new Date()
-    const m = now.getUTCMonth()
-    const y = now.getUTCFullYear()
-    const term = search.trim().toLowerCase()
+    const now = new Date();
+    const m = now.getUTCMonth();
+    const y = now.getUTCFullYear();
+    const term = search.trim().toLowerCase();
 
     let list = poems.filter(p => {
-      const d = new Date(p.created_at)
-      return d.getUTCMonth() === m && d.getUTCFullYear() === y
-    })
+      const d = new Date(p.created_at);
+      return d.getUTCMonth() === m && d.getUTCFullYear() === y;
+    });
 
     list = list.filter(p =>
       p.title.toLowerCase().includes(term) ||
       p.author_name.toLowerCase().includes(term)
-    )
+    );
 
     switch (order) {
       case 'popular':
-        list = list.sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0))
-        break
+        list = list.sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0));
+        break;
       case 'title-asc':
-        list = list.sort((a, b) => a.title.localeCompare(b.title))
-        break
+        list = list.sort((a, b) => a.title.localeCompare(b.title));
+        break;
       case 'title-desc':
-        list = list.sort((a, b) => b.title.localeCompare(a.title))
-        break
+        list = list.sort((a, b) => b.title.localeCompare(a.title));
+        break;
       default:
         list = list.sort(
           (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        )
+        );
     }
 
-    return list
-  }, [poems, search, order])
+    return list;
+  }, [poems, search, order]);
 
   // voto
   async function submitVote() {
-    if (!selected) return
+    if (!selected) return;
     if (rating < 1 || rating > 5) {
-      setVoteMsg('Seleziona da 1 a 5 stelle')
-      return
+      setVoteMsg('Seleziona da 1 a 5 stelle');
+      return;
     }
     // blocco “già votato” lato client (cookie semplice)
     if (typeof document !== 'undefined' && document.cookie.includes(`voted-poem-${selected.id}=true`)) {
-      setVoteMsg('Hai già votato questa poesia. Grazie!')
-      return
+      setVoteMsg('Hai già votato questa poesia. Grazie!');
+      return;
     }
 
     try {
-      setSubmittingVote(true)
-      setVoteMsg('Invio in corso...')
+      setSubmittingVote(true);
+      setVoteMsg('Invio in corso...');
       const { error } = await supabase.functions.invoke('invia-voto', {
         body: { poemId: selected.id, rating }
-      })
-      if (error) throw error
+      });
+      if (error) throw error;
 
       // cookie 1 anno
       if (typeof document !== 'undefined') {
-        document.cookie = `voted-poem-${selected.id}=true; max-age=31536000; path=/`
+        document.cookie = `voted-poem-${selected.id}=true; max-age=31536000; path=/`;
       }
-      setVoteMsg('Grazie per aver votato!')
+      setVoteMsg('Grazie per aver votato!');
       // ricarico classifica soft
-      const { data } = await supabase.rpc('get_poems_with_votes')
-      setPoems(data || [])
+      const { data } = await supabase.rpc('get_poems_with_votes');
+      setPoems(data || []);
       setTimeout(() => {
-        setSelected(null)
-        setRating(0)
-        setVoteMsg(null)
-      }, 1200)
+        setSelected(null);
+        setRating(0);
+        setVoteMsg(null);
+      }, 1200);
     } catch (e: any) {
-      setVoteMsg(e.message || 'Errore durante la votazione')
+      setVoteMsg(e.message || 'Errore durante la votazione');
     } finally {
-      setSubmittingVote(false)
+      setSubmittingVote(false);
     }
   }
 
-  const rankEmoji = (i: number) => (i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '')
+  const rankEmoji = (i: number) => (i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '');
 
   return (
     <main>
@@ -242,7 +242,7 @@ export default function PoetryHome() {
                 <p style={{ fontSize: '.9rem', color: '#777' }}>Nessuna poesia per questo mese.</p>
               ) : (
                 monthly.map(p => {
-                  const d = new Date(p.created_at).toLocaleDateString('it-IT', { day: 'numeric', month: 'long' })
+                  const d = new Date(p.created_at).toLocaleDateString('it-IT', { day: 'numeric', month: 'long' });
                   return (
                     <div
                       className="mini-poem-item"
@@ -256,7 +256,7 @@ export default function PoetryHome() {
                       <span className="mini-poem-author">di {p.author_name}</span>
                       <span className="mini-poem-date">{d}</span>
                     </div>
-                  )
+                  );
                 })
               )}
             </div>
@@ -283,8 +283,8 @@ export default function PoetryHome() {
             <div className="voting-area" style={{ marginTop: '1rem' }}>
               <h3>Il tuo voto:</h3>
               <div className="star-rating" role="radiogroup" aria-label="Valuta questa poesia con le stelle">
-                {[1,2,3,4,5].map(n => (
-                  <label key={n} className="star" aria-label={`${n} stella${n>1?'e':''}`}>
+                {[1, 2, 3, 4, 5].map(n => (
+                  <label key={n} className="star" aria-label={`${n} stella${n > 1 ? 'e' : ''}`}>
                     <input
                       type="radio"
                       name="rating"
@@ -314,5 +314,5 @@ export default function PoetryHome() {
         </div>
       )}
     </main>
-  )
+  );
 }

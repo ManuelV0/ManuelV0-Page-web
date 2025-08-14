@@ -79,7 +79,7 @@
   background: var(--c-superficie);
   border: 1px solid var(--c-bordi);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm, 0 4px 12px rgba(0,0,0,.06));
+  box-shadow: var(--shadow-sm, 0 4px 12px rgba(0, 0, 0, .06));
   padding: clamp(.9rem, 1.6vw, 1.1rem);
   display: grid;
   gap: .75rem;
@@ -93,11 +93,14 @@
   position: relative;
   padding-bottom: .3rem;
 }
+
 .sidebar-box h3::after {
   content: '';
   position: absolute;
-  left: 0; bottom: 0;
-  width: 42px; height: 3px;
+  left: 0;
+  bottom: 0;
+  width: 42px;
+  height: 3px;
   border-radius: 2px;
   background: var(--c-primario);
 }
@@ -131,7 +134,10 @@
   transition: border-color var(--t-quick, .18s), box-shadow var(--t-quick, .18s);
 }
 
-.search-input::placeholder { color: var(--c-testo-leggero); }
+.search-input::placeholder {
+  color: var(--c-testo-leggero);
+}
+
 .search-input:focus,
 .filter-select:focus {
   border-color: color-mix(in srgb, var(--c-primario) 45%, var(--c-bordi));
@@ -150,7 +156,11 @@
   padding-right: .25rem;
   -webkit-overflow-scrolling: touch;
 }
-.mini-poems-list::-webkit-scrollbar { width: 6px; }
+
+.mini-poems-list::-webkit-scrollbar {
+  width: 6px;
+}
+
 .mini-poems-list::-webkit-scrollbar-thumb {
   background: color-mix(in srgb, var(--c-testo) 14%, transparent);
   border-radius: 999px;
@@ -165,13 +175,21 @@
   transition: background var(--t-quick), border-color var(--t-quick);
   cursor: pointer;
 }
+
 .mini-poem-item:hover {
   background: color-mix(in srgb, var(--c-primario) 7%, transparent);
   border-color: color-mix(in srgb, var(--c-primario) 25%, var(--c-bordi));
 }
-.mini-poem-title { font-weight: 600; }
+
+.mini-poem-title {
+  font-weight: 600;
+}
+
 .mini-poem-author,
-.mini-poem-date { font-size: .85rem; color: var(--c-testo-leggero); }
+.mini-poem-date {
+  font-size: .85rem;
+  color: var(--c-testo-leggero);
+}
 
 /* ---------------------------------------
    5.6 CTA PARTECIPAZIONE/SHARE IN SIDEBAR
@@ -194,14 +212,19 @@
   cursor: pointer;
   background: linear-gradient(45deg, #1B5E20, #2E7D32, #4CAF50);
   color: #fff;
-  box-shadow: 0 8px 18px rgba(0,0,0,.12);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
   transition: transform var(--t-quick), box-shadow var(--t-quick), filter var(--t-quick);
 }
-.participation-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,.16); }
+
+.participation-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, .16);
+}
 
 #share-cta-btn {
   background: linear-gradient(45deg, #405DE6, #833AB4, #C13584);
 }
+
 #copy-link-btn {
   background: var(--c-primario);
   color: #fff;
@@ -244,9 +267,12 @@
   border-radius: 10px;
   font-size: .9rem;
   text-decoration: none;
-  display: inline-flex; align-items: center; gap: .4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
   transition: border-color var(--t-quick), background var(--t-quick), color var(--t-quick);
 }
+
 .btn:hover {
   border-color: color-mix(in srgb, var(--c-primario) 35%, var(--c-bordi));
   background: color-mix(in srgb, var(--c-primario) 6%, var(--c-superficie));
@@ -257,7 +283,15 @@
    5.8 VARIANTI DARK (opzionali)
    --------------------------------------- */
 @media (prefers-color-scheme: dark) {
-  .sidebar-box { border-color: color-mix(in srgb, var(--c-bordi) 60%, #000); }
-  .mini-poem-item { border-color: color-mix(in srgb, var(--c-bordi) 45%, transparent); }
-  .mini-poem-item:hover { background: color-mix(in srgb, var(--c-primario) 10%, transparent); }
+  .sidebar-box {
+    border-color: color-mix(in srgb, var(--c-bordi) 60%, #000);
+  }
+  
+  .mini-poem-item {
+    border-color: color-mix(in srgb, var(--c-bordi) 45%, transparent);
+  }
+  
+  .mini-poem-item:hover {
+    background: color-mix(in srgb, var(--c-primario) 10%, transparent);
+  }
 }

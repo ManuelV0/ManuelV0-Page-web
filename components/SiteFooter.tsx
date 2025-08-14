@@ -9,7 +9,12 @@ export default function SiteFooter() {
           <a href="#">Disclaimer</a>
         </nav>
         <div className="footer-social" aria-label="Seguici sui social media">
-          <a aria-label="Instagram" href="https://www.instagram.com/theitalianpoetry/" target="_blank" rel="noopener noreferrer">
+          <a
+            aria-label="Instagram"
+            href="https://www.instagram.com/theitalianpoetry/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <i className="fab fa-instagram" />
             <span className="visually-hidden">Instagram</span>
           </a>
@@ -24,5 +29,5 @@ export default function SiteFooter() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

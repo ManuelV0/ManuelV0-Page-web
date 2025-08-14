@@ -8,7 +8,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'author_id mancante' }, { status: 400 })
   }
 
-  // Chiama la Netlify Function locale del tuo sito
   const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/.netlify/functions/forza-analisi`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

@@ -1,5 +1,3 @@
-/* app/diario.css */
-/* ⬇️ incolla qui tutto il CSS della sezione diario che usi nel progetto */
 .diario-section { background: #fff; }
 
 /* Miglioramenti per accessibilità e leggibilità */
@@ -9,7 +7,6 @@
 }
 
 .diario-section img {
-    alt: 'Immagine descrittiva della sezione diario'; /* Questo non è un attributo CSS, rimuovere */
     max-width: 100%;
     height: auto;
     display: block; /* Migliora l'accessibilità per lettori di schermo */

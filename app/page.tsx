@@ -10,7 +10,9 @@ export default function HomePage() {
 
       <div className="container">
         <div className="content-area">
-          <h2 className="section-title" id="leaderboard" tabIndex={0}>Classifica Principale</h2>
+          <h2 className="section-title" id="leaderboard" tabIndex={0}>
+            Classifica Principale
+          </h2>
           <div className="poems-list" aria-live="polite" role="region" aria-labelledby="leaderboard">
             {/* TODO: qui incolliamo componenti classifica */}
           </div>
@@ -20,5 +22,5 @@ export default function HomePage() {
         </aside>
       </div>
     </main>
-  )
+  );
 }
