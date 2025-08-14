@@ -1,3 +1,4 @@
+```javascript
 // js/diario-autore.js
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
@@ -209,3 +210,4 @@ filterSelect?.addEventListener('change', () => {
 
 // ------- Start -------
 loadAuthors()
+```

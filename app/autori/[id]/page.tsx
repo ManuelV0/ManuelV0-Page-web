@@ -65,7 +65,14 @@ export default async function AutorePage({ params }: { params: { id: string } })
               style={{ backgroundImage: `url('${profile.avatar_url || ''}')` }}
               role="img"
               aria-label={`Avatar di ${profile.username || 'Senza nome'}`}
-              alt={`Avatar di ${profile.username || 'Senza nome'}`}
+             
+             <img
+  className="author-card__avatar"
+  src={avatarUrl}
+  alt={`Avatar di ${profile.username || 'Senza nome'}`}
+/>
+
+             
             />
             <div>
               <div className="author-card__name">{profile.username || 'Senza nome'}</div>
