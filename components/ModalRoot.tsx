@@ -31,9 +31,7 @@ export default function ModalRoot() {
           <li>Testo originale, niente plagio</li>
           <li>Niente hate o contenuti offensivi</li>
         </ul>
-        <button className="button button-primary" onClick={() => setOpen('submission')}>
-          Inizia ora
-        </button>
+        <button className="button button-primary" onClick={() => setOpen('submission')} aria-label="Inizia ora">Inizia ora</button>
       </Backdrop>
 
       {/* ABOUT */}
@@ -146,18 +144,18 @@ function SubmissionModal({
 
       <div className="form-group">
         <label htmlFor="p-title">Titolo</label>
-        <input id="p-title" className="comp-input" value={title} onChange={e => setTitle(e.target.value)} maxLength={120} />
+        <input id="p-title" className="comp-input" value={title} onChange={e => setTitle(e.target.value)} maxLength={120} aria-required="true" />
       </div>
       <div className="form-group">
         <label htmlFor="p-content">Testo</label>
-        <textarea id="p-content" className="comp-textarea" value={content} onChange={e => setContent(e.target.value)} />
+        <textarea id="p-content" className="comp-textarea" value={content} onChange={e => setContent(e.target.value)} aria-required="true" />
       </div>
       <div className="form-group">
         <label htmlFor="p-ig">Instagram (opzionale)</label>
         <input id="p-ig" className="comp-input" value={instagram} onChange={e => setInstagram(e.target.value)} placeholder="nome utente" />
       </div>
 
-      <button className="button button-primary" onClick={submit} disabled={busy || !email}>
+      <button className="button button-primary" onClick={submit} disabled={busy || !email} aria-label="Invia poesia">
         {busy ? 'Invio…' : 'Invia'}
       </button>
       {msg && <p id="form-message" className="mt-sm" role="status">{msg}</p>}

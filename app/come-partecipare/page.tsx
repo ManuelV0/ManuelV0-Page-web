@@ -8,7 +8,7 @@ export default function ComeParteciparePage() {
   return (
     <main className="container" role="main">
       <section className="card-section" aria-labelledby="come-partecipare-heading">
-        <h2 id="come-partecipare-heading">Come Partecipare</h2>
+        <h1 id="come-partecipare-heading" className="visually-hidden">Come Partecipare</h1>
         <div className="card-content">
           <ol style={{ textAlign: 'left', lineHeight: 1.8, marginTop: '1rem' }}>
             <li>

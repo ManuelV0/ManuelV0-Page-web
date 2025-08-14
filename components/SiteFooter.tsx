@@ -18,11 +18,11 @@ export default function SiteFooter() {
             <i className="fab fa-instagram" />
             <span className="visually-hidden">Instagram</span>
           </a>
-          <a aria-label="Facebook" href="#" rel="noopener noreferrer">
+          <a aria-label="Facebook" href="#" target="_blank" rel="noopener noreferrer">
             <i className="fab fa-facebook" />
             <span className="visually-hidden">Facebook</span>
           </a>
-          <a aria-label="Twitter" href="#" rel="noopener noreferrer">
+          <a aria-label="Twitter" href="#" target="_blank" rel="noopener noreferrer">
             <i className="fab fa-twitter" />
             <span className="visually-hidden">Twitter</span>
           </a>

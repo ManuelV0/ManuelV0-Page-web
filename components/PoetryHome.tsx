@@ -221,6 +221,7 @@ export default function PoetryHome() {
                           aria-label={`Instagram di ${p.author_name}`}
                         >
                           <i className="fab fa-instagram" />
+                          <span className="sr-only">Instagram di {p.author_name}</span>
                         </a>
                       )}
                       <span className="poem-votes">{p.vote_count || 0} Voti</span>

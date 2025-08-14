@@ -43,6 +43,7 @@
   color: var(--c-testo-leggero); 
   cursor: pointer;
   outline: none; /* Added for accessibility */
+  aria-label: "Close modal"; /* Added for accessibility */
 }
 
 .modal-close-btn:hover {
@@ -55,4 +56,6 @@
   color: var(--c-primario);
   font-size: 1.5rem; /* Ensured proper heading size for accessibility */
   line-height: 1.2; /* Improved readability */
+  role: "heading"; /* Added role for accessibility */
+  aria-level: 2; /* Specified heading level for accessibility */
 }

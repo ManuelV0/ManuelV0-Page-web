@@ -25,11 +25,11 @@ export default function AutorePage() {
               aria-label="Avatar di TheItalianPoetry"
             />
             <div>
-              <div className="author-card__name">TheItalianPoetry</div>
+              <div className="author-card__name" role="heading" aria-level={2}>TheItalianPoetry</div>
               <div className="author-card__id">owner</div>
             </div>
             <div className="author-card__badges">
-              <span className="badge">Founder</span>
+              <span className="badge" role="note">Founder</span>
             </div>
           </div>
 
@@ -44,9 +44,9 @@ export default function AutorePage() {
               <div className="journal-block">
                 <h4>Temi ricorrenti</h4>
                 <div className="journal-tags">
-                  <span className="journal-tag">Identità</span>
-                  <span className="journal-tag">Assenze</span>
-                  <span className="journal-tag">Desiderio</span>
+                  <span className="journal-tag" role="note">Identità</span>
+                  <span className="journal-tag" role="note">Assenze</span>
+                  <span className="journal-tag" role="note">Desiderio</span>
                 </div>
               </div>
 

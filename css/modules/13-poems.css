@@ -1,4 +1,4 @@
-/* =========================================================
+/ * =========================================================
    13) POESIE DELL’AUTORE
    - Sezioni: "L’origine del Male" e "Frammenti"
    - Griglia card poesia
@@ -10,6 +10,7 @@
 .poems-section .section-title {
   margin-bottom: .75rem;
   font-size: 1.5rem; /* Aumentata leggibilità */
+  font-weight: bold; /* Migliorata leggibilità */
 }
 
 /* Griglia */
@@ -37,6 +38,7 @@
   color: var(--c-primario, #4CAF50);
   margin-bottom: .5rem;
   font-size: 1.25rem; /* Aumentata leggibilità */
+  font-weight: bold; /* Migliorata leggibilità */
 }
 .poem-text {
   white-space: pre-line;

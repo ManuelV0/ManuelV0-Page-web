@@ -35,4 +35,5 @@
 
 .hidden {
     display: none !important;
+    visibility: hidden; /* Aggiunto per migliorare l'accessibilità */
 }

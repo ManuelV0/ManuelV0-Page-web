@@ -89,8 +89,8 @@ export default function SiteHeader() {
       >
         <Link href="/" className={is('/') ? 'is-active' : ''} aria-current={is('/') ? 'page' : undefined}>Home</Link>
         <Link href="/#leaderboard" className={is('/') ? 'is-active' : ''}>Classifica</Link>
-        <button type="button" onClick={() => openModal('how-to')}>Come Partecipare</button>
-        <button type="button" onClick={() => openModal('about')}>Chi Siamo</button>
+        <button type="button" onClick={() => openModal('how-to')} aria-label="Come Partecipare">Come Partecipare</button>
+        <button type="button" onClick={() => openModal('about')} aria-label="Chi Siamo">Chi Siamo</button>
         <Link href="/autore" className={starts('/autore') ? 'is-active' : ''} aria-current={starts('/autore') ? 'page' : undefined}>Autore</Link>
         <Link href="/diario" className={starts('/diario') ? 'is-active' : ''} aria-current={starts('/diario') ? 'page' : undefined}>Diario</Link>
       </nav>
@@ -102,13 +102,13 @@ export default function SiteHeader() {
         data-visible={mobileOpen}
       >
         {!email ? (
-          <button className="button-social google" onClick={signInWithGoogle}>
+          <button className="button-social google" onClick={signInWithGoogle} aria-label="Accedi con Google">
             <i className="fab fa-google" aria-hidden="true" /> Accedi con Google
           </button>
         ) : (
           <div className="user-chip">
             <span className="chip-email">{email}</span>
-            <button className="button-secondary" onClick={signOut}>Logout</button>
+            <button className="button-secondary" onClick={signOut} aria-label="Logout">Logout</button>
           </div>
         )}
         <button

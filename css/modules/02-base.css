@@ -155,6 +155,7 @@ object {
 
 img {
   height: auto;
+  alt: "Immagine descrittiva"; /* Aggiunto attributo alt per accessibilità */
 }
 
 /* -----------------------

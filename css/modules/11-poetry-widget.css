@@ -36,3 +36,8 @@
 .hidden {
     display: none !important;
 }
+
+/* Accessibility improvements */
+.hidden[aria-hidden="true"] {
+    display: none !important;
+}

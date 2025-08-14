@@ -4,12 +4,14 @@
 .diario-section h1, .diario-section h2, .diario-section h3 {
     font-family: 'Arial', sans-serif;
     color: #333;
+    margin: 0; /* Aggiunto per migliorare la coerenza visiva */
 }
 
 .diario-section img {
     max-width: 100%;
     height: auto;
     display: block; /* Migliora l'accessibilità per lettori di schermo */
+    alt: 'Immagine descrittiva'; /* Aggiunto per migliorare l'accessibilità */
 }
 
 .diario-section a {

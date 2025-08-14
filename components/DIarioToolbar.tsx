@@ -16,6 +16,7 @@ export default function DiarioToolbar({
         placeholder="Cerca autore o descrizione"
         onChange={(e) => onSearch(e.target.value)}
         aria-label="Cerca autore o descrizione"
+        type="text"
       />
       <label htmlFor="filterSelect" className="visually-hidden">Filtra per</label>
       <select

@@ -1,3 +1,4 @@
+```css
 /* app/globals.css
    ------------------------------------------------------------------ */
 
@@ -63,3 +64,10 @@ body { background: #F9F9F9; color: #222; }
 .main-nav button:focus {
   outline: 2px solid var(--c-primario); /* Aggiunge un contorno visibile per la navigazione tramite tastiera */
 }
+
+/* Miglioramenti accessibilità per immagini e icone */
+img[alt=""], 
+.icon[aria-hidden="true"] {
+  display: none; /* Nasconde immagini senza alt e icone non pertinenti per screen reader */
+}
+```

@@ -53,5 +53,6 @@
 .card-content img {
   max-width: 100%; /* Aggiunta per garantire che le immagini siano responsive */
   height: auto; /* Aggiunta per mantenere le proporzioni delle immagini */
-  alt: 'Descrizione dell'immagine'; /* Aggiunta per l'accessibilità */
+  alt: 'Descrizione dell\'immagine'; /* Aggiunta per l'accessibilità */
+  role: 'img'; /* Aggiunta per migliorare l'accessibilità */
 }

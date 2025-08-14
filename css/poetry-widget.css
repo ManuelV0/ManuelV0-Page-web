@@ -1,3 +1,4 @@
+```css
 /* ==========================================================================
    TheItalianPoetry — Widget CSS (final, mobile‑first, a11y & dark‑aware)
    NOTE: mantiene i selettori forniti; aggiunge focus, motion-safe e fix vari.
@@ -652,4 +653,4 @@ button {
 
   .app-header {
     background: rgba(10, 10, 12, .75);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, .35
+    box-shadow: 0 2px 10px rgba(0, 0, 0

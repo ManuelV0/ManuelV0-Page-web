@@ -99,6 +99,7 @@ export default function Modals() {
         ref={dialogRef}
         className="modal-content"
         aria-labelledby="modal-title"
+        role="document"
       >
         <button
           ref={closeBtnRef}

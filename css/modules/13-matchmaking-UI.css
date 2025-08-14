@@ -1,4 +1,4 @@
-/* 13) MATCHMAKING UI — lista match, punteggi */
+/ * 13) MATCHMAKING UI — lista match, punteggi * /
 .match-list {
     list-style: none; 
     padding: 0; 
@@ -29,4 +29,18 @@
 .mm-themes {
     font-size: 0.95rem; 
     color: var(--c-testo-leggero);
+}
+
+/* Accessibility improvements */
+.match-card[role="article"] {
+    outline: none; /* Remove default outline for better styling */
+}
+
+.mm-header h2 {
+    font-size: 1.25rem; /* Ensure headings are clear and readable */
+    margin: 0; /* Remove default margin */
+}
+
+.mm-header img {
+    alt: "Icon representing the match"; /* Add alt text for images */
 }

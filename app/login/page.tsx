@@ -16,7 +16,7 @@ export default function LoginPage() {
     <main className="container" role="main">
       <section className="card-section" aria-labelledby="login-heading">
         <div className="card-content">
-          <h2 id="login-heading">Accedi</h2>
+          <h1 id="login-heading" className="visually-hidden">Accedi</h1>
           <p className="mb-sm">Accedi per inviare e votare poesie.</p>
           <button 
             className="button button-primary" 

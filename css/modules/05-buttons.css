@@ -11,6 +11,7 @@
   font-weight: 700;
   transition: var(--t);
   font: inherit;
+  text-align: center; /* Migliora l'accessibilità per il testo */
 }
 
 .button-primary {
@@ -44,4 +45,9 @@
 
 .full-width-btn {
   width: 100%;
+}
+
+.button:focus {
+  outline: 2px solid var(--c-primario); /* Aggiunta per migliorare l'accessibilità */
+  outline-offset: 2px; /* Aggiunta per migliorare l'accessibilità */
 }
