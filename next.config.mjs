@@ -1,12 +1,6 @@
+// next.config.mjs
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack: (config) => {
-    config.ignoreWarnings = [
-      ...(config.ignoreWarnings || []),
-      { module: /@supabase\/realtime-js/, message: /Critical dependency:/ },
-    ];
-    return config;
-  },
+  experimental: { optimizeCss: false },
 };
-
 export default nextConfig;
