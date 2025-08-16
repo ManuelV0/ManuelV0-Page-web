@@ -1,117 +1,107 @@
-/* =========================================================
-   03) HEADER — layout impilato, hamburger, accessibilità
-   Compatibile con il componente SiteHeader che usi già.
-   Classi/struttura attese:
-   .main-header.main-header--stacked
-     .header-brand (.brand-title)
-     .mobile-nav-toggle [aria-expanded]
-     nav#primary-navigation.main-nav.main-nav--centered[data-visible]
-     #primary-actions.header-actions.header-actions--centered[data-visible]
-   ========================================================= */
+/* 03-header.css — HEADER UNIFICATO (brand + hamburger + nav + azioni)
+   Dipendenze: usa le variabili da 01-tokens.css e il reset da 02-base.css */
 
 /* -----------------------------
-   3.1 Wrapper header (sticky)
+   3.0 Layout base header
    ----------------------------- */
 .main-header {
-  position: sticky; /* resta in alto durante lo scroll */
+  position: sticky;
   top: 0;
-  inset-inline: 0;
-  z-index: var(--z-header, 1000);
+  z-index: 1000;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* su mobile: brand a sinistra, nav/actions in blocchi */
+  grid-auto-flow: row;
+  row-gap: .25rem;
+
+  padding: .6rem .9rem;
   background: var(--c-superficie);
   border-bottom: 1px solid var(--c-bordi);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
-/* Variante impilata (brand sopra, poi nav, poi actions) */
-.main-header--stacked {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr; /* brand centrato, toggle a dx su mobile */
-  align-items: center;
-  gap: var(--s-2);
-  padding: clamp(.6rem, 1.6vw, .9rem) var(--container-pad);
-}
-
-/* -----------------------------
-   3.2 Brand (centrato)
-   ----------------------------- */
+/* Brand */
 .header-brand {
-  grid-column: 1 / -1; /* riga intera su mobile */
-  display: inline-flex;
+  grid-column: 1 / -1;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: .6rem;
-  text-align: center;
+  gap: .55rem;
+  font-weight: 800;
+  letter-spacing: .3px;
+  line-height: 1;
 }
-.header-brand .brand-title {
-  font-family: var(--font-heading);
-  font-weight: var(--fw-extrabold);
-  font-size: clamp(1.15rem, 2.1vw, 1.65rem);
-  letter-spacing: .2px;
-  color: var(--c-testo);
+.header-brand .fa-feather-pointed {
+  font-size: 1.15rem;
+  opacity: .9;
 }
-.header-brand i {
-  color: var(--c-primario);
-  font-size: 1.25em;
+.brand-title {
+  font-size: 1.05rem;
 }
 
 /* -----------------------------
-   3.3 Toggle hamburger
+   3.1 Toggle hamburger
    ----------------------------- */
 .mobile-nav-toggle {
-  grid-column: 3; /* a destra */
+  grid-column: 1 / -1;
   justify-self: end;
-  appearance: none;
-  background: transparent;
+
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+
+  padding: .35rem .55rem;
   border: 1px solid var(--c-bordi);
-  color: var(--c-testo);
-  border-radius: 10px;
-  padding: .5rem .65rem;
-  font-size: 1.1rem;
+  border-radius: .5rem;
+  background: var(--c-superficie);
   cursor: pointer;
-  transition: background var(--t-quick), border-color var(--t-quick), transform var(--t-quick);
+
+  font: inherit;
+  line-height: 1;
+  transition: background var(--t-quick), border-color var(--t-quick);
 }
 .mobile-nav-toggle:hover {
-  background: color-mix(in srgb, var(--c-primario) 6%, transparent);
+  background: color-mix(in srgb, var(--c-primario) 8%, transparent);
+  border-color: color-mix(in srgb, var(--c-primario) 35%, var(--c-bordi));
 }
-.mobile-nav-toggle:active {
-  transform: translateY(1px);
-}
-.mobile-nav-toggle:focus-visible {
-  outline: var(--focus-ring-width) solid var(--focus-ring-color);
-  outline-offset: var(--focus-ring-offset);
+.mobile-nav-toggle .fas {
+  font-size: 1rem;
 }
 
 /* -----------------------------
-   3.4 Nav principale
+   3.2 Nav principale
    ----------------------------- */
 .main-nav {
   grid-column: 1 / -1;
-  display: none; /* chiusa di default su mobile */
+
+  display: none;           /* chiusa su mobile */
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: .6rem .9rem;
-  padding-block: .35rem;
-}
+  gap: .5rem .6rem;
 
-/* Apertura/chiusura mobile guidata da data-visible (gestita da React) */
+  padding-block: .15rem .35rem;
+}
 .main-nav[data-visible="true"] {
   display: flex;
 }
 
 .main-nav a,
 .main-nav button {
-  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+
+  padding: .5rem .7rem;
+  border-radius: .5rem;
+  border: 1px solid transparent;
   background: transparent;
-  border: 0;
-  padding: .5rem .8rem;
+
   font: inherit;
-  color: var(--c-testo);
-  border-radius: 8px;
+  line-height: 1;
   text-decoration: none;
+  color: var(--c-testo);
+
   cursor: pointer;
-  transition: color var(--t-quick), background var(--t-quick);
+  transition: color var(--t-quick), background var(--t-quick), border-color var(--t-quick);
   white-space: nowrap;
 }
 .main-nav a:hover,
@@ -119,8 +109,6 @@
   color: var(--c-primario);
   background: color-mix(in srgb, var(--c-primario) 9%, transparent);
 }
-
-/* Stato attivo coerente con il resto del sito */
 .main-nav .is-active {
   color: var(--c-primario);
   text-decoration: underline;
@@ -128,11 +116,11 @@
 }
 
 /* -----------------------------
-   3.5 Barra azioni (login/cta)
+   3.3 Barra azioni (login/cta)
    ----------------------------- */
 .header-actions {
   grid-column: 1 / -1;
-  display: none; /* chiusa di default su mobile */
+  display: none; /* chiusa su mobile */
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -161,19 +149,20 @@
 }
 
 /* -----------------------------
-   3.6 Breakpoint: da tablet in su
+   3.4 Breakpoint: ≥768px (tablet+)
    - Nav & actions sempre visibili
-   - Layout in riga (brand centrato)
+   - Brand al centro
    ----------------------------- */
 @media (min-width: 768px) {
-  .main-header--stacked {
-    grid-template-columns: 1fr auto 1fr; /* brand al centro, nav a sinistra, actions a destra */
-    grid-auto-flow: row;
+  .main-header {
+    padding-block: .7rem;
+    grid-template-columns: 1fr auto 1fr; /* nav - brand - actions */
     align-items: center;
   }
 
   .header-brand {
     grid-column: 2; /* centro visivo */
+    justify-self: center;
   }
   .mobile-nav-toggle {
     display: none; /* hamburger sparisce */
@@ -193,7 +182,6 @@
     gap: .6rem;
   }
 
-  /* dimensioni un filo più compatte su desktop */
   .main-nav a,
   .main-nav button {
     padding: .45rem .65rem;
@@ -201,10 +189,10 @@
 }
 
 /* -----------------------------
-   3.7 Breakpoint desktop largo
+   3.5 Breakpoint: ≥1024px
    ----------------------------- */
 @media (min-width: 1024px) {
-  .main-header--stacked {
+  .main-header {
     padding-block: .85rem;
   }
   .main-nav {
@@ -213,7 +201,7 @@
 }
 
 /* -----------------------------
-   3.8 Tema scuro (opzionale)
+   3.6 Tema scuro (opzionale)
    ----------------------------- */
 @media (prefers-color-scheme: dark) {
   .main-header {

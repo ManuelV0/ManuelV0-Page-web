@@ -6,3 +6,8 @@ out/
 *.log
 .env*
 venv/
+.next/
+node_modules/
+out/
+*.log
+.env*

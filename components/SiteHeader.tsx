@@ -1,3 +1,4 @@
+
 'use client'
 
 import Link from 'next/link'
@@ -18,7 +19,9 @@ export default function SiteHeader() {
     supabase.auth.getUser().then(({ data }) => {
       if (active) setEmail(data.user?.email ?? null)
     })
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setEmail(s?.user?.email ?? null))
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) =>
+      setEmail(s?.user?.email ?? null)
+    )
     return () => {
       active = false
       sub?.subscription.unsubscribe()
@@ -62,23 +65,19 @@ export default function SiteHeader() {
 
   return (
     <header className="main-header main-header--stacked" role="banner">
-      {/* Riga 1: brand */}
+      {/* Riga 1: brand con toggle */}
       <div className="header-brand">
-        <i className="fa-solid fa-feather-pointed" aria-hidden="true" />
-        <span className="brand-title">TheItalianPoetry</span>
+        <button
+          className="mobile-nav-toggle brand-toggle"
+          aria-controls="primary-navigation primary-actions"
+          aria-expanded={mobileOpen}
+          onClick={() => setMobileOpen(v => !v)}
+          aria-label={mobileOpen ? 'Chiudi menu' : 'Apri menu'}
+        >
+          <i className="fa-solid fa-bars" aria-hidden="true" />
+          <span className="brand-title">TheItalianPoetry</span>
+        </button>
       </div>
-
-      {/* Toggle mobile */}
-      <button
-        className="mobile-nav-toggle"
-        aria-controls="primary-navigation primary-actions"
-        aria-expanded={mobileOpen}
-        onClick={() => setMobileOpen(v => !v)}
-        aria-label={mobileOpen ? 'Chiudi menu' : 'Apri menu'}
-      >
-        <i className="fas fa-bars" aria-hidden="true" />
-        <span className="sr-only">Menu</span>
-      </button>
 
       {/* Riga 2: nav */}
       <nav
@@ -87,12 +86,24 @@ export default function SiteHeader() {
         data-visible={mobileOpen}
         aria-label="Navigazione principale"
       >
-        <Link href="/" className={is('/') ? 'is-active' : ''} aria-current={is('/') ? 'page' : undefined}>Home</Link>
-        <Link href="/#leaderboard" className={is('/') ? 'is-active' : ''}>Classifica</Link>
-        <button type="button" onClick={() => openModal('how-to')} aria-label="Come Partecipare">Come Partecipare</button>
-        <button type="button" onClick={() => openModal('about')} aria-label="Chi Siamo">Chi Siamo</button>
-        <Link href="/autore" className={starts('/autore') ? 'is-active' : ''} aria-current={starts('/autore') ? 'page' : undefined}>Autore</Link>
-        <Link href="/diario" className={starts('/diario') ? 'is-active' : ''} aria-current={starts('/diario') ? 'page' : undefined}>Diario</Link>
+        <Link href="/" className={is('/') ? 'is-active' : ''} aria-current={is('/') ? 'page' : undefined}>
+          Home
+        </Link>
+        <Link href="/#leaderboard" className={is('/') ? 'is-active' : ''}>
+          Classifica
+        </Link>
+        <button type="button" onClick={() => openModal('how-to')} aria-label="Come Partecipare">
+          Come Partecipare
+        </button>
+        <button type="button" onClick={() => openModal('about')} aria-label="Chi Siamo">
+          Chi Siamo
+        </button>
+        <Link href="/autore" className={starts('/autore') ? 'is-active' : ''} aria-current={starts('/autore') ? 'page' : undefined}>
+          Autore
+        </Link>
+        <Link href="/diario" className={starts('/diario') ? 'is-active' : ''} aria-current={starts('/diario') ? 'page' : undefined}>
+          Diario
+        </Link>
       </nav>
 
       {/* Riga 3: actions */}
@@ -108,7 +119,9 @@ export default function SiteHeader() {
         ) : (
           <div className="user-chip">
             <span className="chip-email">{email}</span>
-            <button className="button-secondary" onClick={signOut} aria-label="Logout">Logout</button>
+            <button className="button-secondary" onClick={signOut} aria-label="Logout">
+              Logout
+            </button>
           </div>
         )}
         <button
